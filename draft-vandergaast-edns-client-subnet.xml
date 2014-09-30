@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY rfc5735 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5735.xml">
+<!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc4035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4035.xml">
 <!ENTITY rfc4034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4034.xml">
 <!ENTITY rfc4033 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4033.xml">
 <!ENTITY rfc4193 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4193.xml">
-<!ENTITY rfc2671 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2671.xml">
+<!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 <!ENTITY rfc1034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml">
 <!ENTITY rfc2663 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
 <!ENTITY rfc1035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml">
@@ -297,7 +297,7 @@
     </section>
 
     <section anchor="format" title="Option Format">
-      <t>This draft uses an EDNS0 (<xref target="RFC2671"/>) option to include
+      <t>This draft uses an EDNS0 (<xref target="RFC6891"/>) option to include
       client IP information in DNS messages. The option is structured as
       follows:</t>
 
@@ -319,10 +319,10 @@
       </figure>
 
       <t><list style="symbols">
-          <t>(Defined in <xref target="RFC2671"/>) OPTION-CODE, 2 octets, for
+          <t>(Defined in <xref target="RFC6891"/>) OPTION-CODE, 2 octets, for
           edns-client-subnet is 8.</t>
 
-          <t>(Defined in <xref target="RFC2671"/>) OPTION-LENGTH, 2 octets,
+          <t>(Defined in <xref target="RFC6891"/>) OPTION-LENGTH, 2 octets,
           contains the length of the payload (everything after OPTION-LENGTH)
           in bytes.</t>
 
@@ -392,7 +392,7 @@
 
         <t>Requests with wrongly formatted options (i.e. wrong size) MUST be
         rejected and a FORMERR response must be returned to the sender, as
-        described by <xref target="RFC2671"/>, Transport Considerations.</t>
+        described by <xref target="RFC6891"/>, Transport Considerations.</t>
 
         <t>If the Authoritative Nameserver decides to use information from the
         edns-client-subnet option to calculate a response, it MUST include the
@@ -573,8 +573,8 @@
       Codes (OPT)" registry to edns-client-subnet.</t>
 
       <t>The IANA is requested to update the reference
-      ("[draft-vandergaast-edns-client-subnet") to refer to this RFC (once
-      published).</t>
+      ("draft-vandergaast-edns-client-subnet") to refer to this RFC when
+      published.</t>
     </section>
 
     <section title="DNSSEC Considerations">
@@ -708,7 +708,7 @@
             <t>Authoritative Nameservers and Recursive Resolvers should
             discard known to be wrong or known to be forged edns-client-subnet
             options. They must at least ignore unroutable addresses, such as
-            some of the address blocks defined in <xref target="RFC5735"/> and
+            some of the address blocks defined in <xref target="RFC6890"/> and
             <xref target="RFC4193"/>, and should ignore and never forward
             edns-client-subnet options specifying networks or addresses that
             are known not to be served by those servers when feasible.</t>
@@ -931,7 +931,7 @@
     <references title="Normative References">
       &rfc2119;
 
-      &rfc5735;
+      &rfc6890;
 
       &rfc4035;
 
@@ -941,7 +941,7 @@
 
       &rfc4193;
 
-      &rfc2671;
+      &rfc6891;
 
       &rfc1035;
 
