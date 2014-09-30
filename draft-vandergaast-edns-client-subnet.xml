@@ -8,8 +8,7 @@
 <!ENTITY rfc4193 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4193.xml">
 <!ENTITY rfc2671 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2671.xml">
 <!ENTITY rfc1034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml">
-<!ENTITY rfc2663 PUBLIC ""
-"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
+<!ENTITY rfc2663 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
 <!ENTITY rfc1035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml">
 ]>
 <rfc category="info" docName="draft-vandergaast-edns-client-subnet-02"
@@ -108,6 +107,24 @@
       </address>
     </author>
 
+    <author fullname="Warren Kumari" initials="W." surname="Kumari">
+      <organization>Google</organization>
+
+      <address>
+        <postal>
+          <street>1600 Amphitheatre Parkway</street>
+
+          <city>Mountain View, CA</city>
+
+          <code>94043</code>
+
+          <country>US</country>
+        </postal>
+
+        <email>warren@kumari.net</email>
+      </address>
+    </author>
+
     <date day="30" month="September" year="2014"/>
 
     <area>ops</area>
@@ -179,16 +196,15 @@
       should be used.</t>
     </section>
 
-      <section title="Requirements Notation">
-        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-        document are to be interpreted as described in <xref
-        target="RFC2119"/>.</t>
-      </section>
+    <section title="Requirements Notation">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119"/>.</t>
+    </section>
 
     <section title="Terminology">
-      <t>
-        <list style="hanging">
+      <t><list style="hanging">
           <t hangText="Stub Resolver:">A simple DNS protocol implementation on
           the client side as described in <xref target="RFC1034"/> section
           5.3.1.</t>
@@ -224,8 +240,7 @@
           only loosely related to the concept of geographical distance: two
           geographically close hosts can still be very distant from a
           topological perspective.</t>
-        </list>
-      </t>
+        </list></t>
     </section>
 
     <section anchor="overview" title="Overview">
@@ -554,8 +569,12 @@
     </section>
 
     <section anchor="iana" title="IANA Considerations">
-      <t>IANA has assigned option code 8 in the "DNS EDNS0 Option Codes (OPT)"
-      registry to edns-client-subnet.</t>
+      <t>IANA has already assigned option code 8 in the "DNS EDNS0 Option
+      Codes (OPT)" registry to edns-client-subnet.</t>
+
+      <t>The IANA is requested to update the reference
+      ("[draft-vandergaast-edns-client-subnet") to refer to this RFC (once
+      published).</t>
     </section>
 
     <section title="DNSSEC Considerations">
@@ -663,8 +682,7 @@
 
         <t>To mitigate those problems:</t>
 
-        <t>
-          <list style="symbols">
+        <t><list style="symbols">
             <t>Recursive Resolvers implementing edns-client-subnet should only
             enable it in deployments where it is expected to bring clear
             advantages to the end users. For example, when expecting clients
@@ -700,8 +718,7 @@
             to ignore the content of the edns-client-subnet option based on
             black or white lists, rate limiting mechanisms, or any other logic
             implemented in the software.</t>
-          </list>
-        </t>
+          </list></t>
       </section>
     </section>
 
@@ -762,8 +779,7 @@
     </section>
 
     <section title="Example">
-      <t>
-        <list style="numbers">
+      <t><list style="numbers">
           <t>A stub resolver SR with IP address 192.0.2.37 tries to resolve
           www.example.com, by forwarding the query to the Recursive Resolver R
           from IP address IP, asking for recursion.</t>
@@ -843,8 +859,7 @@
           query is performed. If multiple results match, the one with the
           longest SCOPE NETMASK is chosen, as per common best-network match
           algorithms.</t>
-        </list>
-      </t>
+        </list></t>
     </section>
 
     <section anchor="exp" title="Experiment Details">
@@ -877,8 +892,7 @@
       24-hour periods with and without the option enabled on a Recursive
       Resolver. Metrics to be compared include:</t>
 
-      <t>
-        <list style="symbols">
+      <t><list style="symbols">
           <t>Cache hit rate on the Recursive Resolver.</t>
 
           <t>Average response time on the Recursive Resolver.</t>
@@ -888,8 +902,7 @@
 
           <t>Most importantly, difference in load times as measured by user
           agents (especially web browsers).</t>
-        </list>
-      </t>
+        </list></t>
 
       <t>Success of the experiment will depend on the level of improvement in
       the last mentioned metric. Others are for operational reasons (i.e. does
@@ -915,7 +928,7 @@
   </middle>
 
   <back>
-        <references title="Normative References">
+    <references title="Normative References">
       &rfc2119;
 
       &rfc5735;
@@ -939,22 +952,11 @@
       &rfc2663;
     </references>
 
-    <section title="Document Editing History">
-      <t>[This section should be removed by the RFC editor before
-      publishing]</t>
-    </section>
-
-      <section title="-02">
-        <t>
-          <list style="symbols">
-            <t>Added IANA-assigned option code.</t>
-          </list>
-        </t>
-      </section>
+    <section title="Document History">
+      <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <section title="-00">
-        <t>
-          <list style="symbols">
+        <t><list style="symbols">
             <t>Document moved to experimental track, added experiment
             description in header with details in a new section.</t>
 
@@ -990,13 +992,11 @@
 
             <t>Added a few definitions in the Terminology section, and a few
             more aesthetic changes in the rest of the document.</t>
-          </list>
-        </t>
+          </list></t>
       </section>
 
       <section title="-01">
-        <t>
-          <list style="symbols">
+        <t><list style="symbols">
             <t>Document version number reset from -02 to -00 due to the rename
             to edns-client-subnet.</t>
 
@@ -1029,11 +1029,14 @@
             Add a better explanation in the format section.</t>
 
             <t>Minor corrections in various other sections.</t>
-          </list>
-        </t>
+          </list></t>
       </section>
 
-
-
+      <section title="-02">
+        <t><list style="symbols">
+            <t>Added IANA-assigned option code.</t>
+          </list></t>
+      </section>
+    </section>
   </back>
 </rfc>
