@@ -10,7 +10,7 @@
 <!ENTITY rfc1034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml">
 <!ENTITY rfc1035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml">
 ]>
-<rfc category="exp" docName="draft-vandergaast-edns-client-subnet-02"
+<rfc category="info" docName="draft-vandergaast-edns-client-subnet-02"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -106,11 +106,11 @@
       </address>
     </author>
 
-    <date month="July" year="2013"/>
+    <date day="30" month="September" year="2014"/>
 
-    <area>int</area>
+    <area>ops</area>
 
-    <workgroup>dnsext</workgroup>
+    <workgroup>dnsop</workgroup>
 
     <abstract>
       <t>This draft defines an EDNS0 extension to carry information about the
@@ -119,14 +119,15 @@
     </abstract>
 
     <note title="IESG Note">
-      <t>This document describes an experimental EDNS0 option. The purpose of
-      this experiment is to discover if the information carried in an
-      edns-client-subnet option is sufficiently helpful to Authoritative
-      Nameservers to give better Optimized Replies, and to measure the latency
-      improvement from this better reply, taking into account a likely lower
-      cache hit rate at (and generally higher load on) the Recursive Resolver,
-      and possibly other operational aspects. Details on how this experiment
-      will be carried out can be found in <xref target="exp"/>.</t>
+      <t>[RFC Editor: Please remove this note prior to publication ]</t>
+
+      <t>This informational document describes an existing, implemented and
+      deployed system. It was originally going ot be an Experimental document,
+      but is now detailing a deployed system.</t>
+
+      <t>[TODO(WK): Remove? Don't really want to throw away the experimant
+      text, feelslike a waste. ] Details on how the experiment would have been
+      carried out can be found in <xref target="exp"/>.</t>
     </note>
   </front>
 
