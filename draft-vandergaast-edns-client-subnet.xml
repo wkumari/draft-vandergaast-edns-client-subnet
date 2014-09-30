@@ -8,6 +8,8 @@
 <!ENTITY rfc4193 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4193.xml">
 <!ENTITY rfc2671 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2671.xml">
 <!ENTITY rfc1034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml">
+<!ENTITY rfc2663 PUBLIC ""
+"http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
 <!ENTITY rfc1035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml">
 ]>
 <rfc category="info" docName="draft-vandergaast-edns-client-subnet-02"
@@ -175,6 +177,7 @@
       <t>This draft also includes guidelines on how to best cache those
       results and provides recommendations on when this protocol extension
       should be used.</t>
+    </section>
 
       <section title="Requirements Notation">
         <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -182,7 +185,6 @@
         document are to be interpreted as described in <xref
         target="RFC2119"/>.</t>
       </section>
-    </section>
 
     <section title="Terminology">
       <t>
@@ -910,20 +912,47 @@
       all the other people that replied to our emails on various mailing
       lists.</t>
     </section>
+  </middle>
 
-    <appendix title="Document Editing History">
+  <back>
+        <references title="Normative References">
+      &rfc2119;
+
+      &rfc5735;
+
+      &rfc4035;
+
+      &rfc4034;
+
+      &rfc4033;
+
+      &rfc4193;
+
+      &rfc2671;
+
+      &rfc1035;
+
+      &rfc1034;
+    </references>
+
+    <references title="Informative References">
+      &rfc2663;
+    </references>
+
+    <section title="Document Editing History">
       <t>[This section should be removed by the RFC editor before
       publishing]</t>
+    </section>
 
-      <appendix title="-02">
+      <section title="-02">
         <t>
           <list style="symbols">
             <t>Added IANA-assigned option code.</t>
           </list>
         </t>
-      </appendix>
+      </section>
 
-      <appendix title="-00">
+      <section title="-00">
         <t>
           <list style="symbols">
             <t>Document moved to experimental track, added experiment
@@ -963,9 +992,9 @@
             more aesthetic changes in the rest of the document.</t>
           </list>
         </t>
-      </appendix>
+      </section>
 
-      <appendix title="-01">
+      <section title="-01">
         <t>
           <list style="symbols">
             <t>Document version number reset from -02 to -00 due to the rename
@@ -1002,48 +1031,9 @@
             <t>Minor corrections in various other sections.</t>
           </list>
         </t>
-      </appendix>
-    </appendix>
-  </middle>
+      </section>
 
-  <back>
-    <references title="Normative References">
-      &rfc2119;
 
-      &rfc5735;
 
-      &rfc4035;
-
-      &rfc4034;
-
-      &rfc4033;
-
-      &rfc4193;
-
-      &rfc2671;
-
-      &rfc1035;
-
-      &rfc1034;
-    </references>
-
-    <references title="Informative References">
-      <reference anchor="RFC2663">
-        <front>
-          <title>IP Network Address Translator (NAT) Terminology and
-          Considerations</title>
-
-          <author initials="P." surname="Srisuresh">
-            <organization>Lucent Technologies</organization>
-          </author>
-
-          <author initials="M." surname="Holdrege">
-            <organization>Lucent Technologies</organization>
-          </author>
-        </front>
-
-        <seriesInfo name="RFC" value="2663"/>
-      </reference>
-    </references>
   </back>
 </rfc>
