@@ -10,6 +10,8 @@ Expires: April 3, 2015                                          S. Leach
                                                                 VeriSign
                                                                 E. Lewis
                                                                  Neustar
+                                                               W. Kumari
+                                                                  Google
                                                       September 30, 2014
 
 
@@ -49,8 +51,6 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 3, 2015.
-
 
 
 
@@ -58,6 +58,8 @@ Contavalli, et al.        Expires April 3, 2015                 [Page 1]
 
 Internet-Draft        Client Subnet in DNS Requests       September 2014
 
+
+   This Internet-Draft will expire on April 3, 2015.
 
 Copyright Notice
 
@@ -103,10 +105,8 @@ Table of Contents
      15.1.  Normative References . . . . . . . . . . . . . . . . . .  19
      15.2.  Informative References . . . . . . . . . . . . . . . . .  19
      15.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  19
-   Appendix A.  Document Editing History . . . . . . . . . . . . . .  20
-   Appendix B.  -02  . . . . . . . . . . . . . . . . . . . . . . . .  20
-   Appendix C.  -00  . . . . . . . . . . . . . . . . . . . . . . . .  20
-   Appendix D.  -01  . . . . . . . . . . . . . . . . . . . . . . . .  21
+   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  20
+     A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
 
 
 
@@ -115,6 +115,8 @@ Contavalli, et al.        Expires April 3, 2015                 [Page 2]
 Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
+     A.2.  -01 . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
+     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  21
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21
 
 1.  Introduction
@@ -160,8 +162,6 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    authority servers that would benefit from the extension and not for
    general purpose deployment.  It is completely optional and can safely
    be ignored by servers that choose not to implement it or enable it.
-
-
 
 
 
@@ -290,7 +290,7 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 5.  Option Format
 
-   This draft uses an EDNS0 ([RFC2671]) option to include client IP
+   This draft uses an EDNS0 ([RFC6891]) option to include client IP
    information in DNS messages.  The option is structured as follows:
 
                 +0 (MSB)                            +1 (LSB)
@@ -306,10 +306,10 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    7: |                           ADDRESS...                          /
       +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 
-   o  (Defined in [RFC2671]) OPTION-CODE, 2 octets, for edns-client-
+   o  (Defined in [RFC6891]) OPTION-CODE, 2 octets, for edns-client-
       subnet is 8.
 
-   o  (Defined in [RFC2671]) OPTION-LENGTH, 2 octets, contains the
+   o  (Defined in [RFC6891]) OPTION-LENGTH, 2 octets, contains the
       length of the payload (everything after OPTION-LENGTH) in bytes.
 
    o  FAMILY, 2 octets, indicates the family of the address contained in
@@ -397,7 +397,7 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
    Requests with wrongly formatted options (i.e. wrong size) MUST be
    rejected and a FORMERR response must be returned to the sender, as
-   described by [RFC2671], Transport Considerations.
+   described by [RFC6891], Transport Considerations.
 
    If the Authoritative Nameserver decides to use information from the
    edns-client-subnet option to calculate a response, it MUST include
@@ -597,8 +597,11 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 7.  IANA Considerations
 
-   IANA has assigned option code 8 in the "DNS EDNS0 Option Codes (OPT)"
-   registry to edns-client-subnet.
+   IANA has already assigned option code 8 in the "DNS EDNS0 Option
+   Codes (OPT)" registry to edns-client-subnet.
+
+   The IANA is requested to update the reference ("draft-vandergaast-
+   edns-client-subnet") to refer to this RFC when published.
 
 8.  DNSSEC Considerations
 
@@ -607,9 +610,6 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    change the usage of those resource records and mechanisms used to
    provide data origin authentication and data integrity to the DNS, as
    described in [RFC4033], [RFC4034] and [RFC4035].
-
-
-
 
 
 
@@ -758,7 +758,7 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    o  Authoritative Nameservers and Recursive Resolvers should discard
       known to be wrong or known to be forged edns-client-subnet
       options.  They must at least ignore unroutable addresses, such as
-      some of the address blocks defined in [RFC5735] and [RFC4193], and
+      some of the address blocks defined in [RFC6890] and [RFC4193], and
       should ignore and never forward edns-client-subnet options
       specifying networks or addresses that are known not to be served
       by those servers when feasible.
@@ -1024,9 +1024,6 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
-   [RFC2671]  Vixie, P., "Extension Mechanisms for DNS (EDNS0)", RFC
-              2671, August 1999.
-
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "DNS Security Introduction and Requirements", RFC
               4033, March 2005.
@@ -1042,8 +1039,12 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    [RFC4193]  Hinden, R. and B. Haberman, "Unique Local IPv6 Unicast
               Addresses", RFC 4193, October 2005.
 
-   [RFC5735]  Cotton, M. and L. Vegoda, "Special Use IPv4 Addresses",
-              RFC 5735, January 2010.
+   [RFC6890]  Cotton, M., Vegoda, L., Bonica, R., and B. Haberman,
+              "Special-Purpose IP Address Registries", BCP 153, RFC
+              6890, April 2013.
+
+   [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
+              for DNS (EDNS(0))", STD 75, RFC 6891, April 2013.
 
 15.2.  Informative References
 
@@ -1061,21 +1062,16 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-
 Contavalli, et al.        Expires April 3, 2015                [Page 19]
 
 Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
-Appendix A.  Document Editing History
+Appendix A.  Document History
 
-   [This section should be removed by the RFC editor before publishing]
+   [RFC Editor: Please delete this section before publication.]
 
-Appendix B.  -02
-
-   o  Added IANA-assigned option code.
-
-Appendix C.  -00
+A.1.  -00
 
    o  Document moved to experimental track, added experiment description
       in header with details in a new section.
@@ -1113,8 +1109,12 @@ Appendix C.  -00
    o  Added a few definitions in the Terminology section, and a few more
       aesthetic changes in the rest of the document.
 
+A.2.  -01
 
+   o  Document version number reset from -02 to -00 due to the rename to
+      edns-client-subnet.
 
+   o  Clarified example (dealing with TLDs, and various minor errors).
 
 
 
@@ -1122,13 +1122,6 @@ Contavalli, et al.        Expires April 3, 2015                [Page 20]
 
 Internet-Draft        Client Subnet in DNS Requests       September 2014
 
-
-Appendix D.  -01
-
-   o  Document version number reset from -02 to -00 due to the rename to
-      edns-client-subnet.
-
-   o  Clarified example (dealing with TLDs, and various minor errors).
 
    o  Referencing RFC5035 instead of RFC1918.
 
@@ -1157,6 +1150,10 @@ Appendix D.  -01
 
    o  Minor corrections in various other sections.
 
+A.3.  -02
+
+   o  Added IANA-assigned option code.
+
 Authors' Addresses
 
    Carlo Contavalli
@@ -1166,6 +1163,9 @@ Authors' Addresses
    US
 
    Email: ccontavalli@google.com
+
+
+
 
 
 
@@ -1206,13 +1206,13 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    Email: ed.lewis@neustar.biz
 
 
+   Warren Kumari
+   Google
+   1600 Amphitheatre Parkway
+   Mountain View, CA  94043
+   US
 
-
-
-
-
-
-
+   Email: warren@kumari.net
 
 
 
