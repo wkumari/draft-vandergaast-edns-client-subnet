@@ -6,17 +6,17 @@
 dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
-Expires: April 3, 2015                                          S. Leach
+Expires: April 6, 2015                                          S. Leach
                                                                 VeriSign
-                                                                E. Lewis
-                                                                 Neustar
+                                                             D. Lawrence
+                                                                  Akamai
                                                                W. Kumari
                                                                   Google
-                                                      September 30, 2014
+                                                        October 03, 2014
 
 
                      Client Subnet in DNS Requests
-                draft-vandergaast-edns-client-subnet-02
+             draft-vandergaast-dnsop-edns-client-subnet-00
 
 Abstract
 
@@ -29,12 +29,8 @@ IESG Note
    [RFC Editor: Please remove this note prior to publication ]
 
    This informational document describes an existing, implemented and
-   deployed system.  It was originally going ot be an Experimental
+   deployed system.  It was originally going to be an Experimental
    document, but is now detailing a deployed system.
-
-   [TODO(WK): Remove?  Don't really want to throw away the experimant
-   text, feelslike a waste. ] Details on how the experiment would have
-   been carried out can be found in Section 13.
 
 Status of This Memo
 
@@ -51,15 +47,17 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
+   This Internet-Draft will expire on April 6, 2015.
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 1]
+
+
+
+Contavalli, et al.        Expires April 6, 2015                 [Page 1]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
-
-   This Internet-Draft will expire on April 3, 2015.
 
 Copyright Notice
 
@@ -99,25 +97,25 @@ Table of Contents
      11.1.  Probing  . . . . . . . . . . . . . . . . . . . . . . . .  15
      11.2.  Whitelist  . . . . . . . . . . . . . . . . . . . . . . .  15
    12. Example . . . . . . . . . . . . . . . . . . . . . . . . . . .  16
-   13. Experiment Details  . . . . . . . . . . . . . . . . . . . . .  17
+   13. Contributing Authors  . . . . . . . . . . . . . . . . . . . .  17
    14. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  18
-   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  19
-     15.1.  Normative References . . . . . . . . . . . . . . . . . .  19
+   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     15.1.  Normative References . . . . . . . . . . . . . . . . . .  18
      15.2.  Informative References . . . . . . . . . . . . . . . . .  19
      15.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  19
-   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  20
-     A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
-
-
-
-Contavalli, et al.        Expires April 3, 2015                 [Page 2]
-
-Internet-Draft        Client Subnet in DNS Requests       September 2014
-
-
+   Appendix A.  Document History . . . . . . . . . . . . . . . . . .  19
+     A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  19
      A.2.  -01 . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
-     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  21
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21
+     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
+
+
+
+Contavalli, et al.        Expires April 6, 2015                 [Page 2]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
 
 1.  Introduction
 
@@ -166,9 +164,11 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 3]
+
+
+Contavalli, et al.        Expires April 6, 2015                 [Page 3]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    This draft also includes guidelines on how to best cache those
@@ -222,9 +222,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 4]
+Contavalli, et al.        Expires April 6, 2015                 [Page 4]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
 4.  Overview
@@ -278,9 +278,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 5]
+Contavalli, et al.        Expires April 6, 2015                 [Page 5]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    Additionally, owners of resolvers with edns-client-subnet enabled are
@@ -334,9 +334,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 6]
+Contavalli, et al.        Expires April 6, 2015                 [Page 6]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
       bits indicated by the SOURCE NETMASK field, with bits set to 0 to
@@ -390,9 +390,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 7]
+Contavalli, et al.        Expires April 6, 2015                 [Page 7]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    Requests with wrongly formatted options (i.e. wrong size) MUST be
@@ -446,9 +446,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 8]
+Contavalli, et al.        Expires April 6, 2015                 [Page 8]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
 6.3.  Handling edns-client-subnet Replies and Caching
@@ -502,9 +502,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                 [Page 9]
+Contavalli, et al.        Expires April 6, 2015                 [Page 9]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
       queries that do not contain or allow a longer SOURCE NETMASK to be
@@ -558,9 +558,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 10]
+Contavalli, et al.        Expires April 6, 2015                [Page 10]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
 6.4.  Transitivity
@@ -614,9 +614,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 11]
+Contavalli, et al.        Expires April 6, 2015                [Page 11]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
 9.  NAT Considerations
@@ -670,9 +670,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 12]
+Contavalli, et al.        Expires April 6, 2015                [Page 12]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    Note that even without edns-client-subnet options, any server queried
@@ -726,9 +726,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 13]
+Contavalli, et al.        Expires April 6, 2015                [Page 13]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    To mitigate those problems:
@@ -782,9 +782,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 14]
+Contavalli, et al.        Expires April 6, 2015                [Page 14]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
 11.1.  Probing
@@ -838,9 +838,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 15]
+Contavalli, et al.        Expires April 6, 2015                [Page 15]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
 12.  Example
@@ -894,9 +894,9 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 16]
+Contavalli, et al.        Expires April 6, 2015                [Page 16]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    8.   The Authoritative Nameserver ANS adds an edns-client-subnet
@@ -934,62 +934,26 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
         match, the one with the longest SCOPE NETMASK is chosen, as per
         common best-network match algorithms.
 
-13.  Experiment Details
+13.  Contributing Authors
 
-   This document describes an experiment to be conducted on the
-   Internet.  Participation requires the careful eye on the proposed
-   EDNS0 option.  What is described in this document may need to be
-   altered or adjusted as experience dictates.
+   The below individuals contributed significantly to the draft.  The
+   RFC Editor prefers a maximum of 5 names on the front page, and so we
+   have listed additional authors in this section.
 
-   During the experiment, participants will enable edns-client-subnet
-   support on their Nameservers (both Intermediate Nameservers and
-   Authoritative Nameservers).
+   Edward Lewis
 
-   Intermediate Nameservers will be configured with whitelists so edns-
-   client-subnet options will be sent only to Authoritative Nameservers
+   ICANN
+
+   12025 Waterfront Drive, Suite 300 Los Angeles, CA 90094-2536 USA
+
+   Email: edward.lewis@icann.org
 
 
 
-Contavalli, et al.        Expires April 3, 2015                [Page 17]
+Contavalli, et al.        Expires April 6, 2015                [Page 17]
 
-Internet-Draft        Client Subnet in DNS Requests       September 2014
+Internet-Draft        Client Subnet in DNS Requests         October 2014
 
-
-   participating in the experiment.  Some participants might also choose
-   to experiment with the probing behaviour described in Section 11.1.
-
-   Authoritative Nameservers could be configured with a whitelist but
-   maintainers are strongly encouraged to accept edns-client-subnet
-   options from anywhere to encourage openness. ns1-ns4.google.com are
-   configured as such and can be used to test client/resolver
-   implementations.
-
-   Pending official code point allocation (as described in Section 7), a
-   temporary EDNS0 option code will be in use.  This code is not
-   guaranteed to be used in further stages of this effort - assuming the
-   are further stages.
-
-   The effects of edns-client-subnet will be measured using data of
-   24-hour periods with and without the option enabled on a Recursive
-   Resolver.  Metrics to be compared include:
-
-   o  Cache hit rate on the Recursive Resolver.
-
-   o  Average response time on the Recursive Resolver.
-
-   o  Increase in query rate on both Recursive Resolvers and
-      Authoritative Nameservers.
-
-   o  Most importantly, difference in load times as measured by user
-      agents (especially web browsers).
-
-   Success of the experiment will depend on the level of improvement in
-   the last mentioned metric.  Others are for operational reasons (i.e.
-   does one need to provision for extra Nameservers?).
-
-   Possible side-effects from using edns-client-subnet will also be
-   investigated.  These may include interoperability problems within the
-   DNS and decreased (or possibly increased) ease of troubleshooting.
 
 14.  Acknowledgements
 
@@ -1003,13 +967,6 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    Dempsky from OpenDNS, Patrick W.  Gilmore from Akamai, Colm
    MacCarthaigh, Richard Sheehan and all the other people that replied
    to our emails on various mailing lists.
-
-
-
-Contavalli, et al.        Expires April 3, 2015                [Page 18]
-
-Internet-Draft        Client Subnet in DNS Requests       September 2014
-
 
 15.  References
 
@@ -1046,6 +1003,14 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
               for DNS (EDNS(0))", STD 75, RFC 6891, April 2013.
 
+
+
+
+Contavalli, et al.        Expires April 6, 2015                [Page 18]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
 15.2.  Informative References
 
    [RFC2663]  Srisuresh, P. and M. Holdrege, "IP Network Address
@@ -1055,17 +1020,6 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 15.3.  URIs
 
    [1] http://www.iana.org/assignments/address-family-numbers/
-
-
-
-
-
-
-
-Contavalli, et al.        Expires April 3, 2015                [Page 19]
-
-Internet-Draft        Client Subnet in DNS Requests       September 2014
-
 
 Appendix A.  Document History
 
@@ -1106,6 +1060,13 @@ A.1.  -00
    o  Fully take multi-tier DNS setups in mind and be more clear about
       where the option should be originated.
 
+
+
+Contavalli, et al.        Expires April 6, 2015                [Page 19]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    o  Added a few definitions in the Terminology section, and a few more
       aesthetic changes in the rest of the document.
 
@@ -1115,13 +1076,6 @@ A.2.  -01
       edns-client-subnet.
 
    o  Clarified example (dealing with TLDs, and various minor errors).
-
-
-
-Contavalli, et al.        Expires April 3, 2015                [Page 20]
-
-Internet-Draft        Client Subnet in DNS Requests       September 2014
-
 
    o  Referencing RFC5035 instead of RFC1918.
 
@@ -1156,6 +1110,19 @@ A.3.  -02
 
 Authors' Addresses
 
+
+
+
+
+
+
+
+
+Contavalli, et al.        Expires April 6, 2015                [Page 20]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    Carlo Contavalli
    Google
    1600 Amphitheater Parkway
@@ -1163,20 +1130,6 @@ Authors' Addresses
    US
 
    Email: ccontavalli@google.com
-
-
-
-
-
-
-
-
-
-
-
-Contavalli, et al.        Expires April 3, 2015                [Page 21]
-
-Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
    Wilmer van der Gaast
@@ -1197,13 +1150,13 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
    Email: sleach@verisign.com
 
 
-   Edward Lewis
-   Neustar
-   46000 Center Oak Plaza
-   Sterling, VA  20166
+   David
+   Akamai
+   8 Cambridge Center
+   Cambridge, MA  02142
    US
 
-   Email: ed.lewis@neustar.biz
+   Email: tale@akamai.com
 
 
    Warren Kumari
@@ -1221,14 +1174,5 @@ Internet-Draft        Client Subnet in DNS Requests       September 2014
 
 
 
-
-
-
-
-
-
-
-
-
-Contavalli, et al.        Expires April 3, 2015                [Page 22]
+Contavalli, et al.        Expires April 6, 2015                [Page 21]
 ```

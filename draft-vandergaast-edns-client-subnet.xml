@@ -11,7 +11,7 @@
 <!ENTITY rfc2663 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
 <!ENTITY rfc1035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml">
 ]>
-<rfc category="info" docName="draft-vandergaast-edns-client-subnet-02"
+<rfc category="info" docName="draft-vandergaast-dnsop-edns-client-subnet-00"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -87,23 +87,23 @@
       </address>
     </author>
 
-    <author fullname="Edward Lewis" initials="E." surname="Lewis">
-      <organization>Neustar</organization>
+    <author fullname="David" initials="D." surname="Lawrence">
+      <organization>Akamai</organization>
 
       <address>
         <postal>
-          <street>46000 Center Oak Plaza</street>
+          <street>8 Cambridge Center</street>
 
-          <city>Sterling</city>
+          <city>Cambridge</city>
 
-          <region>VA</region>
+          <region>MA</region>
 
-          <code>20166</code>
+          <code>02142</code>
 
           <country>US</country>
         </postal>
 
-        <email>ed.lewis@neustar.biz</email>
+        <email>tale@akamai.com</email>
       </address>
     </author>
 
@@ -125,7 +125,7 @@
       </address>
     </author>
 
-    <date day="30" month="September" year="2014"/>
+    <date day="03" month="October" year="2014"/>
 
     <area>ops</area>
 
@@ -141,12 +141,8 @@
       <t>[RFC Editor: Please remove this note prior to publication ]</t>
 
       <t>This informational document describes an existing, implemented and
-      deployed system. It was originally going ot be an Experimental document,
+      deployed system. It was originally going to be an Experimental document,
       but is now detailing a deployed system.</t>
-
-      <t>[TODO(WK): Remove? Don't really want to throw away the experimant
-      text, feelslike a waste. ] Details on how the experiment would have been
-      carried out can be found in <xref target="exp"/>.</t>
     </note>
   </front>
 
@@ -304,7 +300,7 @@
       <figure>
         <artwork align="left"><![CDATA[
              +0 (MSB)                            +1 (LSB)
-  +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+   +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 0: |                          OPTION-CODE                          |
    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 2: |                         OPTION-LENGTH                         |
@@ -667,7 +663,7 @@
             results that will rarely (if ever) be used.</t>
 
             <t>reverse engineer the algorithms (or data) used by the
-            Authoritative Nameserver to caclulate the optimized answer.</t>
+            Authoritative Nameserver to calculate the optimized answer.</t>
 
             <t>mount a DoS attack against an intermediate resolver, by forcing
             it to perform many more recursive queries than it would normally
@@ -862,55 +858,18 @@
         </list></t>
     </section>
 
-    <section anchor="exp" title="Experiment Details">
-      <t>This document describes an experiment to be conducted on the
-      Internet. Participation requires the careful eye on the proposed EDNS0
-      option. What is described in this document may need to be altered or
-      adjusted as experience dictates.</t>
+    <section title="Contributing Authors">
+      <t>The below individuals contributed significantly to the draft. The RFC
+      Editor prefers a maximum of 5 names on the front page, and so we have
+      listed additional authors in this section.</t>
 
-      <t>During the experiment, participants will enable edns-client-subnet
-      support on their Nameservers (both Intermediate Nameservers and
-      Authoritative Nameservers).</t>
+      <t>Edward Lewis</t>
 
-      <t>Intermediate Nameservers will be configured with whitelists so
-      edns-client-subnet options will be sent only to Authoritative
-      Nameservers participating in the experiment. Some participants might
-      also choose to experiment with the probing behaviour described in <xref
-      target="probing"/>.</t>
+      <t>ICANN</t>
 
-      <t>Authoritative Nameservers could be configured with a whitelist but
-      maintainers are strongly encouraged to accept edns-client-subnet options
-      from anywhere to encourage openness. ns1-ns4.google.com are configured
-      as such and can be used to test client/resolver implementations.</t>
+      <t>12025 Waterfront Drive, Suite 300 Los Angeles, CA 90094-2536 USA</t>
 
-      <t>Pending official code point allocation (as described in <xref
-      target="iana"/>), a temporary EDNS0 option code will be in use. This
-      code is not guaranteed to be used in further stages of this effort -
-      assuming the are further stages.</t>
-
-      <t>The effects of edns-client-subnet will be measured using data of
-      24-hour periods with and without the option enabled on a Recursive
-      Resolver. Metrics to be compared include:</t>
-
-      <t><list style="symbols">
-          <t>Cache hit rate on the Recursive Resolver.</t>
-
-          <t>Average response time on the Recursive Resolver.</t>
-
-          <t>Increase in query rate on both Recursive Resolvers and
-          Authoritative Nameservers.</t>
-
-          <t>Most importantly, difference in load times as measured by user
-          agents (especially web browsers).</t>
-        </list></t>
-
-      <t>Success of the experiment will depend on the level of improvement in
-      the last mentioned metric. Others are for operational reasons (i.e. does
-      one need to provision for extra Nameservers?).</t>
-
-      <t>Possible side-effects from using edns-client-subnet will also be
-      investigated. These may include interoperability problems within the DNS
-      and decreased (or possibly increased) ease of troubleshooting.</t>
+      <t>Email: edward.lewis@icann.org</t>
     </section>
 
     <section title="Acknowledgements">
