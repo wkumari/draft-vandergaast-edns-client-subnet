@@ -67,26 +67,6 @@
       </address>
     </author>
 
-    <author fullname="Sean Leach" initials="S." surname="Leach">
-      <organization>VeriSign</organization>
-
-      <address>
-        <postal>
-          <street>21355 Ridgetop Circle</street>
-
-          <city>Dulles</city>
-
-          <region>VA</region>
-
-          <code>20166</code>
-
-          <country>US</country>
-        </postal>
-
-        <email>sleach@verisign.com</email>
-      </address>
-    </author>
-
     <author fullname="David" initials="D." surname="Lawrence">
       <organization>Akamai</organization>
 
@@ -125,7 +105,7 @@
       </address>
     </author>
 
-    <date day="03" month="October" year="2014"/>
+    <date day="22" month="October" year="2014"/>
 
     <area>ops</area>
 
@@ -141,8 +121,10 @@
       <t>[RFC Editor: Please remove this note prior to publication ]</t>
 
       <t>This informational document describes an existing, implemented and
-      deployed system. It was originally going to be an Experimental document,
-      but is now detailing a deployed system.</t>
+      deployed system. A subset of the operators using this is as
+      http://www.afasterinternet.com/participants.htm. The authors believe
+      that it is better to document this system (even if not everyone agrees
+      with the concept) than leave it undocumented and proprietary. </t>
     </note>
   </front>
 
@@ -280,7 +262,8 @@
 
       <t>Failure to support this option or its improper handling will, at
       worst, cause sub-optimal geolocation, which is a pretty common
-      occurrence in current CDN setups and not a cause of concern.</t>
+      occurrence in current content delivery network (CDN) setups and not a
+      cause of concern.</t>
 
       <t><xref target="originating"/> also provides a mechanism for Stub
       Resolvers to signal Recursive Resolvers that they do not want an
@@ -861,15 +844,22 @@
     <section title="Contributing Authors">
       <t>The below individuals contributed significantly to the draft. The RFC
       Editor prefers a maximum of 5 names on the front page, and so we have
-      listed additional authors in this section.</t>
+      listed additional authors in this section</t>
 
-      <t>Edward Lewis</t>
+      <t><figure>
+          <artwork><![CDATA[Edward Lewis
+ICANN
+12025 Waterfront Drive, Suite 300 Los Angeles, CA 90094-2536 USA
+Email: edward.lewis@icann.org]]></artwork>
+        </figure></t>
 
-      <t>ICANN</t>
-
-      <t>12025 Waterfront Drive, Suite 300 Los Angeles, CA 90094-2536 USA</t>
-
-      <t>Email: edward.lewis@icann.org</t>
+      <figure>
+        <artwork><![CDATA[Sean Leach
+Fastly
+POBox 78266
+San Francisco, CA 94107
+]]></artwork>
+      </figure>
     </section>
 
     <section title="Acknowledgements">
