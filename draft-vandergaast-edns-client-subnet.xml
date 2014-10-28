@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
-<!ENTITY rfc4035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4035.xml">
-<!ENTITY rfc4034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4034.xml">
-<!ENTITY rfc4033 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4033.xml">
-<!ENTITY rfc4193 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4193.xml">
-<!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 <!ENTITY rfc1034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1034.xml">
-<!ENTITY rfc2663 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
 <!ENTITY rfc1035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1035.xml">
+<!ENTITY rfc1700 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1700.xml">
+<!ENTITY rfc1918 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1918.xml">
+<!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc2663 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
+<!ENTITY rfc4033 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4033.xml">
+<!ENTITY rfc4034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4034.xml">
+<!ENTITY rfc4035 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4035.xml">
+<!ENTITY rfc4193 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4193.xml">
+<!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
+<!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
 <rfc category="info" docName="draft-vandergaast-dnsop-edns-client-subnet-00"
      ipr="trust200902">
@@ -334,7 +336,7 @@
           the SCOPE NETMASK of the request was 0 then ADDRESS must contain the
           same octets as in the request.  Otherwise, the bits for ADDRESS will
           be significant through the maximum of the SOURCE NETMASK or SCOPE
-          NETMASK, and 0 filled to the end of an octet.
+          NETMASK, and 0 filled to the end of an octet.</t>
 
         </list> All fields are in network byte order ("big-endian",
       per <xref target="RFC1700"/>, Data Notation).</t>
@@ -410,7 +412,7 @@
 
         <t>If a non-zero SCOPE NETMASK was supplied in the request, the SCOPE
         NETMASK of the response MUST be no longer than the SCOPE NETMASK of the
-        request.
+        request.</t>
 
         <t>As not all netblocks are the same size, an Authoritative Nameserver
         may return different values of SCOPE NETMASK for different
@@ -480,7 +482,7 @@
 
         <t>When the request includes a longer SCOPE NETMASK, the reply returned
         may still be cached as optimal for the ADDRESS and SCOPE NETMASK of
-        the reply. This might still be sub-optimal for the original client.
+        the reply. This might still be sub-optimal for the original client.</t>
 
         <t>To avoid this sub-optimal reply from being served from cache for
         other clients for which a better reply would be available, the
@@ -588,7 +590,7 @@
       does not change the usage of those resource records and mechanisms used
       to provide data origin authentication and data integrity to the DNS, as
       described in <xref target="RFC4033"/>, <xref target="RFC4034"/> and
-      <xref target="RFC4035"/>.  OPT records are not signed.
+      <xref target="RFC4035"/>.  OPT records are not signed.</t>
     </section>
 
     <section title="NAT Considerations">
@@ -615,7 +617,7 @@
       based on the address of the Recursive Resolver.  In the reply it SHOULD
       set SCOPE NETMASK to cover all of the relevant private space.  For
       example, a request for ADDRESS 10.1.2.0 with a SOURCE NETMASK of 24 would
-      get a returned SCOPE NETMASK of 8.
+      get a returned SCOPE NETMASK of 8.</t>
 
     </section>
 
@@ -638,7 +640,7 @@
         optimized up to SCOPE NETMASK bits for a subset of the SOURCE
         NETMASK. Subsequent requests within the TTL from clients within the
         cached range will be served the optimal answer, while still preserving
-        privacy of the user.
+        privacy of the user.</t>
 
         <t>ISPs will often have more detailed knowledge of their own networks.
         I.e. they will know if all 24-bit prefixes in a /20 are in the same
@@ -853,7 +855,7 @@
           is optimal for several /27 ranges within the ADDRESS/SOURCE NETMASK
           of the request.  It chooses one randomly.  (Note well, this is just
           one example of how ANS could pick a suitable answer.  Other selection
-          methods are possible.)
+          methods are possible.)</t>
 
           <t>The Authoritative Nameserver ANS adds an edns-client-subnet
           option in the reply, containing: <list style="symbols">
