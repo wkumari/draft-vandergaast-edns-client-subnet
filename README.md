@@ -6,7 +6,7 @@ dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
 Expires: April 30, 2015                                      D. Lawrence
-                                                                  Akamai
+                                                     Akamai Technologies
                                                                W. Kumari
                                                                   Google
                                                         October 27, 2014
@@ -26,10 +26,11 @@ IESG Note
    [RFC Editor: Please remove this note prior to publication ]
 
    This informational document describes an existing, implemented and
-   deployed system.  A subset of the operators using this is at [1].
-   The authors believe that it is better to document this system (even
-   if not everyone agrees with the concept) than leave it undocumented
-   and proprietary.
+   deployed system.  A subset of the operators using this is at
+   http://www.afasterinternet.com/participants.htm .  The authors
+   believe that it is better to document this system (even if not
+   everyone agrees with the concept) than leave it undocumented and
+   proprietary.
 
 Status of This Memo
 
@@ -47,7 +48,6 @@ Status of This Memo
    material or to cite them other than as "work in progress."
 
    This Internet-Draft will expire on April 30, 2015.
-
 
 
 
@@ -82,7 +82,7 @@ Table of Contents
    5.  Option Format . . . . . . . . . . . . . . . . . . . . . . . .   6
    6.  Protocol Description  . . . . . . . . . . . . . . . . . . . .   7
      6.1.  Originating the Option  . . . . . . . . . . . . . . . . .   7
-     6.2.  Generating a Response . . . . . . . . . . . . . . . . . .   7
+     6.2.  Generating a Response . . . . . . . . . . . . . . . . . .   8
      6.3.  Handling edns-client-subnet Replies and Caching . . . . .   9
      6.4.  Transitivity  . . . . . . . . . . . . . . . . . . . . . .  11
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  12
@@ -90,13 +90,13 @@ Table of Contents
    9.  NAT Considerations  . . . . . . . . . . . . . . . . . . . . .  12
    10. Security Considerations . . . . . . . . . . . . . . . . . . .  13
      10.1.  Privacy  . . . . . . . . . . . . . . . . . . . . . . . .  13
-     10.2.  Birthday Attacks . . . . . . . . . . . . . . . . . . . .  13
+     10.2.  Birthday Attacks . . . . . . . . . . . . . . . . . . . .  14
      10.3.  Cache Pollution  . . . . . . . . . . . . . . . . . . . .  14
-   11. Sending the Option  . . . . . . . . . . . . . . . . . . . . .  15
-     11.1.  Probing  . . . . . . . . . . . . . . . . . . . . . . . .  15
+   11. Sending the Option  . . . . . . . . . . . . . . . . . . . . .  16
+     11.1.  Probing  . . . . . . . . . . . . . . . . . . . . . . . .  16
      11.2.  Whitelist  . . . . . . . . . . . . . . . . . . . . . . .  16
-   12. Example . . . . . . . . . . . . . . . . . . . . . . . . . . .  16
-   13. Contributing Authors  . . . . . . . . . . . . . . . . . . . .  18
+   12. Example . . . . . . . . . . . . . . . . . . . . . . . . . . .  17
+   13. Contributing Authors  . . . . . . . . . . . . . . . . . . . .  19
    14. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  19
    15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  19
      15.1.  Normative References . . . . . . . . . . . . . . . . . .  19
@@ -114,7 +114,7 @@ Contavalli, et al.       Expires April 30, 2015                 [Page 2]
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
-     A.4.  -03 . . . . . . . . . . . . . . . . . . . . . . . . . . .  22
+     A.4.  -03*  . . . . . . . . . . . . . . . . . . . . . . . . . .  22
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
 
 1.  Introduction
@@ -126,7 +126,7 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    source address is that of the Recursive Resolver rather than of the
    query originator.
 
-   Traditionally and probably still in the majority of instances,
+   Traditionally, and probably still in the majority of instances,
    Recursive Resolvers are reasonably close in the network topology to
    the Stub Resolvers or Forwarders that are the source of queries.  For
    these resolvers, using their own IP address is sufficient for
@@ -215,8 +215,8 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    The general idea of this document is to provide an EDNS0 option to
    allow Recursive Resolvers, if they are willing, to forward details
-   about the origin network that a query is coming from when talking to
-   other Nameservers.
+   about the origin network from which a query is coming when talking to
+   Authoritative Nameservers.
 
 
 
@@ -233,11 +233,11 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    As described in Section 6.2, an Authoritative Nameserver could use
    this EDNS0 option as a hint to better locate the network of the end
-   user, and provide a better answer.
+   user and provide a better answer.
 
-   Its reply would contain an EDNS0 client-subnet option, clearly
-   indicating that (1) the server made use of this information and (2)
-   the answer is tied to the network of the client.
+   Its reply would also contain an edns-client-subnet option, clearly
+   indicating that the server made use of this information, and that the
+   answer is tied to the network of the client.
 
    As described in Section 6.3, Intermediate Nameservers would use this
    information to cache the reply.
@@ -251,17 +251,17 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    options, and privacy.  Section 10 explores various mitigation
    techniques.
 
-   The expectation, however, is that this option will only be enabled
-   (and used) by Recursive Resolvers and Authoritative Nameservers that
-   incur geolocation issues.
+   The expectation, however, is that this option will only be used by
+   Recursive Resolvers and Authoritative Nameservers that incur
+   geolocation issues.
 
    Most Recursive Resolvers, Authoritative Nameservers and Stub
    Resolvers will never know about this option, and will continue
    working as they had been.
 
    Failure to support this option or its improper handling will, at
-   worst, cause sub-optimal identification of client location, which is
-   a common occurrence in current content delivery network (CDN) setups
+   worst, cause suboptimal identification of client location, which is a
+   common occurrence in current content delivery network (CDN) setups
    and not a cause of concern.
 
    Section 6.1 also provides a mechanism for Stub Resolvers to signal
@@ -284,7 +284,7 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 5.  Option Format
 
-   This draft uses an EDNS0 ([RFC6891]) option to include client address
+   This draft uses an EDNS0 [RFC6891]) option to include client address
    information in DNS messages.  The option is structured as follows:
 
                 +0 (MSB)                            +1 (LSB)
@@ -304,7 +304,7 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
       subnet is 8 (0x00 0x08).
 
    o  (Defined in [RFC6891]) OPTION-LENGTH, 2 octets, contains the
-      length of the payload (everything after OPTION-LENGTH) in bytes.
+      length of the payload (everything after OPTION-LENGTH) in octets.
 
    o  FAMILY, 2 octets, indicates the family of the address contained in
       the option, using address family codes as assigned by IANA in
@@ -314,11 +314,12 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    document only defines the format for FAMILY 1 (IP version 4) and 2
    (IP version 6), which are as follows:
 
-   o  SOURCE NETMASK, unsigned byte representing the length of the
+   o  SOURCE NETMASK, unsigned octet representing the length of the
       netmask pertaining to the query.  In replies, it mirrors the same
-      value as in the requests.
+      value as in the requests.  It can be set to 0 to disable client-
+      based lookups, in which case the ADDRESS field MUST be absent.
 
-   o  SCOPE NETMASK, unsigned byte representing the length of the
+   o  SCOPE NETMASK, unsigned octet representing the length of the
       netmask pertaining to the reply.  In requests, it SHOULD be set to
       the longest cacheable length supported by the Intermediate
       Nameserver.  For backwards compatibiilty with draft versions of
@@ -326,9 +327,8 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
       Authoritative Nameserver treat the longest cacheable length as the
       SOURCE NETMASK length.  In responses, this field is set by the
       Authoritative Nameserver to indicate the coverage of the response.
-      It may or may not match SOURCE NETMASK; it could be shorter or
+      It might or might not match SOURCE NETMASK; it could be shorter or
       longer.
-
 
 
 
@@ -339,15 +339,14 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    o  ADDRESS, variable number of octets, contains either an IPv4 or
-      IPv6 address (depending on FAMILY), truncated in the request to
-      the number of bits indicated by the SOURCE NETMASK field, with
-      bits set to 0 to pad up to the end of the last octet used.  (This
-      need not be as many octets as a complete address would take.)  In
-      the reply, if the SCOPE NETMASK of the request was 0 then ADDRESS
-      must contain the same octets as in the request.  Otherwise, the
-      bits for ADDRESS will be significant through the maximum of the
-      SOURCE NETMASK or SCOPE NETMASK, and 0 filled to the end of an
-      octet.
+      IPv6 address, depending on FAMILY, truncated in the request to the
+      number of bits indicated by the SOURCE NETMASK field, with bits
+      set to 0 to pad up to the end of the last octet used.  (This need
+      not be as many octets as a complete address would take.)  In the
+      reply, if the SCOPE NETMASK of the request was 0 then ADDRESS must
+      contain the same octets as in the request.  Otherwise, the bits
+      for ADDRESS will be significant through the maximum of the SOURCE
+      NETMASK or SCOPE NETMASK, and 0 filled to the end of an octet.
 
    All fields are in network byte order ("big-endian", per [RFC1700],
    Data Notation).
@@ -360,15 +359,24 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    Resolvers when querying other servers, as described in Section 11.
 
    In this option, the server should include the IP address of the
-   client that caused the query to be generated, truncated to a number
+   client that caused the query to be generated, truncated to the number
    of bits specified in the SOURCE NETMASK field.
 
    A Stub Resolver MAY generate DNS queries with an edns-client-subnet
    option with SOURCE NETMASK set to 0 (i.e. 0.0.0.0/0) to indicate that
    the Recursive Resolver MUST NOT add address information of the client
-   to its queries.  The Stub Resolver may also add non-empty edns-
-   client-subnet options to its queries, but Recursive Resolvers are not
-   required to use this information.
+   to its queries.  The subsequent Recursive Resolver query to the
+   Authoritative Nameserver will then either not include an edns-client-
+   subnet option or MAY optionally include its own address information,
+   which is what the Authoritative Nameserver will use anyway to
+   generate the reply in lieu of no option.  This allows the answer to
+   be handled by the same caching mechanism as other requests, with an
+   explicit indicator of the applicable scope.  Subsequent Stub Resolver
+   requests for /0 can then be answered from this cached response.
+
+   The Stub Resolver may also add non-empty edns-client-subnet options
+   to its queries, but Recursive Resolvers are not required to use this
+   information.
 
    For privacy reasons, and because the whole IP address is rarely
    required to determine an optimized reply, the ADDRESS field in the
@@ -378,14 +386,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    If the Stub Resolver requests additional privacy via a SOURCE NETMASK
    that is shorter than the maximum cacheable SCOPE NETMASK that the
-   Recursive Resolver allows, the Recursive Resolver SHOULD issue the
-   query with its longer SCOPE NETMASK.
-
-6.2.  Generating a Response
-
-   When a query containing an edns-client-subnet option is received, an
-   Authoritative Nameserver supporting edns-client-subnet MAY use the
-
 
 
 
@@ -394,41 +394,61 @@ Contavalli, et al.       Expires April 30, 2015                 [Page 7]
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
+   Recursive Resolver allows, the Recursive Resolver SHOULD issue the
+   query with its longer SCOPE NETMASK.
+
+6.2.  Generating a Response
+
+   When a query containing an edns-client-subnet option is received, an
+   Authoritative Nameserver supporting edns-client-subnet MAY use the
    address information specified in the option in order to generate an
    optimized reply.
 
-   Authoritative servers that have not implemented or enabled support
-   for the edns-client-subnet may safely ignore the option within
-   incoming queries.  Such a server MUST NOT include an edns-client-
-   subnet option within replies, to indicate lack of support for the
-   option.
+   Authoritative Nameservers that have not implemented or enabled
+   support for the edns-client-subnet option may safely ignore it within
+   incoming queries.  Per [RFC6891] section 6.1.2, such a server MUST
+   NOT include an edns-client-subnet option within replies, to indicate
+   lack of support for the option.
 
-   Requests with wrongly formatted options (i.e. wrong size) MUST be
-   rejected and a FORMERR response must be returned to the sender, as
+   Requests with wrongly formatted options (e.g., wrong size) MUST be
+   rejected and a FORMERR response MUST be returned to the sender, as
    described by [RFC6891], Transport Considerations.
 
    If the Authoritative Nameserver decides to use information from the
    edns-client-subnet option to calculate a response, it MUST include
    the option in the response to indicate that the information was used
-   (and has to be cached accordingly).  If the option was not included
-   in a query, it MUST NOT be included in the response.
+   and SHOULD be cached accordingly.  If the option was not included in
+   a query, it MUST NOT be included in the response.
 
    The FAMILY and SOURCE NETMASK in the response MUST match those in the
    request.  The first SOURCE NETMASK bits of the ADDRESS in the
-   response MUST match those in the request.  Echoing back the address
-   and netmask helps to mitigate certain attack vectors, as described in
-   Section 10.
+   response MUST match those in the request, even if fewer bits were
+   used to form the response.  Echoing back the address and netmask
+   helps to mitigate certain attack vectors, as described in Section 10.
 
    The SCOPE NETMASK in the reply indicates the netmask of the network
    for which the answer is intended.
 
-   A SCOPE NETMASK value larger than the SOURCE NETMASK indicates that
+   A SCOPE NETMASK value longer than the SOURCE NETMASK indicates that
    the address and netmask provided in the query was not specific enough
-   to select a single, best response, and that an optimal reply would
-   require at least SCOPE NETMASK bits of address information.
+   to select a single, best response.  The ADDRESS MUST be extended to
+   SCOPE NETMASK significant bits to indicate the network for which it
+   is optimal, but the Recursive Resolver SHOULD still provide the
+   result as the answer to the triggering client request even if the
+   client is in a different address range.
 
    Conversely, a shorter SCOPE NETMASK indicates that more bits than
-   necessary were provided.
+   necessary were provided, and the answer is suitable for a broader
+   range of addresses.
+
+
+
+
+
+Contavalli, et al.       Expires April 30, 2015                 [Page 8]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
 
    If a non-zero SCOPE NETMASK was supplied in the request, the SCOPE
    NETMASK of the response MUST be no longer than the SCOPE NETMASK of
@@ -441,35 +461,24 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    implications with regard to how the reply will be cached by
    Intermediate Nameservers, as described in Section 6.3.
 
+   If the edns-client-subnet option in the request is not used at all, a
+   server supporting edns-client-subnet MUST indicate that no bits of
+   the ADDRESS in the request have been used by specifying a SCOPE
+   NETMASK of 0, equivalent to the networks 0.0.0.0/0 or ::/0.  This
+   could happen, for example, because the reply is invariant across the
+   network space.  The answer is suitable for all clients for the
+   duration of its TTL.
 
-
-
-
-Contavalli, et al.       Expires April 30, 2015                 [Page 8]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
-
-   If the edns-client-subnet option in the request is not used at all
-   (for example, if an optimized reply was temporarily unavailable or
-   not supported for the requested domain name), a server supporting
-   edns-client-subnet MUST indicate that no bits of the ADDRESS in the
-   request have been used by specifying a SCOPE NETMASK of 0 (equivalent
-   to the networks 0.0.0.0/0 or ::/0).
-
-   If no optimized answer could be found at all for the FAMILY, ADDRESS
-   and SOURCE NETMASK indicated in the query, the Authoritative
-   Nameserver SHOULD still return the best result it knows of (i.e. by
-   using the query source IP address instead, or a sensible default),
-   and indicate that this result should only be cached for the FAMILY,
-   ADDRESS and SOURCE NETMASK indicated in the request.  The server will
-   indicate this by copying the SOURCE NETMASK into the SCOPE NETMASK
-   field.
+   The specific logic that an Authoritative Nameserver uses to choose an
+   optimized reply is not in the scope of this document.  Implementers
+   are encouraged, however, to consider carefully their selection of
+   SCOPE NETMASK for the reply in the event that an optimal reply cannot
+   be determined.
 
 6.3.  Handling edns-client-subnet Replies and Caching
 
    When an Intermediate Nameserver receives a reply containing an edns-
-   client-subnet option, it will return a reply to its client and may
+   client-subnet option, it will return a reply to its client and SHOULD
    cache the result.
 
    If the FAMILY, SOURCE NETMASK, and SOURCE NETMASK bits of ADDRESS in
@@ -480,24 +489,15 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    to the network specified by the FAMILY, ADDRESS and SCOPE NETMASK
    fields, as detailed below.  Note that the additional and authority
    sections from a DNS response message are specifically excluded here.
+   Any information cached from these sections MUST NOT be tied to a
+   network.
 
-   If another query is received matching the entry in the cache, the
-   resolver will verify that the FAMILY and ADDRESS that represent the
-   client match one of the networks in the cache for that entry.
+   If another query is received matching the name and type of an entry
+   in the cache, the resolver will check whether the FAMILY and ADDRESS
+   of the client matches one of the networks in the cache for that
+   entry.
 
-   If the address of the client is within any of the networks in the
-   cache, then the cached response MUST be returned as usual.  If the
-   address of the client matches multiple networks in the cache, the
-   entry with the highest SCOPE NETMASK value MUST be returned, as with
-   most route-matching algorithms.
 
-   If the address of the client does not match any network in the cache,
-   then the Recursive Resolver MUST behave as if no match was found and
-   perform resolution as usual.  This is necessary to avoid sub-optimal
-   replies in the cache from being returned to the wrong clients, and to
-   avoid a single request coming from a client on a different network
-   from polluting the cache with a sub-optimal reply for all the users
-   of that resolver.
 
 
 
@@ -506,27 +506,41 @@ Contavalli, et al.       Expires April 30, 2015                 [Page 9]
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
+   If the address of the client is within any of the networks in the
+   cache, then the cached response MUST be returned as usual.  If the
+   address of the client matches multiple networks in the cache, the
+   entry with the longest SCOPE NETMASK value MUST be returned, as with
+   most route-matching algorithms.
+
+   If the address of the client does not match any network in the cache,
+   then the Recursive Resolver MUST behave as if no match was found and
+   perform resolution as usual.  This is necessary to avoid suboptimal
+   replies in the cache from being returned to the wrong clients, and to
+   avoid a single request coming from a client on a different network
+   from polluting the cache with a suboptimal reply for all the users of
+   that resolver.
+
    Note that every time a Recursive Resolver queries an Authoritative
    Nameserver by forwarding the edns-client-subnet option that it
    received from another client, a short SOURCE NETMASK in the original
-   request could cause a sub-optimal reply to be returned by the
+   request could cause a suboptimal reply to be returned by the
    Authoritative Nameserver.
 
    When the request includes a longer SCOPE NETMASK, the reply returned
    may still be cached as optimal for the ADDRESS and SCOPE NETMASK of
-   the reply.  This might still be sub-optimal for the original client.
+   the reply.  This might still be suboptimal for the original client.
 
-   To avoid this sub-optimal reply from being served from cache for
-   other clients for which a better reply would be available, the
-   Recursive Resolver MUST check the SCOPE NETMASK that was returned by
-   the Authoritative Nameserver:
+   To avoid this suboptimal reply from being served from cache for other
+   clients for which a better reply would be available, the Recursive
+   Resolver MUST check the SCOPE NETMASK that was returned by the
+   Authoritative Nameserver:
 
    o  If the SCOPE NETMASK in the reply is longer than the SOURCE
-      NETMASK, it means that the reply might be sub-optimal.  A
-      Recursive Resolver MUST return this entry from cache only to
-      queries that do not contain or allow a longer SOURCE NETMASK to be
-      forwarded, or to queries originating from the network covered by
-      the ADDRESS and SCOPE NETMASK..
+      NETMASK, it means that the reply might be suboptimal.  A Recursive
+      Resolver MUST return this entry from cache only to queries that do
+      not contain or allow a longer SOURCE NETMASK to be forwarded, or
+      to queries originating from the network covered by the ADDRESS and
+      SCOPE NETMASK..
 
    o  If the SCOPE NETMASK in the reply is shorter than or equal to the
       SOURCE NETMASK, the reply is optimal, and SHOULD be returned from
@@ -539,20 +553,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    standard DNS caching behavior, all records SHOULD be retained until
    their TTL expires.  Subsequent queries to refresh the data should
    always specify the longest SCOPE NETMASK that the Recursive Resolver
-   is willing to cache, even if previous responses indicated that a
-   shorter netmask was the optimal response.
-
-   Although omitting this behaviour will significantly simplify an
-   implementation, the resulting drop in cache hits is very likely to
-   defeat most latency benefits provided by edns-client-subnet.
-   Therefore, when implementing this option for latency purposes,
-   implementing full caching support as described in this section is
-   STRONGLY RECOMMENDED.
-
-   Any reply containing an edns-client-subnet option considered invalid
-   should be treated as if no edns-client-subnet option was specified at
-   all.
-
 
 
 
@@ -561,6 +561,20 @@ Contavalli, et al.       Expires April 30, 2015                [Page 10]
 
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
+
+   is willing to cache, even if previous responses indicated that a
+   shorter netmask was the optimal response.
+
+   Although omitting network-specific caching will significantly
+   simplify an implementation, the resulting drop in cache hits is very
+   likely to defeat most latency benefits provided by edns-client-
+   subnet.  Therefore, when implementing this option for latency
+   purposes, implementing full caching support as described in this
+   section is STRONGLY RECOMMENDED.
+
+   Any reply containing an edns-client-subnet option considered invalid
+   should be treated as if no edns-client-subnet option was specified at
+   all.
 
    Replies coming from servers not supporting edns-client-subnet or
    otherwise not containing an edns-client-subnet option SHOULD be
@@ -584,19 +598,25 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    Generally, edns-client-subnet options will only be present in DNS
    messages between a Recursive Resolver and an Authoritative
-   Nameserver, i.e. one hop.  In certain configurations however (for
-   example multi-tier nameserver setups), it may be necessary to
+   Nameserver, i.e., one hop.  In certain configurations however, for
+   example multi-tier nameserver setups, it may be necessary to
    implement transitive behaviour on Intermediate Nameservers.
 
-   It is important that any Intermediate Nameserver that implements
-   transitive behaviour (i.e. forward edns-client-subnet options
-   received from their clients) MUST fully implement the caching
-   behaviour described in Section 6.3.
+   It is important that any Intermediate Nameserver that forwards edns-
+   client-subnet options received from their clients MUST fully
+   implement the caching behaviour described in Section 6.3.
 
-   Intermediate Nameservers (including Recursive Resolvers) supporting
+   Intermediate Nameservers, including Recursive Resolvers, supporting
    edns-client-subnet MUST forward options with SOURCE NETMASK set to 0
-   (i.e. anonymized), such an option MUST NOT be replaced with an option
-   with more accurate address information.
+   (i.e., completely anonymized), such an option MUST NOT be replaced
+   with an option with more accurate address information.
+
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 11]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
 
    An Intermediate Nameserver MAY also forward edns-client-subnet
    options with actual address information.  This information MAY match
@@ -607,17 +627,8 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    If for any reason the Intermediate Nameserver does not want to use
    the information in an edns-client-subnet option it receives (too
    little address information, network address from a range not
-   authorized to use the server, private/unroutable address space, ...),
+   authorized to use the server, private/unroutable address space, etc),
    it SHOULD drop the query and return a REFUSED response.  Note again
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 11]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
-
    that an edns-client-subnet option with 0 address bits MUST NOT be
    refused.
 
@@ -633,39 +644,28 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    The presence or absence of an [RFC6891] EDNS0 OPT resource record
    containing an edns-client-subnet option in a DNS query does not
-   change the usage of those resource records and mechanisms used to
+   change the usage of the resource records and mechanisms used to
    provide data origin authentication and data integrity to the DNS, as
    described in [RFC4033], [RFC4034] and [RFC4035].  OPT records are not
    signed.
 
 9.  NAT Considerations
 
-   Special awareness of edns-client-subnet in devices that perform NAT
-   as described in [RFC2663] is not required; queries can be passed
-   through as-is.  The client's network address SHOULD NOT be added, and
-   existing edns-client-subnet options, if present, SHOULD NOT be
-   modified by NAT devices.
+   Special awareness of edns-client-subnet in devices that perform
+   Network Address Translation (NAT) as described in [RFC2663] is not
+   required; queries can be passed through as-is.  The client's network
+   address SHOULD NOT be added, and existing edns-client-subnet options,
+   if present, SHOULD NOT be modified by NAT devices.
 
-   In large-scale global networks behind NAT (but for example with
-   centralized DNS infrastructure), an internal Intermediate Nameserver
-   may have detailed network layout information, and may know which
-   external subnets are used for egress traffic by each internal
-   network.  In such cases, the Intermediate Nameserver MAY use that
-   information when originating edns-client-subnet options.
+   In large-scale global networks behind NAT (but, for example, with a
+   Centralized Resolver infrastructure), an internal Intermediate
+   Nameserver might have detailed network layout information, and might
+   know which external subnets are used for egress traffic by each
+   internal network.  In such cases, the Intermediate Nameserver MAY use
+   that information when originating edns-client-subnet options.
 
    In other cases, Recursive Resolvers sited behind a NAT device SHOULD
    NOT originate edns-client-subnet options with their IP address, and
-   instead rely on downstream Intermediate Nameservers doing so.  T
-
-   If an Authoritative Nameserver on the publicly routed Internet
-   receives a request that specifies an ADDRESS in [RFC1918] private
-   address space, it SHOULD ignore ADDRESS and look up its answer based
-   on the address of the Recursive Resolver.  In the reply it SHOULD set
-   SCOPE NETMASK to cover all of the relevant private space.  For
-   example, a request for ADDRESS 10.1.2.0 with a SOURCE NETMASK of 24
-   would get a returned SCOPE NETMASK of 8.
-
-
 
 
 
@@ -673,6 +673,21 @@ Contavalli, et al.       Expires April 30, 2015                [Page 12]
 
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
+
+   instead rely on downstream Intermediate Nameservers doing so.  They
+   MAY, however, choose to include the option with their internal
+   address for the purposes of signaling a shorter, more anonymous
+   SOURCE NETMASK.
+
+   If an Authoritative Nameserver on the publicly routed Internet
+   receives a request that specifies an ADDRESS in [RFC1918] or
+   [RFC4193] private address space, it SHOULD ignore ADDRESS and look up
+   its answer based on the address of the Recursive Resolver.  In the
+   reply it SHOULD set SCOPE NETMASK to cover all of the relevant
+   private space.  For example, a request for ADDRESS 10.1.2.0 with a
+   SOURCE NETMASK of 24 would get a returned SCOPE NETMASK of 8.  The
+   Intermediate Nameserver MAY elect to cache the answer under one entry
+   for special-purpose addresses [RFC6890]; see Section 10.3.
 
 10.  Security Considerations
 
@@ -698,30 +713,15 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    preserving privacy of the user.
 
    ISPs will often have more detailed knowledge of their own networks.
-   I.e. they will know if all 24-bit prefixes in a /20 are in the same
-   area.  In those cases, for optimal cache utilization and improved
-   privacy, the ISP's Recursive Resolver SHOULD truncate IP addresses in
-   this /20 to just 20 bits, instead of 24 as recommended above.
+   That is, they will know if all 24-bit prefixes in a /20 are in the
+   same area.  In those cases, for optimal cache utilization and
+   improved privacy, the ISP's Recursive Resolver SHOULD truncate IP
+   addresses in this /20 to just 20 bits, instead of 24 as recommended
+   above.
 
    Users who wish their full IP address to be hidden can include an
    edns-client-subnet option specifying the wildcard address 0.0.0.0/0
    (i.e.  FAMILY set to 1 (IPv4), SOURCE NETMASK to 0 and no ADDRESS).
-   As described in previous sections, this option will be forwarded
-   across all the Recursive Resolvers supporting edns-client-subnet,
-   which MUST NOT modify it to include the network address of the
-   client.
-
-   Note that even without edns-client-subnet options, any server queried
-   directly by the user will be able to see the full client IP address.
-   Recursive Resolvers or Authoritative Nameservers MAY use the source
-   IP address of requests to return a cached entry or to generate an
-   optimized reply that best matches the request.
-
-10.2.  Birthday Attacks
-
-   edns-client-subnet adds information to the q-tuple.  This allows an
-   attacker to send a caching Intermediate Nameserver multiple queries
-   with spoofed IP addresses either in the edns-client-subnet option or
 
 
 
@@ -730,13 +730,29 @@ Contavalli, et al.       Expires April 30, 2015                [Page 13]
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
-   as the source IP.  These queries will trigger multiple outgoing
-   queries with the same name, type and class, just different address
-   information in the edns-client-subnet option.
+   As described in previous sections, this option will be forwarded
+   across all the Recursive Resolvers supporting edns-client-subnet,
+   which MUST NOT modify it to include the network address of the
+   client.
+
+   Note that even without an edns-client-subnet option, any server
+   queried directly by the user will be able to see the full client IP
+   address.  Recursive Resolvers or Authoritative Nameservers MAY use
+   the source IP address of requests to return a cached entry or to
+   generate an optimized reply that best matches the request.
+
+10.2.  Birthday Attacks
+
+   edns-client-subnet adds information to the DNS question tuple
+   (q-tuple).  This allows an attacker to send a caching Intermediate
+   Nameserver multiple queries with spoofed IP addresses either in the
+   edns-client-subnet option or as the source IP.  These queries will
+   trigger multiple outgoing queries with the same name, type and class,
+   just different address information in the edns-client-subnet option.
 
    With multiple queries for the same name in flight, the attacker has a
    higher chance of success in sending a matching response (with the
-   address 0.0.0.0/0 to still get it cached for many hosts).
+   address 0.0.0.0/0 to get it cached for many hosts).
 
    To counter this, every edns-client-subnet option in a response packet
    MUST contain the FAMILY and SOURCE NETMASK fields from the
@@ -759,24 +775,8 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    o  reverse engineer the algorithms (or data) used by the
       Authoritative Nameserver to calculate the optimized answer.
 
-   o  mount a DoS attack against an intermediate resolver, by forcing it
-      to perform many more recursive queries than it would normally do,
-      due to how caching is handled for queries containing the edns-
-      client-subnet option.
-
-   Even without malicious intent, Third-party Resolvers providing
-   answers to clients in multiple networks will need to cache different
-   replies for different networks, putting more pressure on the cache.
-
-   To mitigate those problems:
-
-   o  Recursive Resolvers implementing edns-client-subnet should only
-      enable it in deployments where it is expected to bring clear
-      advantages to the end users.  For example, when expecting clients
-      from a variety of networks or from a wide geographical area.  Due
-      to the high cache pressure introduced by edns-client-subnet, the
-      feature must be disabled in all default configurations.
-
+   o  mount a denial-of-service attack against an Intermediate
+      Nameserver, by forcing it to perform many more recursive queries
 
 
 
@@ -786,36 +786,61 @@ Contavalli, et al.       Expires April 30, 2015                [Page 14]
 Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
-   o  Recursive Resolvers should limit the number of networks and
+      than it would normally do, due to how caching is handled for
+      queries containing the edns-client-subnet option.
+
+   Even without malicious intent, Centralized Resolvers providing
+   answers to clients in multiple networks will need to cache different
+   replies for different networks, putting more memory pressure on the
+   cache.
+
+   To mitigate those problems:
+
+   o  Recursive Resolvers implementing edns-client-subnet should only
+      enable it in deployments where it is expected to bring clear
+      advantages to the end users.  For example, when expecting clients
+      from a variety of networks or from a wide geographical area.  Due
+      to the high cache pressure introduced by edns-client-subnet, the
+      feature SHOULD be disabled in all default configurations.
+
+   o  Recursive Resolvers SHOULD limit the number of networks and
       answers they keep in the cache for a given query.
 
-   o  Recursive Resolvers should limit the number of total different
+   o  Recursive Resolvers SHOULD limit the number of total different
       networks that they keep in cache.
 
    o  Recursive Resolvers should never send edns-client-subnet options
       with a SCOPE NETMASK that is longer than they are willing to
-      cache.  Similarly, if using a SCOPE NETMASK of 0, the request
-      should not set a SOURCE NETMASK of more bits than they are willing
-      to cache.
+      cache.  Similarly, if using the backwards-compatible SCOPE NETMASK
+      of 0, the request should not set a SOURCE NETMASK of more bits
+      than they are willing to cache.
 
    o  Recursive Resolvers should implement algorithms to improve the
       cache hit rate, given the size constraints indicated above.
-      Recursive Resolvers may, for example, decide to discard more
+      Recursive Resolvers MAY, for example, decide to discard more
       specific cache entries first.
 
    o  Authoritative Nameservers and Recursive Resolvers should discard
-      known to be wrong or known to be forged edns-client-subnet
-      options.  They must at least ignore unroutable addresses, such as
-      some of the address blocks defined in [RFC6890] and [RFC4193], and
-      should ignore and never forward edns-client-subnet options
-      specifying networks or addresses that are known not to be served
-      by those servers when feasible.
+      edns-client-subnet options that are either obviously forged or
+      otherwise known to be wrong.  They SHOULD at least treat
+      unroutable addresses, such as some of the address blocks defined
+      in [RFC6890], as equivalent to the Recursive Resolver's own
+      identity.  They SHOULD ignore and never forward edns-client-subnet
+      options specifying other routable addresses that are known not to
+      be served by the query source.
 
    o  Authoritative Nameservers consider the edns-client-subnet option
       just as a hint to provide better results.  They can decide to
       ignore the content of the edns-client-subnet option based on black
       or white lists, rate limiting mechanisms, or any other logic
       implemented in the software.
+
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 15]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
 
 11.  Sending the Option
 
@@ -833,15 +858,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    Additionally, Recursive Resolvers MAY be configured to never send the
    option when querying root, top-level, and effective top-level domain
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 15]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
-
    servers.  These domains are delegation-centric and are very unlikely
    to generate different replies based on the address of the client.
 
@@ -871,15 +887,24 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    an implementation could decide to use a statically configured
    whitelist of Authoritative Namesevers to send the option to.
    Implementations MAY also allow additionally configuring this based on
-   other criteria (i.e. zone, qtype).
+   other criteria, such as zone or query type.
+
+
+
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 16]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
 
    An additional advantage of using a whitelist is that partial client
    address information is only disclosed to Nameservers that are known
    to use the information, improving privacy.
 
    A major drawback is scalability.  The operator needs to track which
-   Nameservers support edns-client-subnet, making it harder for new
-   Authoritative Nameservers to start using the option.
+   Authoritative Nameservers support edns-client-subnet, making it
+   harder for new Authoritative Nameservers to start using the option.
 
 12.  Example
 
@@ -890,13 +915,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    2.   RNS, supporting edns-client-subnet, looks up www.example.com in
         its cache.  An entry is found neither for www.example.com, nor
         for example.com.
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 16]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
 
    3.   RNS builds a query to send to the root and .com servers.  The
         implementation of R provides facilities so an administrator can
@@ -928,6 +946,14 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
         *  ADDRESS, set to 0xC0 0x00 0x02, providing only the first 24
            bits of the IPv4 address.
 
+
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 17]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    6.   The query is sent.  Server ANS understands and uses edns-client-
         subnet.  It parses the edns-client-subnet option, and generates
         an optimized reply.
@@ -945,14 +971,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
         *  OPTION-LENGTH, set to 0x00 0x08 for the following fixed 4
            octets plus the 4 octets that will be used for ADDRESS .
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 17]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
 
         *  FAMILY, set to 0x00 0x01, the same as the request.
 
@@ -982,6 +1000,16 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
         match, the one with the longest SCOPE NETMASK is chosen, as per
         common best-network match algorithms.
 
+
+
+
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 18]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
 13.  Contributing Authors
 
    The below individuals contributed significantly to the draft.  The
@@ -997,18 +1025,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    Fastly
    POBox 78266
    San Francisco, CA 94107
-
-
-
-
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 18]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
 
 14.  Acknowledgements
 
@@ -1043,6 +1059,13 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 19]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "DNS Security Introduction and Requirements", RFC
               4033, March 2005.
@@ -1057,14 +1080,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
 
    [RFC4193]  Hinden, R. and B. Haberman, "Unique Local IPv6 Unicast
               Addresses", RFC 4193, October 2005.
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 19]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
 
    [RFC6890]  Cotton, M., Vegoda, L., Bonica, R., and B. Haberman,
               "Special-Purpose IP Address Registries", BCP 153, RFC
@@ -1100,6 +1115,13 @@ A.1.  -00
 
    o  Updated NAT section.
 
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 20]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    o  Added recommendation to not use the default /24 recommendation for
       the source netmask field if more detailed information about the
       network is available.
@@ -1112,15 +1134,6 @@ A.1.  -00
 
    o  Security considerations now includes a section about birthday
       attacks.
-
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 20]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
 
    o  Renamed edns-client-ip in edns-client-subnet, following
       suggestions on the mailing list.
@@ -1158,6 +1171,13 @@ A.2.  -01
    o  Intermediate Nameservers can now remove an edns-client-subnet
       option, or reduce the SOURCE NETMASK to increase privacy.
 
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 21]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    o  Added a reference to DoS attacks in the Security section.
 
    o  Don't use "network range", as it seems to have different meaning
@@ -1168,21 +1188,14 @@ A.2.  -01
 
    o  Minor corrections in various other sections.
 
-
-
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 21]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
-
-
 A.3.  -02
 
    o  Added IANA-assigned option code.
 
-A.4.  -03
+A.4.  -03*
+
+   o  [*] There was no -03 version of the draft; these changes, however,
+      were made after -02.
 
    o  Allow non-zero SCOPE NETMASK for Recursive Resolvers to indicate
       their maximum cacheable mask length, and updated the example
@@ -1210,6 +1223,17 @@ Authors' Addresses
    Email: ccontavalli@google.com
 
 
+
+
+
+
+
+
+Contavalli, et al.       Expires April 30, 2015                [Page 22]
+
+Internet-Draft        Client Subnet in DNS Requests         October 2014
+
+
    Wilmer van der Gaast
    Google
    Belgrave House, 76 Buckingham Palace Road
@@ -1220,18 +1244,12 @@ Authors' Addresses
 
 
    David C Lawrence
-   Akamai
+   Akamai Technologies
    8 Cambridge Center
    Cambridge, MA  02142
    US
 
    Email: tale@akamai.com
-
-
-
-Contavalli, et al.       Expires April 30, 2015                [Page 22]
-
-Internet-Draft        Client Subnet in DNS Requests         October 2014
 
 
    Warren Kumari
@@ -1241,24 +1259,6 @@ Internet-Draft        Client Subnet in DNS Requests         October 2014
    US
 
    Email: warren@kumari.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
