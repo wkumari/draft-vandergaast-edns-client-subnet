@@ -67,7 +67,7 @@
       </address>
     </author>
 
-    <author fullname="David" initials="D." surname="Lawrence">
+    <author fullname="David C Lawrence" initials="D.C." surname="Lawrence">
       <organization>Akamai</organization>
 
       <address>
@@ -105,7 +105,7 @@
       </address>
     </author>
 
-    <date day="22" month="October" year="2014"/>
+    <date day="27" month="October" year="2014"/>
 
     <area>ops</area>
 
@@ -121,8 +121,9 @@
       <t>[RFC Editor: Please remove this note prior to publication ]</t>
 
       <t>This informational document describes an existing, implemented and
-      deployed system. A subset of the operators using this is as
-      http://www.afasterinternet.com/participants.htm. The authors believe
+      deployed system. A subset of the operators using this is at
+      <eref target="http://www.afasterinternet.com/participants.htm" />.
+      The authors believe
       that it is better to document this system (even if not everyone agrees
       with the concept) than leave it undocumented and proprietary. </t>
     </note>
@@ -133,41 +134,38 @@
       <t>Many Authoritative Nameservers today return different replies based
       on the perceived topological location of the user. These servers use the
       IP address of the incoming query to identify that location. Since most
-      queries come from intermediate recursive resolvers, the source address
+      queries come from intermediate Recursive Resolvers, the source address
       is that of the Recursive Resolver rather than of the query
       originator.</t>
 
       <t>Traditionally and probably still in the majority of instances,
-      recursive resolvers are reasonably close in the topological sense to the
-      stub resolvers or forwarders that are the source of queries. For these
+      Recursive Resolvers are reasonably close in the network topology to the
+      Stub Resolvers or Forwarders that are the source of queries. For these
       resolvers, using their own IP address is sufficient for authority
       servers that tailor responses based upon location of the querier.</t>
 
       <t>Increasingly, though, a class of Recursive Resolvers has arisen that
-      serves query sources without regard to topology. The motivation for a
-      query source to use such a Third-party Resolver varies but is usually
-      because of some enhanced experience, such as greater cache security or
-      applying policies regarding where users may connect. (Although political
-      censorship usually comes to mind here, the same actions may be used by a
-      parent when setting controls on where a minor may connect.) When using a
-      Third-party Resolver, there can no longer be any assumption of close
-      proximity between the originator and the recursive resolver, leading to
-      less than optimal replies from the authority servers.</t>
+      handle query sources that are often not topologically close. The
+      motivation for a user to configure such a Centralized Resolver varies but
+      is usually because of some enhanced experience, such as greater cache
+      security or applying policies regarding where users may
+      connect. (Although political censorship usually comes to mind here, the
+      same actions may be used by a parent when setting controls on where a
+      minor may connect.) Similarly, many ISPs and other organizations use a
+      Centralized Resolver infrastructure that can be distant from the clients
+      the resolvers serve.  The cases all lead to less than optimal replies
+      from topology-sensitive Authoritative Nameservers.</t>
 
-      <t>A similar situation exists within some ISPs where the Recursive
-      Resolvers are topologically distant from some edges of the ISP network,
-      resulting in less than optimal replies from the authority servers.</t>
-
-      <t>This draft defines an EDNS0 option to convey network information that
-      is relevant to the message but not otherwise included in the datagram.
-      This will provide the mechanism to carry sufficient network information
-      about the originator for the authority server to tailor responses. It
-      also provides for the authority server to indicate the scope of network
-      addresses for which the tailored answer is intended. This EDNS0 option
-      is intended for those recursive and authority servers that would benefit
-      from the extension and not for general purpose deployment. It is
-      completely optional and can safely be ignored by servers that choose not
-      to implement it or enable it.</t>
+      <t>This draft defines an <xref target="RFC6891">EDNS0</xref> option to
+      convey network information that is relevant to the DNS message.  It will
+      carry sufficient network information about the originator for the
+      Authoritative Nameserver to tailor responses. It will also provide for
+      the Authoritative Nameserver to indicate the scope of network addresses
+      for which the tailored answer is intended. This EDNS0 option is intended
+      for those recursive and authority servers that would benefit from the
+      extension and not for general purpose deployment. It is completely
+      optional and can safely be ignored by servers that choose not to
+      implement it or enable it.</t>
 
       <t>This draft also includes guidelines on how to best cache those
       results and provides recommendations on when this protocol extension
@@ -194,30 +192,29 @@
 
           <t hangText="Recursive Resolver:">A nameserver that is responsible
           for resolving domain names for clients by following the domain's
-          delegation chain, starting at the root. Recursive Resolvers
-          frequently use caches to be able to respond to client queries
-          quickly. Described in <xref target="RFC1035"/> chapter 7.</t>
+          delegation chain.  Recursive Resolvers frequently use caches to be
+          able to respond to client queries quickly. Described in
+          <xref target="RFC1035"/> chapter 7.</t>
 
           <t hangText="Intermediate Nameserver:">Any nameserver (possibly a
           Recursive Resolver) in between the Stub Resolver and the
           Authoritative Nameserver.</t>
 
-          <t hangText="Third-party Resolvers:">Recursive Resolvers provided by
-          parties that are not Internet Service Providers (ISPs). These
-          services are often offered as substitutes for ISP-run
-          nameservers.</t>
+          <t hangText="Centralized Resolvers:">Recursive Resolvers that serve a
+          topologically diverse network address space.</t>
 
-          <t hangText="Optimized reply:">A reply from a nameserver that is
+          <t hangText="Optimized Reply:">A reply from a nameserver that is
           optimized for the node that sent the request, normally based on
           performance (i.e. lowest latency, least number of hops, topological
           distance, ...).</t>
 
-          <t hangText="Topologically close:">Refers to two hosts being close
+          <t hangText="Topologically Close:">Refers to two hosts being close
           in terms of number of hops or time it takes for a packet to travel
           from one host to the other. The concept of topological distance is
           only loosely related to the concept of geographical distance: two
           geographically close hosts can still be very distant from a
-          topological perspective.</t>
+          topological perspective, and two geographically distant hosts can be
+          quite close on the network.</t>
         </list></t>
     </section>
 
@@ -253,31 +250,31 @@
       mitigation techniques.</t>
 
       <t>The expectation, however, is that this option will only be enabled
-      (and used) by Recursive Resolvers and Authoritative Nameserver that
+      (and used) by Recursive Resolvers and Authoritative Nameservers that
       incur geolocation issues.</t>
 
-      <t>Most Recursive Resolvers, Authoritative Nameservers and Stub Resolver
+      <t>Most Recursive Resolvers, Authoritative Nameservers and Stub Resolvers
       will never know about this option, and will continue working as they had
       been.</t>
 
       <t>Failure to support this option or its improper handling will, at
-      worst, cause sub-optimal geolocation, which is a pretty common
-      occurrence in current content delivery network (CDN) setups and not a
-      cause of concern.</t>
+      worst, cause sub-optimal identification of client location, which is a
+      common occurrence in current content delivery network (CDN) setups
+      and not a cause of concern.</t>
 
       <t><xref target="originating"/> also provides a mechanism for Stub
-      Resolvers to signal Recursive Resolvers that they do not want an
-      edns-client treatment for specific requests.</t>
+      Resolvers to signal Recursive Resolvers that they do not want
+      edns-client-subnet treatment for specific requests.</t>
 
-      <t>Additionally, owners of resolvers with edns-client-subnet enabled are
-      allowed to choose how many bits of the address of received queries to
-      forward, or to reduce the number of bits forwarded for queries already
-      including an edns-client-subnet option.</t>
+      <t>Additionally, operators of Intermediate Nameservers with
+      edns-client-subnet enabled are allowed to choose how many bits of the
+      address of received queries to forward, or to reduce the number of bits
+      forwarded for queries already including an edns-client-subnet option.</t>
     </section>
 
     <section anchor="format" title="Option Format">
       <t>This draft uses an EDNS0 (<xref target="RFC6891"/>) option to include
-      client IP information in DNS messages. The option is structured as
+      client address information in DNS messages. The option is structured as
       follows:</t>
 
       <figure>
@@ -299,7 +296,7 @@
 
       <t><list style="symbols">
           <t>(Defined in <xref target="RFC6891"/>) OPTION-CODE, 2 octets, for
-          edns-client-subnet is 8.</t>
+          edns-client-subnet is 8 (0x00 0x08).</t>
 
           <t>(Defined in <xref target="RFC6891"/>) OPTION-LENGTH, 2 octets,
           contains the length of the payload (everything after OPTION-LENGTH)
@@ -313,22 +310,34 @@
         </list> The format of the address part depends on the value of FAMILY.
       This document only defines the format for FAMILY 1 (IP version 4) and 2
       (IP version 6), which are as follows: <list style="symbols">
+
           <t>SOURCE NETMASK, unsigned byte representing the length of the
           netmask pertaining to the query. In replies, it mirrors the same
           value as in the requests.</t>
 
           <t>SCOPE NETMASK, unsigned byte representing the length of the
-          netmask pertaining to the reply. In requests, it MUST be set to 0.
-          In responses, this may or may not match SOURCE NETMASK.</t>
+          netmask pertaining to the reply.  In requests, it SHOULD be set to
+          the longest cacheable length supported by the Intermediate
+          Nameserver.  For backwards compatibiilty with draft versions of this
+          specification, in requests it MAY be set to 0 to have the
+          Authoritative Nameserver treat the longest cacheable length as the
+          SOURCE NETMASK length.  In responses, this field is set by the
+          Authoritative Nameserver to indicate the coverage of the response.
+          It may or may not match SOURCE NETMASK; it could be shorter or
+          longer.</t>
 
           <t>ADDRESS, variable number of octets, contains either an IPv4 or
-          IPv6 address (depending on FAMILY), truncated to the number of bits
-          indicated by the SOURCE NETMASK field, with bits set to 0 to pad up
-          to the end of the last octet used.</t>
-        </list> All fields are in network byte order. Throughout the document,
-      we will often refer to "longer" or "shorter" netmasks, corresponding to
-      netmasks that have a "higher" or "lower" value when represented as
-      integers.</t>
+          IPv6 address (depending on FAMILY), truncated in the request to the
+          number of bits indicated by the SOURCE NETMASK field, with bits set
+          to 0 to pad up to the end of the last octet used.  (This need not be
+          as many octets as a complete address would take.)  In the reply, if
+          the SCOPE NETMASK of the request was 0 then ADDRESS must contain the
+          same octets as in the request.  Otherwise, the bits for ADDRESS will
+          be significant through the maximum of the SOURCE NETMASK or SCOPE
+          NETMASK, and 0 filled to the end of an octet.
+
+        </list> All fields are in network byte order ("big-endian",
+      per <xref target="RFC1700"/>, Data Notation).</t>
     </section>
 
     <section title="Protocol Description">
@@ -337,25 +346,28 @@
         Recursive Resolvers when querying other servers, as described in <xref
         target="send_when"/>.</t>
 
-        <t>In this option, the server should include the IP of the client that
-        caused the query to be generated, truncated to a number of bits
-        specified in the SOURCE NETMASK field.</t>
-
-        <t>The IP of the client can generally be determined by looking at the
-        source IP indicated in the IP header of the request.</t>
+        <t>In this option, the server should include the IP address of the
+        client that caused the query to be generated, truncated to a number of
+        bits specified in the SOURCE NETMASK field.</t>
 
         <t>A Stub Resolver MAY generate DNS queries with an edns-client-subnet
         option with SOURCE NETMASK set to 0 (i.e. 0.0.0.0/0) to indicate that
         the Recursive Resolver MUST NOT add address information of the client
         to its queries. The Stub Resolver may also add non-empty
         edns-client-subnet options to its queries, but Recursive Resolvers are
-        not required to accept/use this information.</t>
+        not required to use this information.</t>
 
         <t>For privacy reasons, and because the whole IP address is rarely
         required to determine an optimized reply, the ADDRESS field in the
         option SHOULD be truncated to a certain number of bits, chosen by the
-        administrators of the server, as described in <xref
+        administrators of the Intermediate Nameserver, as described in <xref
         target="security"/>.</t>
+
+        <t>If the Stub Resolver requests additional privacy via a SOURCE
+        NETMASK that is shorter than the maximum cacheable SCOPE NETMASK that
+        the Recursive Resolver allows, the Recursive Resolver SHOULD issue
+        the query with its longer SCOPE NETMASK.</t>
+
       </section>
 
       <section anchor="responding" title="Generating a Response">
@@ -379,10 +391,11 @@
         has to be cached accordingly). If the option was not included in a
         query, it MUST NOT be included in the response.</t>
 
-        <t>The FAMILY, ADDRESS and SOURCE NETMASK in the response MUST match
-        those in the request. Echoing back the address and netmask helps to
-        mitigate certain attack vectors, as described in <xref
-        target="security"/>.</t>
+        <t>The FAMILY and SOURCE NETMASK in the response MUST match
+        those in the request.  The first SOURCE NETMASK bits of the ADDRESS
+        in the response MUST match those in the request.  Echoing back the
+        address and netmask helps to mitigate certain attack vectors, as
+        described in <xref target="security"/>.</t>
 
         <t>The SCOPE NETMASK in the reply indicates the netmask of the network
         for which the answer is intended.</t>
@@ -394,6 +407,10 @@
 
         <t>Conversely, a shorter SCOPE NETMASK indicates that more bits than
         necessary were provided.</t>
+
+        <t>If a non-zero SCOPE NETMASK was supplied in the request, the SCOPE
+        NETMASK of the response MUST be no longer than the SCOPE NETMASK of the
+        request.
 
         <t>As not all netblocks are the same size, an Authoritative Nameserver
         may return different values of SCOPE NETMASK for different
@@ -427,9 +444,9 @@
         edns-client-subnet option, it will return a reply to its client and
         may cache the result.</t>
 
-        <t>If the FAMILY, ADDRESS and SOURCE NETMASK fields in the reply don't
-        match the fields in the corresponding request, the full reply MUST be
-        dropped, as described in <xref target="security"/>.</t>
+        <t>If the FAMILY, SOURCE NETMASK, and SOURCE NETMASK bits of ADDRESS in
+        the reply don't match the fields in the corresponding request, the full
+        reply MUST be dropped, as described in <xref target="security"/>.</t>
 
         <t>In the cache, any resource record in the answer section will be
         tied to the network specified by the FAMILY, ADDRESS and SCOPE NETMASK
@@ -457,32 +474,41 @@
 
         <t>Note that every time a Recursive Resolver queries an Authoritative
         Nameserver by forwarding the edns-client-subnet option that it
-        received from another client, a low SOURCE NETMASK in the original
+        received from another client, a short SOURCE NETMASK in the original
         request could cause a sub-optimal reply to be returned by the
         Authoritative Nameserver.</t>
 
+        <t>When the request includes a longer SCOPE NETMASK, the reply returned
+        may still be cached as optimal for the ADDRESS and SCOPE NETMASK of
+        the reply. This might still be sub-optimal for the original client.
+
         <t>To avoid this sub-optimal reply from being served from cache for
-        clients for which a better reply would be available, the Recursive
-        Resolver MUST check the SCOPE NETMASK that was returned by the
-        Authoritative Nameserver: <list style="symbols">
+        other clients for which a better reply would be available, the
+        Recursive Resolver MUST check the SCOPE NETMASK that was returned by
+        the Authoritative Nameserver:
+
+          <list style="symbols">
             <t>If the SCOPE NETMASK in the reply is longer than the SOURCE
             NETMASK, it means that the reply might be sub-optimal. A Recursive
             Resolver MUST return this entry from cache only to queries that do
-            not contain or allow a longer SOURCE NETMASK to be forwarded.</t>
+            not contain or allow a longer SOURCE NETMASK to be forwarded,
+            or to queries originating from the network covered by the ADDRESS
+            and SCOPE NETMASK..</t>
 
-            <t>If the SCOPE NETMASK in the reply is shorter or equal to the
-            SOURCE NETMASK, the reply is optimal, and SHOULD be returned from
-            cache to any client within the network indicated by ADDRESS and
-            SCOPE NETMASK.</t>
+            <t>If the SCOPE NETMASK in the reply is shorter than or equal to
+            the SOURCE NETMASK, the reply is optimal, and SHOULD be returned
+            from cache to any client within the network indicated by ADDRESS
+            and SCOPE NETMASK.</t>
           </list></t>
-
-        <t>When another request is performed, the existing entries SHOULD be
-        kept in the cache until their TTL expires, as per standard
-        behavior.</t>
 
         <t>As another reply is received, the reply will be tied to a different
         network. The server SHOULD keep in cache both replies, and return the
-        most appropriate one depending on the address of the client.</t>
+        most appropriate one depending on the address of the client. Per
+        standard DNS caching behavior, all records SHOULD be retained until
+        their TTL expires. Subsequent queries to refresh the data should always
+        specify the longest SCOPE NETMASK that the Recursive Resolver is
+        willing to cache, even if previous responses indicated that a shorter
+        netmask was the optimal response.</t>
 
         <t>Although omitting this behaviour will significantly simplify an
         implementation, the resulting drop in cache hits is very likely to
@@ -539,7 +565,7 @@
 
         <t>If for any reason the Intermediate Nameserver does not want to use
         the information in an edns-client-subnet option it receives (too
-        little address information, network address from an IP range not
+        little address information, network address from a range not
         authorized to use the server, private/unroutable address space, ...),
         it SHOULD drop the query and return a REFUSED response. Note again
         that an edns-client-subnet option with 0 address bits MUST NOT be
@@ -557,12 +583,12 @@
     </section>
 
     <section title="DNSSEC Considerations">
-      <t>The presence or absence of an OPT resource record [TODO: Reference
-      OPT] containing an edns-client-subnet option in a DNS query does not
-      change the usage of those resource records and mechanisms used to
-      provide data origin authentication and data integrity to the DNS, as
+      <t>The presence or absence of an <xref target="RFC6891" /> EDNS0 OPT
+      resource record containing an edns-client-subnet option in a DNS query
+      does not change the usage of those resource records and mechanisms used
+      to provide data origin authentication and data integrity to the DNS, as
       described in <xref target="RFC4033"/>, <xref target="RFC4034"/> and
-      <xref target="RFC4035"/>.</t>
+      <xref target="RFC4035"/>.  OPT records are not signed.
     </section>
 
     <section title="NAT Considerations">
@@ -579,9 +605,18 @@
       cases, the Intermediate Nameserver MAY use that information when
       originating edns-client-subnet options.</t>
 
-      <t>In other cases, Recursive Resolvers sited behind NAT SHOULD NOT
-      originate edns-client-subnet options with their external IP address, and
-      instead rely on downstream Intermediate Nameservers doing so.</t>
+      <t>In other cases, Recursive Resolvers sited behind a NAT device SHOULD
+      NOT originate edns-client-subnet options with their IP address,
+      and instead rely on downstream Intermediate Nameservers doing so.  T</t>
+
+      <t>If an Authoritative Nameserver on the publicly routed Internet
+      receives a request that specifies an ADDRESS in <xref target="RFC1918" />
+      private address space, it SHOULD ignore ADDRESS and look up its answer
+      based on the address of the Recursive Resolver.  In the reply it SHOULD
+      set SCOPE NETMASK to cover all of the relevant private space.  For
+      example, a request for ADDRESS 10.1.2.0 with a SOURCE NETMASK of 24 would
+      get a returned SCOPE NETMASK of 8.
+
     </section>
 
     <section anchor="security" title="Security Considerations">
@@ -596,6 +631,14 @@
         IPv4 addresses to 24 bits. No recommendation is provided for IPv6 at
         this time, but IPv6 addresses should be similarly truncated in order
         to not allow unique identification of the client.</t>
+
+        <t>When a non-zero SCOPE NETMASK is provided by the Recursive Resolver
+        that is longer than SOURCE NETMASK, users can often obtain more optimal
+        mapping if the resolver is well-used.  Replies will have answers
+        optimized up to SCOPE NETMASK bits for a subset of the SOURCE
+        NETMASK. Subsequent requests within the TTL from clients within the
+        cached range will be served the optimal answer, while still preserving
+        privacy of the user.
 
         <t>ISPs will often have more detailed knowledge of their own networks.
         I.e. they will know if all 24-bit prefixes in a /20 are in the same
@@ -630,10 +673,11 @@
         address 0.0.0.0/0 to still get it cached for many hosts).</t>
 
         <t>To counter this, every edns-client-subnet option in a response
-        packet MUST contain the full FAMILY, ADDRESS and SOURCE NETMASK fields
-        from the corresponding request. Intermediate Nameservers processing a
-        response MUST verify that these match, and MUST discard the entire
-        reply if they do not.</t>
+        packet MUST contain the FAMILY and SOURCE NETMASK fields from the
+        corresponding request, along with identical ADDRESS bits for SOURCE
+        NETMASK length.  Intermediate Nameservers processing a response MUST
+        verify that these match, and MUST discard the entire reply if they do
+        not.</t>
       </section>
 
       <section title="Cache Pollution">
@@ -676,8 +720,10 @@
             networks that they keep in cache.</t>
 
             <t>Recursive Resolvers should never send edns-client-subnet
-            options with SOURCE NETMASKs providing more bits in the ADDRESS
-            than they are willing to cache responses for.</t>
+            options with a SCOPE NETMASK that is longer than they are willing
+            to cache.  Similarly, if using a SCOPE NETMASK of 0, the request
+            should not set a SOURCE NETMASK of more bits than they are willing
+            to cache.</t>
 
             <t>Recursive Resolvers should implement algorithms to improve the
             cache hit rate, given the size constraints indicated above.
@@ -714,8 +760,10 @@
         subsequent queries to those Nameservers.</t>
 
         <t>Additionally, Recursive Resolvers MAY be configured to never send
-        the option when querying root and TLD servers, as these are unlikely
-        to generate different replies based on the IP of the client.</t>
+        the option when querying root, top-level, and effective top-level
+        domain servers.  These domains are delegation-centric and are very
+        unlikely to generate different replies based on the address of the
+        client.</t>
 
         <t>When probing, it is important that several things are probed:
         support for edns-client-subnet, support for EDNS0, support for EDNS0
@@ -763,34 +811,35 @@
           www.example.com, by forwarding the query to the Recursive Resolver R
           from IP address IP, asking for recursion.</t>
 
-          <t>R, supporting edns-client-subnet, looks up www.example.com in its
-          cache. An entry is found neither for www.example.com, nor for
+          <t>RNS, supporting edns-client-subnet, looks up www.example.com in
+          its cache. An entry is found neither for www.example.com, nor for
           example.com.</t>
 
-          <t>R builds a query to send to the root and .com servers. The
+          <t>RNS builds a query to send to the root and .com servers. The
           implementation of R provides facilities so an administrator can
-          configure R not to forward edns-client-subnet in certain cases. In
-          particular, R is configured to not include an edns-client-subnet
-          option when talking to TLD or root nameservers, as described in
-          <xref target="originating"/>. Thus, no edns-client-subnet option is
-          added, and resolution is performed as usual.</t>
+          configure RNS not to forward edns-client-subnet in certain cases. In
+          particular, RNS is configured to not include an edns-client-subnet
+          option when talking to delegation-centric nameservers, as described
+          in <xref target="originating"/>. Thus, no edns-client-subnet option
+          is added, and resolution is performed as usual.</t>
 
-          <t>R now knows the next server to query: Authoritative Nameserver
+          <t>RNS now knows the next server to query, Authoritative Nameserver
           ANS, responsible for example.com.</t>
 
-          <t>R prepares a new query for www.example.com, including an
+          <t>RNS prepares a new query for www.example.com, including an
           edns-client-subnet option with: <list style="symbols">
-              <t>OPTION-CODE, set to 8.</t>
+              <t>OPTION-CODE, set to 0x00 0x08.</t>
 
-              <t>OPTION-LENGTH, set to 0x00 0x07.</t>
+              <t>OPTION-LENGTH, set to 0x00 0x07 for the following fixed 4
+              octets plus the 3 octets that will be used for ADDRESS.</t>
 
               <t>FAMILY, set to 0x00 0x01 as IP is an IPv4 address.</t>
 
-              <t>SOURCE NETMASK, set to 0x18, as R is configured to conceal
+              <t>SOURCE NETMASK, set to 0x18, as RNS is configured to conceal
               the last 8 bits of every IPv4 address.</t>
 
-              <t>SCOPE NETMASK, set to 0x00, as specified by this document for
-              all requests.</t>
+              <t>SCOPE NETMASK, set to 0x1B, as RNS is willing to cache answers
+              up to a /27.</t>
 
               <t>ADDRESS, set to 0xC0 0x00 0x02, providing only the first 24
               bits of the IPv4 address.</t>
@@ -800,39 +849,43 @@
           edns-client-subnet. It parses the edns-client-subnet option, and
           generates an optimized reply.</t>
 
-          <t>Due to the internal implementation of the Authoritative
-          Nameserver ANS, ANS finds a reply that is optimal for the whole /16
-          of the client that performed the request.</t>
+          <t>Due to the internal implementation of ANS, it finds an answer that
+          is optimal for several /27 ranges within the ADDRESS/SOURCE NETMASK
+          of the request.  It chooses one randomly.  (Note well, this is just
+          one example of how ANS could pick a suitable answer.  Other selection
+          methods are possible.)
 
           <t>The Authoritative Nameserver ANS adds an edns-client-subnet
           option in the reply, containing: <list style="symbols">
-              <t>OPTION-CODE, set to 8.</t>
+              <t>OPTION-CODE, set to 0x00 0x08.</t>
 
-              <t>OPTION-LENGTH, set to 0x00 0x07.</t>
+              <t>OPTION-LENGTH, set to 0x00 0x08 for the following fixed 4
+              octets plus the 4 octets that will be used for ADDRESS .</t>
 
-              <t>FAMILY, set to 0x00 0x01.</t>
+              <t>FAMILY, set to 0x00 0x01, the same as the request.</t>
 
               <t>SOURCE NETMASK, set to 0x18, copied from the request.</t>
 
-              <t>SCOPE NETMASK, set to 0x10, indicating a /16 network.</t>
+              <t>SCOPE NETMASK, set to 0x1B, indicating a /27 network.</t>
 
-              <t>ADDRESS, set to 0xC0 0x00 0x02, copied from the request.</t>
+              <t>ADDRESS, set to 0xC0 0x00 0x02 0xE0, copied from the
+              request.</t>
             </list></t>
 
-          <t>The Recursive Resolver R receives the reply containing an
-          edns-client-subnet option. The resolver verifies that FAMILY, SOURCE
-          NETMASK, and ADDRESS match the request. If not, the option is
-          discarded.</t>
+          <t>RNS receives the reply containing an edns-client-subnet
+          option. The resolver verifies that FAMILY, SOURCE NETMASK, and the
+          SOURCE NETMASK bits of ADDRESS match the request. If not, the message
+          is discarded.</t>
 
           <t>The reply is interpreted as usual. Since the reply contains an
           edns-client-subnet option, the ADDRESS, SCOPE NETMASK, and FAMILY in
           the response are used to cache the entry.</t>
 
-          <t>R sends a response to stub resolver SR, without including an
+          <t>RNS sends a response to stub resolver SR, without including an
           edns-client-subnet option.</t>
 
-          <t>R receives another request to resolve www.example.com. This time,
-          a reply is cached. The reply, however, is tied to a particular
+          <t>RNS receives another request to resolve www.example.com. This
+          time, a reply is cached. The reply, however, is tied to a particular
           network. If the address of the client matches any network in the
           cache, then the reply is returned from the cache. Otherwise, another
           query is performed. If multiple results match, the one with the
@@ -859,6 +912,9 @@ Fastly
 POBox 78266
 San Francisco, CA 94107
 ]]></artwork>
+
+
+
       </figure>
     </section>
 
@@ -870,9 +926,9 @@ San Francisco, CA 94107
       Rowlands, Chris Morrow, Kara Moscoe, Alex Nizhner, Warren Kumari,
       Richard Rabbat from Google, Terry Farmer, Mark Teodoro, Edward Lewis,
       Eric Burger from Neustar, David Ulevitch, Matthew Dempsky from OpenDNS,
-      Patrick W. Gilmore from Akamai, Colm MacCarthaigh, Richard Sheehan and
-      all the other people that replied to our emails on various mailing
-      lists.</t>
+      Patrick W. Gilmore and Jason Moreau from Akamai, Colm MacCarthaigh,
+      Richard Sheehan and all the other people that replied to our emails on
+      various mailing lists.</t>
     </section>
   </middle>
 
@@ -895,6 +951,10 @@ San Francisco, CA 94107
       &rfc1035;
 
       &rfc1034;
+
+      &rfc1700;
+
+      &rfc1918;
     </references>
 
     <references title="Informative References">
@@ -986,6 +1046,26 @@ San Francisco, CA 94107
             <t>Added IANA-assigned option code.</t>
           </list></t>
       </section>
+
+      <section title="-03">
+        <t><list style="symbols">
+            <t>Allow non-zero SCOPE NETMASK for Recursive Resolvers to
+            indicate their maximum cacheable mask length, and updated the
+            example accordingly.</t>
+
+            <t>A note on Authoritative Nameservers receiving requests that
+            specify private address space.</t>
+
+            <t>A note to always ask for the longest acceptable SCOPE NETMASK,
+            even if a prior answer indicated that a shorter netmask was
+            optimal.</t>
+
+            <t>Marked up a couple of references.</t>
+
+            <t>Minor grammatical consistency edits.</t>
+        </list></t>
+      </section>
+
     </section>
   </back>
 </rfc>
