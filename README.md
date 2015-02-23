@@ -15,7 +15,7 @@ Expires: August 27, 2015                                     D. Lawrence
 
 
                      Client Subnet in DNS Requests
-                draft-ietf-dnsop-edns-client-subnet-01.1
+                draft-ietf-dnsop-edns-client-subnet-01.2
 
 Abstract
 
@@ -775,8 +775,8 @@ Internet-Draft        Client Subnet in DNS Requests        February 2015
 
    With multiple queries for the same name in flight, the attacker has a
    higher chance of success in sending a matching response (with with
-   the SCOPE NETMASK being 0 (meaning an empty prefix) to get it cached
-   for many hosts).
+   the SCOPE PREFIX-LENGTH being 0 (meaning an empty prefix) to get it
+   cached for many hosts).
 
    To counter this, every ECS option in a response packet MUST contain
    the FAMILY and SOURCE PREFIX-LENGTH fields from the corresponding
@@ -1053,9 +1053,9 @@ Internet-Draft        Client Subnet in DNS Requests        February 2015
    Nizhner, Warren Kumari, Richard Rabbat from Google, Terry Farmer,
    Mark Teodoro, Edward Lewis, Eric Burger from Neustar, David Ulevitch,
    Matthew Dempsky from OpenDNS, Patrick W.  Gilmore and Jason Moreau
-   from Akamai, Colm MacCarthaigh, John Dickinson, Richard Sheehan and
-   all the other people that replied to our emails on various mailing
-   lists.
+   from Akamai, Colm MacCarthaigh, John Dickinson, Richard Sheehan,
+   Antonio Querubin and all the other people that replied to our emails
+   on various mailing lists.
 
 
 
@@ -1132,26 +1132,30 @@ Appendix A.  Document History
 
    [RFC Editor: Please delete this section before publication.]
 
+   -01.1 to -01.2
+
+   o  I'd missed on instance of NETMASK (Antonio Querubin)
+
    -00 to -01.1 (IETF)
 
-      NETMASK was not a good desription, changed to PREFIX-LENGTH (
+   o  NETMASK was not a good desription, changed to PREFIX-LENGTH (
       Jinmei, others).  Stole most of the definition for prefix-length
       from RFC4291.
 
-      Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
+   o  Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
       IPv6 (Jinmei)
 
-      Explicity note that ECS cannot be used to hand NXD to some clients
+   o  Explicity note that ECS cannot be used to hand NXD to some clients
       and not others.  (Jinmei)
 
-      Added text explaining that implmentations need to document thier
+   o  Added text explaining that implmentations need to document thier
       behavior with overlapping networks.
 
-      Fixed some of legacy IPv4 cruft (things like 0.0.0.0/0)
+   o  Fixed some of legacy IPv4 cruft (things like 0.0.0.0/0)
 
-      Some more grammar / working cleanups.
+   o  Some more grammar / working cleanups.
 
-      Replaced a whole heap of occurances of "edns-client-subnet" with
+   o  Replaced a whole heap of occurances of "edns-client-subnet" with
       "ECS" for readability.  (John Dickinson)
 
 A.1.  -00
@@ -1167,10 +1171,6 @@ A.1.  -00
 
    o  Updated NAT section.
 
-   o  Added recommendation to not use the default /24 recommendation for
-      the source netmask field if more detailed information about the
-      network is available.
-
 
 
 
@@ -1179,6 +1179,10 @@ Contavalli, et al.       Expires August 27, 2015               [Page 21]
 
 Internet-Draft        Client Subnet in DNS Requests        February 2015
 
+
+   o  Added recommendation to not use the default /24 recommendation for
+      the source netmask field if more detailed information about the
+      network is available.
 
    o  Rewritten problem statement to be more clear about the goal of
       edns-client-subnet and the fact that it's entirely optional.
@@ -1225,16 +1229,14 @@ A.2.  -01
    o  Intermediate Nameservers can now remove an edns-client-subnet
       option, or reduce the SOURCE NETMASK to increase privacy.
 
-   o  Added a reference to DoS attacks in the Security section.
-
-
-
 
 
 Contavalli, et al.       Expires August 27, 2015               [Page 22]
 
 Internet-Draft        Client Subnet in DNS Requests        February 2015
 
+
+   o  Added a reference to DoS attacks in the Security section.
 
    o  Don't use "network range", as it seems to have different meaning
       in other contexts, and turned out to be confusing.
@@ -1277,8 +1279,6 @@ Authors' Addresses
    US
 
    Email: ccontavalli@google.com
-
-
 
 
 

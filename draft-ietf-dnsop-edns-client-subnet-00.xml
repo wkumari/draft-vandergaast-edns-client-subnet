@@ -13,7 +13,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.1"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.2"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -716,8 +716,8 @@
 
         <t>With multiple queries for the same name in flight, the attacker has
         a higher chance of success in sending a matching response (with with
-        the SCOPE NETMASK being 0 (meaning an empty prefix) to get it cached
-        for many hosts).</t>
+        the SCOPE PREFIX-LENGTH being 0 (meaning an empty prefix) to get it
+        cached for many hosts).</t>
 
         <t>To counter this, every ECS option in a response packet MUST contain
         the FAMILY and SOURCE PREFIX-LENGTH fields from the corresponding
@@ -969,8 +969,9 @@ San Francisco, CA 94107
       Warren Kumari, Richard Rabbat from Google, Terry Farmer, Mark Teodoro,
       Edward Lewis, Eric Burger from Neustar, David Ulevitch, Matthew Dempsky
       from OpenDNS, Patrick W. Gilmore and Jason Moreau from Akamai, Colm
-      MacCarthaigh, John Dickinson, Richard Sheehan and all the other people
-      that replied to our emails on various mailing lists.</t>
+      MacCarthaigh, John Dickinson, Richard Sheehan, Antonio Querubin and all
+      the other people that replied to our emails on various mailing
+      lists.</t>
     </section>
   </middle>
 
@@ -1006,7 +1007,11 @@ San Francisco, CA 94107
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
-      <t>-00 to -01.1 (IETF)<list>
+      <t>-01.1 to -01.2<list style="symbols">
+          <t>I'd missed on instance of NETMASK (Antonio Querubin) </t>
+        </list></t>
+
+      <t>-00 to -01.1 (IETF)<list style="symbols">
           <t>NETMASK was not a good desription, changed to PREFIX-LENGTH (
           Jinmei, others). Stole most of the definition for prefix-length from
           RFC4291. </t>
