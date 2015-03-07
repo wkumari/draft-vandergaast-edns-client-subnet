@@ -13,7 +13,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.2"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.3"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -155,7 +155,7 @@
       actions may be used by a parent when setting controls on where a minor
       may connect.) Similarly, many ISPs and other organizations use a
       Centralized Resolver infrastructure that can be distant from the clients
-      the resolvers serve. The cases all lead to less than optimal replies
+      the resolvers serve. The cases all lead to less than desirable replies
       from topology-sensitive Authoritative Nameservers.</t>
 
       <t>This draft defines an <xref target="RFC6891">EDNS0</xref> option to
@@ -219,8 +219,8 @@
           <t hangText="Centralized Resolvers:">Recursive Resolvers that serve
           a topologically diverse network address space.</t>
 
-          <t hangText="Optimized Reply:">A response from a nameserver that is
-          optimized for the node that sent the query, normally based on
+          <t hangText="Tailored Response:">A response from a nameserver that is
+          customized for the node that sent the request, often based on
           performance (i.e. lowest latency, least number of hops, topological
           distance, ...).</t>
 
@@ -348,7 +348,7 @@
           number of bits indicated by the SOURCE PREFIX-LENGTH field, with
           bits set to 0 to pad up to the end of the last octet used. (This
           need not be as many octets as a complete address would take.) In the
-          response, if the SCOPE PREFIX-LENGTH of the query was 0 then ADDRESS
+          reply, if the SCOPE PREFIX-LENGTH of the query was 0 then ADDRESS
           must contain the same octets as in the query. Otherwise, the bits
           for ADDRESS will be significant through the maximum of the SOURCE
           PREFIX-LENGTH or SCOPE PREFIX-LENGTH, and 0 filled to the end of an
@@ -385,7 +385,7 @@
         information.</t>
 
         <t>For privacy reasons, and because the whole IP address is rarely
-        required to determine an optimized response, the ADDRESS field in the
+        required to determine a tailored response, the ADDRESS field in the
         option SHOULD be truncated to a certain number of bits, chosen by the
         administrators of the Intermediate Nameserver, as described in <xref
         target="security"/>.</t>
@@ -400,7 +400,7 @@
       <section anchor="responding" title="Generating a Response">
         <t>When a query containing an ECS option is received, an Authoritative
         Nameserver supporting ECS MAY use the address information specified in
-        the option in order to generate an optimized response.</t>
+        the option in order to generate a tailored response.</t>
 
         <t>Authoritative Nameservers that have not implemented or enabled
         support for the ECS option may safely ignore it within incoming
@@ -429,11 +429,11 @@
         which the answer is intended.</t>
 
         <t>A SCOPE PREFIX-LENGTH value longer than the SOURCE PREFIX-LENGTH
-        indicates that the address and prefix-length provided in the query was
-        not specific enough to select a single, best response. The ADDRESS
+        indicates that the address and prefix length provided in the query was
+        not specific enough to select a single, best response. The ADDRESS 
         MUST be extended to SCOPE PREFIX-LENGTH significant bits to indicate
-        the network for which it is optimal, but the Recursive Resolver SHOULD
-        still provide the result as the answer to the triggering client
+        the network for which it is best suited, but the Recursive Resolver
+        SHOULD still provide the result as the answer to the triggering client
         request even if the client is in a different address range.</t>
 
         <t>Conversely, a shorter SCOPE PREFIX-LENGTH indicates that more bits
@@ -461,33 +461,32 @@
         is suitable for all clients for the duration of its TTL.</t>
 
         <t>The specific logic that an Authoritative Nameserver uses to choose
-        an optimized response is not in the scope of this document.
+        a tailored response is not in the scope of this document.
         Implementers are encouraged, however, to consider carefully their
-        selection of SCOPE PREFIX-LENGTH for the response in the event that an
-        optimal response cannot be determined. </t>
+        selection of SCOPE PREFIX-LENGTH for the response in the event that
+        the best tailored response cannot be determined. </t>
 
         <t>If the authorative nameserver operator configures a more specific
-        (longer prefix-length) optimized response within a configured less
-        specific (shorter prefix-length) response implmentations can
+        (longer prefix-length) tailored response within a configured less
+        specific (shorter prefix-length) response implementations can
         either:</t>
 
         <t><list style="numbers">
             <t>Alert the operator that the order of queries will determine
             which answers get cached. The implemention may warn and continue
-            or treat this as an error and refuse to lead the configuration
-            or</t>
+            or treat this as an error and refuse to load the configuration,
+            or,</t>
 
             <t>Deaggregate the longer optimized response into multiple shorter
             replies.</t>
-          </list>Which behavior is chosen is up to the implmentation (and may
-        be configured), but implmentations MUST document this behavior</t>
+          </list>Which behavior is chosen is up to the implementation (and may
+        be configured), but implementations MUST document this behavior</t>
       </section>
 
       <section anchor="caching"
-               title="Handling edns-client-subnet Replies and Caching">
+               title="Handling ECS Replies and Caching">
         <t>When an Intermediate Nameserver receives a response containing an
-        ECS option, it will return a reply to its client and SHOULD cache the
-        result.</t>
+        ECS option, it SHOULD cache the result.</t>
 
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
         of ADDRESS in the response don't match the fields in the corresponding
@@ -517,21 +516,22 @@
         <t>If the address of the client does not match any network in the
         cache, then the Recursive Resolver MUST behave as if no match was
         found and perform resolution as usual. This is necessary to avoid
-        suboptimal replies in the cache from being returned to the wrong
+        tailored responses in the cache from being returned to the wrong
         clients, and to avoid a single query coming from a client on a
-        different network from polluting the cache with a suboptimal response
+        different network from polluting the cache with a tailored response
         for all the users of that resolver.</t>
 
         <t>Note that every time a Recursive Resolver queries an Authoritative
         Nameserver by forwarding the ECS option that it received from another
         client, a short SOURCE PREFIX-LENGTH in the original query could cause
-        a suboptimal response to be returned by the Authoritative
-        Nameserver.</t>
+        a tailored response to be returned by the Authoritative Nameserver that
+        would not be the tailored response it would use if it had more
+        information.</t>
 
         <t>When the query includes a longer SCOPE PREFIX-LENGTH, the response
-        returned may still be cached as optimal for the ADDRESS and SCOPE
-        PREFIX-LENGTH of the response. This might still be suboptimal for the
-        original client.</t>
+        returned may still be cached for the ADDRESS and SCOPE PREFIX-LENGTH of
+        the response. This might still be suboptimal for the original
+        client.</t>
 
         <t>To avoid this suboptimal response from being served from cache for
         other clients for which a better reply would be available, the
@@ -550,14 +550,15 @@
             indicated by ADDRESS and SCOPE PREFIX-LENGTH.</t>
           </list></t>
 
-        <t>As another reply is received, the response will be tied to a
-        different network. The server SHOULD keep in cache both replies, and
-        return the most appropriate one depending on the address of the
-        client. Per standard DNS caching behavior, all records SHOULD be
-        retained until their TTL expires. Subsequent queries to refresh the
-        data should always specify the longest SCOPE PREFIX-LENGTH that the
-        Recursive Resolver is willing to cache, even if previous responses
-        indicated that a shorter prefix-length was the optimal response.</t>
+        <t>When a response is received for a query that used a different
+        SOURCE, it will be tied to a different network. The server SHOULD keep
+        in cache both replies, and return the most appropriate one depending on
+        the address of the client. Per standard DNS caching behavior, all
+        records SHOULD be retained until their TTL expires. Subsequent queries
+        to refresh the data should always specify the longest SCOPE
+        PREFIX-LENGTH that the Recursive Resolver is willing to cache, even if
+        previous responses indicated that a shorter prefix length was the
+        optimal response.</t>
 
         <t>Although omitting network-specific caching will significantly
         simplify an implementation, the resulting drop in cache hits is very
@@ -622,7 +623,8 @@
       Codes (OPT)" registry to ECS.</t>
 
       <t>The IANA is requested to update the reference
-      ("draft-vandergaast-ECS") to refer to this RFC when published.</t>
+      ("draft-ietf-dnsop-edns-client-subnet") to refer to this RFC when
+      published.</t>
     </section>
 
     <section title="DNSSEC Considerations">
@@ -682,13 +684,13 @@
         <t>When a non-zero SCOPE PREFIX-LENGTH is provided by the Recursive
         Resolver that is longer than SOURCE PREFIX-LENGTH, users can often
         obtain more optimal mapping if the resolver is well-used. Replies will
-        have answers optimized up to SCOPE PREFIX-LENGTH bits for a subset of
-        the SOURCE PREFIX-LENGTH. Subsequent querys within the TTL from
+        have answers tailored up to SCOPE PREFIX-LENGTH bits for a subset of
+        the SOURCE PREFIX-LENGTH. Subsequent queries within the TTL from
         clients within the cached range will be served the optimal answer,
         while still preserving privacy of the user.</t>
 
-        <t>ISPs will have more detailed knowledge of their own networks. That
-        is, they will know if all 24-bit prefixes in a /20 are in the same
+        <t>ISPs should have more detailed knowledge of their own networks. That
+        is, they might know that all 24-bit prefixes in a /20 are in the same
         area. In those cases, for optimal cache utilization and improved
         privacy, the ISP's Recursive Resolver SHOULD truncate IP addresses in
         this /20 to just 20 bits, instead of 24 as recommended above.</t>
@@ -702,7 +704,7 @@
         <t>Note that even without an ECS option, any server queried directly
         by the user will be able to see the full client IP address. Recursive
         Resolvers or Authoritative Nameservers MAY use the source IP address
-        of queries to return a cached entry or to generate an optimized
+        of queries to return a cached entry or to generate a tailored
         response that best matches the query.</t>
       </section>
 
@@ -715,7 +717,7 @@
         option.</t>
 
         <t>With multiple queries for the same name in flight, the attacker has
-        a higher chance of success in sending a matching response (with with
+        a higher chance of success in sending a matching response (with
         the SCOPE PREFIX-LENGTH being 0 (meaning an empty prefix) to get it
         cached for many hosts).</t>
 
@@ -737,7 +739,7 @@
             results that will rarely (if ever) be used.</t>
 
             <t>reverse engineer the algorithms (or data) used by the
-            Authoritative Nameserver to calculate the optimized answer.</t>
+            Authoritative Nameserver to calculate tailored responses.</t>
 
             <t>mount a denial-of-service attack against an Intermediate
             Nameserver, by forcing it to perform many more recursive queries
@@ -862,7 +864,7 @@
 
           <t>RNS builds a query to send to the root and .com servers. The
           implementation of RNS provides facilities so an administrator can
-          configure RNS not to forward ECS in certain cases. In particular,
+          configure it not to forward ECS in certain cases. In particular,
           RNS is configured to not include an ECS option when talking to
           delegation-centric nameservers, as described in <xref
           target="originating"/>. Thus, no ECS option is added, and resolution
@@ -891,7 +893,7 @@
             </list></t>
 
           <t>The query is sent. Server ANS understands and uses ECS. It parses
-          the ECS option, and generates an optimized response.</t>
+          the ECS option, and generates a tailored response.</t>
 
           <t>Due to the internal implementation of ANS, it finds an answer
           that is optimal for several /27 ranges within the ADDRESS/SOURCE
@@ -929,7 +931,7 @@
           <t>RNS sends a response to stub resolver SR, without including an
           ECS option.</t>
 
-          <t>RNS receives another request to resolve www.example.com. This
+          <t>RNS receives another query to resolve www.example.com. This
           time, a response is cached. The response, however, is tied to a
           particular network. If the address of the client matches any network
           in the cache, then the response is returned from the cache.
@@ -947,7 +949,9 @@
       <t><figure>
           <artwork><![CDATA[Edward Lewis
 ICANN
-12025 Waterfront Drive, Suite 300 Los Angeles, CA 90094-2536 USA
+12025 Waterfront Drive, Suite 300
+Los Angeles CA 90094-2536
+USA
 Email: edward.lewis@icann.org]]></artwork>
         </figure></t>
 
@@ -955,9 +959,19 @@ Email: edward.lewis@icann.org]]></artwork>
         <artwork><![CDATA[Sean Leach
 Fastly
 POBox 78266
-San Francisco, CA 94107
+San Francisco CA 94107
+USA
 ]]></artwork>
       </figure>
+
+      <figure>
+        <artwork><![CDATA[Jason Moreau
+Akamai Technologies
+8 Cambridge Ctr
+Cambridge MA 02142-1413
+USA
+]]></artwork>
+     </figure>
     </section>
 
     <section title="Acknowledgements">
@@ -968,10 +982,10 @@ San Francisco, CA 94107
       Presotto, Philip Rowlands, Chris Morrow, Kara Moscoe, Alex Nizhner,
       Warren Kumari, Richard Rabbat from Google, Terry Farmer, Mark Teodoro,
       Edward Lewis, Eric Burger from Neustar, David Ulevitch, Matthew Dempsky
-      from OpenDNS, Patrick W. Gilmore and Jason Moreau from Akamai, Colm
-      MacCarthaigh, John Dickinson, Richard Sheehan, Antonio Querubin and all
-      the other people that replied to our emails on various mailing
-      lists.</t>
+      from OpenDNS, Steve Hill, Patrick W. Gilmore from Akamai, Andrew
+      Sullivan from Dyn, Colm MacCarthaigh, John Dickinson, Richard Sheehan,
+      Antonio Querubin, and all the other people that replied to our emails on
+      various mailing lists.</t>
     </section>
   </middle>
 
@@ -1006,6 +1020,10 @@ San Francisco, CA 94107
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-01.2 to -01.3<list style="symbols">
+          <t>Soften "optimized reply" language per Andrew Sullivan.</t>
+        </list></t>
 
       <t>-01.1 to -01.2<list style="symbols">
           <t>I'd missed on instance of NETMASK (Antonio Querubin) </t>
