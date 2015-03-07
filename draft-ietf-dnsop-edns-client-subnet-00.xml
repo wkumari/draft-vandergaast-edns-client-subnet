@@ -13,7 +13,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.3"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.4"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -107,7 +107,7 @@
       </address>
     </author>
 
-    <date day="23" month="February" year="2015"/>
+    <date day="7" month="March" year="2015"/>
 
     <area>ops</area>
 
@@ -498,9 +498,7 @@
         PREFIX-LENGTH fields, as detailed below. Note that the additional and
         authority sections from a DNS response message are specifically
         excluded here. Any information cached from these sections MUST NOT be
-        tied to a network. This means that ECS option cannot be used to tell
-        some clients that a name exists and others that the name does not
-        exist (NXDOMAIN).</t>
+        tied to a network.</t>
 
         <t>If another query is received matching the name and type of an entry
         in the cache, the resolver will check whether the FAMILY and ADDRESS
@@ -1020,6 +1018,10 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-01.3 to -01.4<list style="symbols">
+          <t>Removed incorrect assertion about NXDOMAIN implications.</t>
+        </list></t>
 
       <t>-01.2 to -01.3<list style="symbols">
           <t>Soften "optimized reply" language per Andrew Sullivan.</t>
