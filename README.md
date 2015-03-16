@@ -7,15 +7,15 @@
 dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
-Expires: September 8, 2015                                   D. Lawrence
+Expires: September 17, 2015                                  D. Lawrence
                                                      Akamai Technologies
                                                                W. Kumari
                                                                   Google
-                                                           March 7, 2015
+                                                          March 16, 2015
 
 
                      Client Subnet in DNS Requests
-                draft-ietf-dnsop-edns-client-subnet-01.4
+                draft-ietf-dnsop-edns-client-subnet-01.5
 
 Abstract
 
@@ -48,14 +48,14 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 8, 2015.
+   This Internet-Draft will expire on September 17, 2015.
 
 
 
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 1]
+Contavalli, et al.     Expires September 17, 2015               [Page 1]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -111,7 +111,7 @@ Table of Contents
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 2]
+Contavalli, et al.     Expires September 17, 2015               [Page 2]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -167,7 +167,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 3]
+Contavalli, et al.     Expires September 17, 2015               [Page 3]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -223,7 +223,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 4]
+Contavalli, et al.     Expires September 17, 2015               [Page 4]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -279,7 +279,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 5]
+Contavalli, et al.     Expires September 17, 2015               [Page 5]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -335,7 +335,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 6]
+Contavalli, et al.     Expires September 17, 2015               [Page 6]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -391,7 +391,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 7]
+Contavalli, et al.     Expires September 17, 2015               [Page 7]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -447,7 +447,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 8]
+Contavalli, et al.     Expires September 17, 2015               [Page 8]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -503,7 +503,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015               [Page 9]
+Contavalli, et al.     Expires September 17, 2015               [Page 9]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -559,7 +559,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 10]
+Contavalli, et al.     Expires September 17, 2015              [Page 10]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -615,7 +615,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 11]
+Contavalli, et al.     Expires September 17, 2015              [Page 11]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -671,7 +671,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 12]
+Contavalli, et al.     Expires September 17, 2015              [Page 12]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -727,7 +727,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 13]
+Contavalli, et al.     Expires September 17, 2015              [Page 13]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -783,7 +783,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 14]
+Contavalli, et al.     Expires September 17, 2015              [Page 14]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -839,7 +839,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 15]
+Contavalli, et al.     Expires September 17, 2015              [Page 15]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -895,7 +895,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 16]
+Contavalli, et al.     Expires September 17, 2015              [Page 16]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -951,7 +951,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 17]
+Contavalli, et al.     Expires September 17, 2015              [Page 17]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1007,7 +1007,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 18]
+Contavalli, et al.     Expires September 17, 2015              [Page 18]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1063,7 +1063,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 19]
+Contavalli, et al.     Expires September 17, 2015              [Page 19]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1119,7 +1119,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 20]
+Contavalli, et al.     Expires September 17, 2015              [Page 20]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1175,7 +1175,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 21]
+Contavalli, et al.     Expires September 17, 2015              [Page 21]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1231,7 +1231,7 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 22]
+Contavalli, et al.     Expires September 17, 2015              [Page 22]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1287,7 +1287,7 @@ Appendix A.  Document History
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 23]
+Contavalli, et al.     Expires September 17, 2015              [Page 23]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1343,7 +1343,7 @@ A.1.  -00
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 24]
+Contavalli, et al.     Expires September 17, 2015              [Page 24]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1399,7 +1399,7 @@ A.4.  -03*
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 25]
+Contavalli, et al.     Expires September 17, 2015              [Page 25]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1455,7 +1455,7 @@ Authors' Addresses
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 26]
+Contavalli, et al.     Expires September 17, 2015              [Page 26]
 
 Internet-Draft        Client Subnet in DNS Requests           March 2015
 
@@ -1511,5 +1511,5 @@ Internet-Draft        Client Subnet in DNS Requests           March 2015
 
 
 
-Contavalli, et al.      Expires September 8, 2015              [Page 27]
+Contavalli, et al.     Expires September 17, 2015              [Page 27]
 ```

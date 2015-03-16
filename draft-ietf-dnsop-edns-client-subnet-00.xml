@@ -13,7 +13,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.4"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01.5"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -107,7 +107,7 @@
       </address>
     </author>
 
-    <date day="7" month="March" year="2015"/>
+    <date day="16" month="March" year="2015"/>
 
     <area>ops</area>
 
