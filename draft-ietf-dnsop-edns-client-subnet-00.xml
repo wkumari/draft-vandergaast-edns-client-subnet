@@ -243,7 +243,8 @@
       <t>The format of this option is described in <xref target="format"/>,
       and is meant to be added in queries sent by Intermediate Nameservers in
       a way transparent to Stub Resolvers and end users, as described in <xref
-      target="originating"/>. ECS is only defined for the IN DNS class.</t>
+      target="originating"/>. ECS is only defined for the Internet (IN) DNS
+      class.</t>
 
       <t>As described in <xref target="responding"/>, an Authoritative
       Nameserver could use this EDNS0 option as a hint to better locate the
@@ -275,8 +276,7 @@
 
       <t>Failure to support this option or its improper handling will, at
       worst, cause suboptimal identification of client location, which is a
-      common occurrence in current content delivery network (CDN) setups and
-      not a cause of concern.</t>
+      common occurrence in current content delivery network (CDN) setups.</t>
 
       <t><xref target="originating"/> also provides a mechanism for Stub
       Resolvers to signal Recursive Resolvers that they do not want ECS
@@ -360,228 +360,320 @@
     <section title="Protocol Description">
       <section anchor="originating" title="Originating the Option">
         <t>The ECS option should generally be added by Recursive Resolvers
-        when querying other servers, as described in <xref
-        target="send_when"/>.</t>
+        when querying Authoritative Nameservers, as described in <xref
+        target="send_when"/>.  The option can also be initialized by a Stub
+        Resolver or Forwarder.</t>
 
-        <t>In this option, the server should include the IP address of the
-        client that caused the query to be generated, truncated to the number
-        of bits specified in the SOURCE PREFIX-LENGTH field.</t>
+        <section anchor="originating_recursor" title="Recursive Resolvers">
+          <t>The setup of the ECS option in a Recursive Resolver depends on the
+          client query that triggered the resolution process.</t>
 
-        <t>A Stub Resolver MAY generate DNS queries with an ECS option with
-        SOURCE PREFIX-LENGTH set to 0 (i.e. 0.0.0.0/0 for IPv4 or ::/0 for
-        IPv6) to indicate that the Recursive Resolver MUST NOT add address
-        information of the client to its queries. The subsequent Recursive
-        Resolver query to the Authoritative Nameserver will then either not
-        include an ECS option or MAY optionally include its own address
-        information, which is what the Authoritative Nameserver will use
-        anyway to generate the response in lieu of no option. This allows the
-        answer to be handled by the same caching mechanism as other queries,
-        with an explicit indicator of the applicable scope. Subsequent Stub
-        Resolver queries for /0 can then be answered from this cached
-        response.</t>
+          <t>In the usual case, where no ECS option was present in the client
+          query, the Recursive Resolver initializes the option by setting the
+          FAMILY of the client's address. It then uses the value of its maximum
+          cacheable prefix length to set both SOURCE PREFIX-LENGTH and SCOPE
+          PREFIX-LENGTH. For privacy reasons, and because the whole IP address
+          is rarely required to determine a tailored response, this length
+          SHOULD be shorter than the full address, as described in
+          <xref target="security"/>.</t>
 
-        <t>The Stub Resolver may also add non-empty ECS options to its
-        queries, but Recursive Resolvers are not required to use this
-        information.</t>
+          <t>If the triggering query included an ECS option itself, it MUST be
+          examined for its SOURCE PREFIX-LENGTH. The Recursive Resolver's
+          outgoing query MUST then set SOURCE PREFIX-LENGTH to the shorter of
+          the incoming query's SOURCE PREFIX-LENGTH or the server's maximum
+          cacheable prefix length. SCOPE PREFIX-LENGTH is set to the server's
+          maximum cacheable prefix length.</t>
 
-        <t>For privacy reasons, and because the whole IP address is rarely
-        required to determine a tailored response, the ADDRESS field in the
-        option SHOULD be truncated to a certain number of bits, chosen by the
-        administrators of the Intermediate Nameserver, as described in <xref
-        target="security"/>.</t>
+          <t>Finally, in both cases, the ADDRESS is then added up to the SOURCE
+          PREFIX-LENGTH number of bits, with trailing 0 bits added if needed to
+          fill the final octet. The total number of octets used should only be
+          enough to cover SOURCE PREFIX-LENGTH bits, rather than the full width
+          that would normally be used by addresses in FAMILY.</t>
 
-        <t>If the Stub Resolver requests additional privacy via a SOURCE
-        PREFIX-LENGTH that is shorter than the maximum cacheable SCOPE
-        PREFIX-LENGTH that the Recursive Resolver allows, the Recursive
-        Resolver SHOULD issue the query with its longer SCOPE
-        PREFIX-LENGTH.</t>
+          <t>FAMILY and ADDRESS information MAY be used from the ECS option
+          incoming query. Passing the existing address data is supportive of
+          the Recursive Resolver being used as the target of a Forwarder, but
+          could possibly run into policy problems with regard to usage
+          agreements between the Recursive Resolver and Authoritative
+          Namserver. See <xref target="whitelist"/> for more discussion on this
+          point. If the Recursive Resolver will not forward the FAMILY and
+          ADDRESS data from the incoming ECS option, it MUST return a REFUSED
+          response.</t>
+
+          <t>Subsequent queries to refresh the data should always specify the
+          longest SCOPE PREFIX-LENGTH that the Recursive Resolver is willing to
+          cache, even if a previous response indicated that a shorter prefix
+          length was sufficient.</t>
+        </section>
+
+        <section title="Stub Resolvers">
+          <t>A Stub Resolver MAY generate DNS queries with an ECS option set to
+          indicate its own level of privacy via SOURCE PREFIX-LENGTH. An
+          Intermediate Nameserver that receives such a query MUST NOT make
+          queries that include more bits of client address than in the
+          originating query.</t>
+
+          <t>A SOURCE PREFIX-LENGTH of 0 means the Recursive Resolver MUST NOT
+          add address information of the client to its queries. The subsequent
+          Recursive Resolver query to the Authoritative Nameserver will then
+          either not include an ECS option or MAY optionally include its own
+          address information, which is what the Authoritative Nameserver will
+          almost certainly use to generate any Tailored Response in lieu of an
+          option. This allows the answer to be handled by the same caching
+          mechanism as other queries, with an explicit indicator of the
+          applicable scope. Subsequent Stub Resolver queries for /0 can then be
+          answered from this cached response.</t>
+
+          <t>A Stub Resolver SHOULD set SCOPE PREFIX-LENGTH to 0. It MAY
+          include FAMILY and ADDRESS data, but should be prepared to handle a
+          REFUSED response if the Intermediate Nameserver that it queries has a
+          policy that denies forwarding of the ADDRESS. If there is no ADDRESS
+          set, FAMILY MUST be set to 0.</t>
+        </section>
+
+        <section title="Forwarders">
+          <t>Forwarders essentially appear to be Stub Resolvers to whatever
+          Recursive Resolver is ultimately handling the query, but look like a
+          Recursive Resolver to their client. A Forwarder using this option
+          MUST prepare it as described in the
+          <xref target="originating_recursor"/> section above. In particular,
+          a Forwarder that implements this protocol MUST honor SOURCE
+          PREFIX-LENGTH restrictions indicated in the incoming query from its
+          client. See also <xref target="transitivity"/>.</t>
+
+          <t>Even though a Forwarder normally has a cache, it should be aware
+          that any maximum cacheable length it sets in SCOPE PREFIX-LENGTH will
+          essentially be ignored, as the Recursive Resolver will use its own
+          value for the purpose of managing its own cache.</t>
+
+          <t>Since the Recursive Resolver it contacts will essentially treat it
+          as a Stub Resolver, the Forwarder must be prepared for a REFUSED
+          response if the Recursive Resolver does not permit incoming ADDRESS
+          information. The Forwarded MUST retry with FAMILY and ADDRESS set to
+          0.</t>
+        </section>
       </section>
 
       <section anchor="responding" title="Generating a Response">
-        <t>When a query containing an ECS option is received, an Authoritative
-        Nameserver supporting ECS MAY use the address information specified in
-        the option in order to generate a tailored response.</t>
+        <section title="Authoritative Nameserver">
+          <t>When a query containing an ECS option is received, an
+          Authoritative Nameserver supporting ECS MAY use the address
+          information specified in the option in order to generate a tailored
+          response.</t>
 
-        <t>Authoritative Nameservers that have not implemented or enabled
-        support for the ECS option may safely ignore it within incoming
-        queries. Per <xref target="RFC6891"/> section 6.1.2, such a server
-        MUST NOT include an ECS option within replies, to indicate lack of
-        support for the option.</t>
+          <t>Authoritative Nameservers that have not implemented or enabled
+          support for the ECS option ought to safely ignore it within incoming
+          queries, per <xref target="RFC6891"/> section 6.1.2.  Such a server
+          MUST NOT include an ECS option within replies, to indicate lack of
+          support for it.  Implementers of Intermediate Nameservers should be
+          aware, however, that some nameservers incorrectly echo back unknown
+          EDNS0 options.</t>
 
-        <t>Queries with wrongly formatted options (e.g., wrong size) MUST be
-        rejected and a FORMERR response MUST be returned to the sender, as
-        described by <xref target="RFC6891"/>, Transport Considerations.</t>
+          <t>A query with a wrongly formatted option (e.g., an unknown FAMILY)
+          MUST be rejected and a FORMERR response MUST be returned to the
+          sender, as described by <xref target="RFC6891"/>, Transport
+          Considerations.</t>
 
-        <t>If the Authoritative Nameserver decides to use information from the
-        ECS option to calculate a response, it MUST include the option in the
-        response to indicate that the information was used and SHOULD be
-        cached accordingly. If the option was not included in a query, it MUST
-        NOT be included in the response.</t>
+          <t>An Authoritative Nameserver that implements this protocol and
+          receives an ECS option MUST include an ECS option in its response to
+          indicate that it SHOULD be cached accordingly, regardless of whether
+          the client information was needed to formulate an answer.  (Note that
+          the <xref target="RFC6891"/> requirement to reserve space for the OPT
+          record could mean that the answer section of the response will be
+          truncated and fallback to TCP indicated accordingly.)  If an ECS
+          option was not included in a query, one MUST NOT be included in the
+          response even if the server is providing a tailored response
+          (presumably based on the address from which it received the
+          query).</t>
 
-        <t>The FAMILY and SOURCE PREFIX-LENGTH in the response MUST match
-        those in the query. The first SOURCE PREFIX-LENGTH bits of the ADDRESS
-        in the response MUST match those in the query, even if fewer bits were
-        used to form the response. Echoing back the address and prefix length
-        helps to mitigate certain attack vectors, as described in <xref
-        target="security"/>.</t>
+          <t>The FAMILY and SOURCE PREFIX-LENGTH in the response MUST match
+          those in the query. The first SOURCE PREFIX-LENGTH bits of the
+          ADDRESS in the response MUST match those in the query, even if fewer
+          bits were used to form the response. Echoing back the address and
+          prefix length helps to mitigate certain attack vectors, as described
+          in <xref target="security"/>.</t>
 
-        <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
-        which the answer is intended.</t>
+          <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
+          which the answer is intended. If a non-zero SCOPE PREFIX-LENGTH was
+          supplied in the query, the SCOPE PREFIX-LENGTH of the response MAY
+          be longer than the SCOPE PREFIX-LENGTH of the query, to signal that
+          more specific answers are available; however, the Authoritative
+          Nameserver should still expect the response to be cached at the SCOPE
+          PREFIX-LENGTH that the query indicated.</t>
 
-        <t>A SCOPE PREFIX-LENGTH value longer than the SOURCE PREFIX-LENGTH
-        indicates that the address and prefix length provided in the query was
-        not specific enough to select a single, best response. The ADDRESS 
-        MUST be extended to SCOPE PREFIX-LENGTH significant bits to indicate
-        the network for which it is best suited, but the Recursive Resolver
-        SHOULD still provide the result as the answer to the triggering client
-        request even if the client is in a different address range.</t>
+          <t>A SCOPE PREFIX-LENGTH value longer than the SOURCE PREFIX-LENGTH
+          indicates that the provided prefix length was not specific enough to
+          select a single, best response. The ADDRESS MUST be extended to SCOPE
+          PREFIX-LENGTH significant bits to indicate the network for which it
+          is best suited.</t>
 
-        <t>Conversely, a shorter SCOPE PREFIX-LENGTH indicates that more bits
-        than necessary were provided, and the answer is suitable for a broader
-        range of addresses.</t>
+          <t>Conversely, a shorter SCOPE PREFIX-LENGTH indicates that more bits
+          than necessary were provided, and the answer is suitable for a
+          broader range of addresses.  This could be as short as 0, to indicate
+          that the answer is suitable for all addresses in FAMILY. [Open issue:
+          you could make a decent case that it should be suitable for all
+          addresses in all families; that's certainly simpler.]</t>
 
-        <t>If a non-zero SCOPE PREFIX-LENGTH was supplied in the query, the
-        SCOPE PREFIX-LENGTH of the response MUST be no longer than the SCOPE
-        PREFIX-LENGTH of the query.</t>
+          <t>In both cases, the value of the SCOPE PREFIX-LENGTH in the
+          response indicates to Intermediate Nameservers how the response
+          should be cached, as described in <xref target="caching"/>.</t>
 
-        <t>As not all netblocks are the same size, an Authoritative Nameserver
-        may return different values of SCOPE PREFIX-LENGTH for different
-        networks.</t>
+          <t>As the logical topology of any part of the network with regard to
+          the tailored response can vary, an Authoritative Nameserver may
+          return different values of SCOPE PREFIX-LENGTH for different
+          networks.</t>
 
-        <t>In both cases, the value of the SCOPE PREFIX-LENGTH in the response
-        has strong implications with regard to how the response will be cached
-        by Intermediate Nameservers, as described in <xref
-        target="caching"/>.</t>
+          <t>The specific logic that an Authoritative Nameserver uses to choose
+          a tailored response is not in the scope of this document.
+          Implementers are encouraged, however, to consider carefully their
+          selection of SCOPE PREFIX-LENGTH for the response in the event that
+          the best tailored response cannot be determined. [Open issue: This
+          seems so very vague; More text here about possible strategy?]</t>
 
-        <t>If the ECS option in the query is not used at all, a server
-        supporting ECS MUST indicate that no bits of the ADDRESS in the query
-        have been used by specifying a SCOPE PREFIX-LENGTH of 0, equivalent to
-        the networks 0.0.0.0/0 or ::/0. This could happen, for example,
-        because the response is invariant across the network space. The answer
-        is suitable for all clients for the duration of its TTL.</t>
+          <t>If the authorative nameserver operator configures a more specific
+          (longer prefix length) tailored response within a configured less
+          specific (shorter prefix length) response, then implementations can
+          either:</t>
 
-        <t>The specific logic that an Authoritative Nameserver uses to choose
-        a tailored response is not in the scope of this document.
-        Implementers are encouraged, however, to consider carefully their
-        selection of SCOPE PREFIX-LENGTH for the response in the event that
-        the best tailored response cannot be determined. </t>
+          <t><list style="numbers">
+              <t>Deaggregate the shorter prefix response into multiple longer
+              prefix responses, or,</t>
 
-        <t>If the authorative nameserver operator configures a more specific
-        (longer prefix-length) tailored response within a configured less
-        specific (shorter prefix-length) response implementations can
-        either:</t>
+              <t>Alert the operator that the order of queries will determine
+              which answers get cached, and either warn and continue or treat
+              this as an error and refuse to load the configuration.</t>
+            </list>
+          Which behavior is chosen is up to the implementation (and may be
+          configured), but implementations MUST document this behavior.</t>
 
-        <t><list style="numbers">
-            <t>Alert the operator that the order of queries will determine
-            which answers get cached. The implemention may warn and continue
-            or treat this as an error and refuse to load the configuration,
-            or,</t>
+          <t>Under the original version and implementations of this protocol,
+          Authoritative Nameservers have no idea what cache granularity the
+          Recursive Resolver is willing to use. Legacy Recursive Resolvers will
+          set SCOPE PREFIX-LENGTH to 0 in their query, and possibly use a
+          shorter SOURCE PREFIX-LENGTH than their own maximum cacheable prefix
+          length if the Recursive Resolver's client specified one. An
+          Authoritative Nameserver implementation that receives one of these
+          legacy queries should be aware that the originally specified caching
+          semantics were that the Recursive Resolver was only supposed to use
+          the response for other queries which used the same SOURCE
+          PREFIX-LENGTH. This might impact how the Authoritative Nameserver
+          determines a response.</t>
 
-            <t>Deaggregate the longer optimized response into multiple shorter
-            replies.</t>
-          </list>Which behavior is chosen is up to the implementation (and may
-        be configured), but implementations MUST document this behavior</t>
+          <t>The issues of the previous paragraph are avoided under the current
+          specification by allowing the Authoritative Nameserver to specify in
+          its reply the network for which the response is intended.</t>
+        </section>
+
+        <section title="Intermediate Nameserver">
+          <t>When an Intermediate Nameserver uses ECS, whether it passes an ECS
+          option in its own response to its client is predicated on whether the
+          client originally included the option. Because a client that did not
+          use an ECS option might not be able to understand it, the server MUST
+          NOT provide one in its response. If the client query did include the
+          option, the server MUST include one in its response, especially as it
+          could be talking to a Forwarder which would need the information for
+          its own caching.  [Open issue: if the Forwarder sent 0s for FAMILY
+          and ADDRESS, how could it take back a response with non-zero FAMILY
+          and ADDRESS when the spec says this mismatch MUST be dropped?]</t>
+
+          <t>If an Intermediate Nameserver receives a response which has a
+          longer SCOPE PREFIX-LENGTH than the SOURCE PREFIX-LENGTH that it
+          provided in its query, it SHOULD still provide the result as the
+          answer to the triggering client request even if the client is in a
+          different address range.  The Intermediate Nameserver MAY instead opt
+          to retry with a longer SOURCE PREFIX-LENGTH to get a better reply
+          before responding to its client, as long as it does not exceed a
+          SOURCE PREFIX-LENGTH specified in the query that triggered
+          resolution, but this obviously has implications for the latency of
+          the overall lookup.</t>
+
+          <t>The logic for using the cache to determine whether the
+          Intermediate Nameserver already knows the response to provide to its
+          client is covered in the next section.</t>
+        </section>
       </section>
 
       <section anchor="caching"
-               title="Handling ECS Replies and Caching">
+               title="Handling ECS Responses and Caching">
         <t>When an Intermediate Nameserver receives a response containing an
-        ECS option, it SHOULD cache the result.</t>
+        ECS option and without the TC bit set, it SHOULD cache the result based
+        on the data in the option. If the TC bit was set, the Intermediate
+        Resolver SHOULD retry the query over TCP to get the complete answer
+        section for caching.</t>
 
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
         of ADDRESS in the response don't match the fields in the corresponding
         query, the full response MUST be dropped, as described in <xref
-        target="security"/>. </t>
+        target="security"/>.</t>
 
-        <t>In the cache, any resource record in the answer section will be
-        tied to the network specified by the FAMILY, ADDRESS and SCOPE
-        PREFIX-LENGTH fields, as detailed below. Note that the additional and
-        authority sections from a DNS response message are specifically
-        excluded here. Any information cached from these sections MUST NOT be
-        tied to a network.</t>
+        <t>If no ECS option is contained in the response, the Intermediate
+        Nameserver MUST treat this as being equivalent to having received a
+        SCOPE PREFIX-LENGTH of 0, which is an answer suitable for all client
+        addresses.</t>
 
-        <t>If another query is received matching the name and type of an entry
-        in the cache, the resolver will check whether the FAMILY and ADDRESS
-        of the client matches one of the networks in the cache for that
-        entry.</t>
+        <section title="Caching the Response">
+          <t>In the cache, any resource record in the answer section will be
+          tied to the network specified by the FAMILY, ADDRESS and SCOPE
+          PREFIX-LENGTH fields, as limited by the Intermediate Nameserver's own
+          configuration for maximum cacheable prefix length. Note that the
+          additional and authority sections from a DNS response message are
+          specifically excluded here. Any records from these sections MUST NOT
+          be tied to a network. [Open issue: this conflicts a bit with
+          draft-kumari-dnsop-multiple-responses, which wants to put data in
+          the additional section that an authoritative nameserver that does
+          ECS would probably want to tailor.]</t>
 
-        <t>If the address of the client is within any of the networks in the
-        cache, then the cached response MUST be returned as usual. If the
-        address of the client matches multiple networks in the cache, the
-        entry with the longest SCOPE PREFIX-LENGTH value MUST be returned, as
-        with most route-matching algorithms.</t>
+          <t>[Open issue: whether negative responses should be tied to the
+          network. The authors are not in agreement on this issue.]</t>
 
-        <t>If the address of the client does not match any network in the
-        cache, then the Recursive Resolver MUST behave as if no match was
-        found and perform resolution as usual. This is necessary to avoid
-        tailored responses in the cache from being returned to the wrong
-        clients, and to avoid a single query coming from a client on a
-        different network from polluting the cache with a tailored response
-        for all the users of that resolver.</t>
+          <t>Records that are cached as /0 because of a query's SOURCE
+          PREFIX-LENGTH of 0 MUST be distinguished from those that are cached
+          as /0 because of a response's SCOPE PREFIX-LENGTH of 0. The former
+          should only be used for other /0 queries that the Intermediate
+          Resolver receives, but the latter is suitable as a response for all
+          networks.</t>
 
-        <t>Note that every time a Recursive Resolver queries an Authoritative
-        Nameserver by forwarding the ECS option that it received from another
-        client, a short SOURCE PREFIX-LENGTH in the original query could cause
-        a tailored response to be returned by the Authoritative Nameserver that
-        would not be the tailored response it would use if it had more
-        information.</t>
+          <t>Although omitting network-specific caching will significantly
+          simplify an implementation, the resulting drop in cache hits is very
+          likely to defeat most latency benefits provided by ECS. Therefore,
+          when implementing this option for latency purposes, implementing full
+          caching support as described in this section is strongly
+          recommended.</t>
 
-        <t>When the query includes a longer SCOPE PREFIX-LENGTH, the response
-        returned may still be cached for the ADDRESS and SCOPE PREFIX-LENGTH of
-        the response. This might still be suboptimal for the original
-        client.</t>
+          <t>Enabling support for ECS in an Intermediate Nameserver will
+          significantly increase the size of the cache, reduce the number of
+          results that can be served from cache, and increase the load on the
+          server. Implementing the mitigation techniques described in
+          <xref target="security"/> is strongly recommended.</t>
+        </section>
 
-        <t>To avoid this suboptimal response from being served from cache for
-        other clients for which a better reply would be available, the
-        Recursive Resolver MUST check the SCOPE PREFIX-LENGTH that was
-        returned by the Authoritative Nameserver: <list style="symbols">
-            <t>If the SCOPE PREFIX-LENGTH in the response is longer than the
-            SOURCE PREFIX-LENGTH, it means that the response might be
-            suboptimal. A Recursive Resolver MUST return this entry from cache
-            only to queries that do not contain or allow a longer SOURCE
-            PREFIX-LENGTH to be forwarded, or to queries originating from the
-            network covered by the ADDRESS and SCOPE PREFIX-LENGTH.</t>
+        <section title="Answering from Cache">
+          <t>Cache lookups are first done as usual for a DNS query, using the
+          query tuple of &lt;name, type, class&gt;.  Then the appropriate RRset
+          MUST be chosen based on longest prefix matching.  The client address
+          to use for comparison will depend on whether the Intermediate
+          Nameserver received an ECS option in its client query.</t>
 
-            <t>If the SCOPE PREFIX-LENGTH in the response is shorter than or
-            equal to the SOURCE PREFIX-LENGTH, the response is optimal, and
-            SHOULD be returned from cache to any client within the network
-            indicated by ADDRESS and SCOPE PREFIX-LENGTH.</t>
+          <t><list style="symbols">
+            <t>If no ECS option was provided, the client's address is used.</t>
+
+            <t>If there was an ECS option, the ADDRESS from it MAY be used if
+            local policy allows. Policy can vary depending on the agreements
+            the operator of the Intermediate Nameserver has with Authoritative
+            Nameserver operators; see <xref target="whitelist"/>. If policy
+            does not allow, a REFUSED response must be sent.</t>
           </list></t>
 
-        <t>When a response is received for a query that used a different
-        SOURCE, it will be tied to a different network. The server SHOULD keep
-        in cache both replies, and return the most appropriate one depending on
-        the address of the client. Per standard DNS caching behavior, all
-        records SHOULD be retained until their TTL expires. Subsequent queries
-        to refresh the data should always specify the longest SCOPE
-        PREFIX-LENGTH that the Recursive Resolver is willing to cache, even if
-        previous responses indicated that a shorter prefix length was the
-        optimal response.</t>
+          <t>If a matching network is found and the relevant data is unexpired,
+          the response is generated as per <xref target="responding"/>.</t>
 
-        <t>Although omitting network-specific caching will significantly
-        simplify an implementation, the resulting drop in cache hits is very
-        likely to defeat most latency benefits provided by ECS. Therefore,
-        when implementing this option for latency purposes, implementing full
-        caching support as described in this section is STRONGLY
-        RECOMMENDED.</t>
-
-        <t>Replies coming from servers not supporting ECS or otherwise not
-        containing an ECS option SHOULD be considered as containing a SCOPE
-        PREFIX-LENGTH of 0 (e.g., cache the result for 0.0.0.0/0 or ::/0) for
-        all the supported families.</t>
-
-        <t>In any case, the response from the resolver to the client MUST NOT
-        contain the ECS option if none was present in the client's original
-        query. If the original client query contained a valid ECS option that
-        was used during recursion, the Recursive Resolver MUST include the ECS
-        option from the Authoritative Nameserver response in the response to
-        the client.</t>
-
-        <t>Enabling support for ECS in a recursive resolver will significantly
-        increase the size of the cache, reduce the number of results that can
-        be served from cache, and increase the load on the server.
-        Implementing the mitigation techniques described in <xref
-        target="security"/> is strongly recommended.</t>
+          <t>If no matching network is found, the Intermediate Nameserver MUST
+          perform resolution as usual. This is necessary to avoid tailored
+          responses in the cache from being returned to the wrong clients, and
+          to avoid a single query coming from a client on a different network
+          from polluting the cache with a tailored response for all the users
+          of that resolver.</t>
+        </section>
       </section>
 
       <section anchor="transitivity" title="Transitivity">
@@ -595,11 +687,11 @@
         options received from their clients MUST fully implement the caching
         behaviour described in <xref target="caching"/>.</t>
 
-        <t>Compliant Intermediate Nameservers, including Recursive Resolvers,
-        that receive an incoming query containing ECS with SOURCE
-        PREFIX-LENGTH set to 0 (i.e. completely anonymized), MUST forward the
-        query with SOURCE PREFIX-LENGTH set to 0 and MUST NOT replace it with
-        an option with more accurate address information.</t>
+        <t>Compliant Intermediate Nameservers that receive an incoming query
+        containing ECS with SOURCE PREFIX-LENGTH set to 0 (that is, completely
+        anonymized), MUST forward the query with SOURCE PREFIX-LENGTH set to 0
+        and MUST NOT replace it with an option with more accurate address
+        information.</t>
 
         <t>An Intermediate Nameserver MAY also forward ECS options with actual
         address information. This information MAY match the source IP address
@@ -632,6 +724,10 @@
       origin authentication and data integrity to the DNS, as described in
       <xref target="RFC4033"/>, <xref target="RFC4034"/> and <xref
       target="RFC4035"/>. OPT records are not signed.</t>
+
+      <t>Use of this option, however, does imply increased DNS traffic between
+      any given Recursive Resolver and Authoritative Nameserver, which could
+      be another barrier to further DNSSEC adoption in this area.</t>
     </section>
 
     <section title="NAT Considerations">
@@ -675,9 +771,8 @@
 
         <t>To protect users' privacy, Recursive Resolvers are strongly
         encouraged to conceal part of the IP address of the user by truncating
-        IPv4 addresses to 24 bits. No recommendation is provided for IPv6 at
-        this time, but IPv6 addresses should be similarly truncated in order
-        to not allow unique identification of the client.</t>
+        IPv4 addresses to 24 bits. 48 bits are recommended for IPv6, based on
+        the length of the aggregatable global routing prefix.</t>
 
         <t>When a non-zero SCOPE PREFIX-LENGTH is provided by the Recursive
         Resolver that is longer than SOURCE PREFIX-LENGTH, users can often
@@ -715,9 +810,9 @@
         option.</t>
 
         <t>With multiple queries for the same name in flight, the attacker has
-        a higher chance of success in sending a matching response (with
+        a higher chance of success in sending a matching response with
         the SCOPE PREFIX-LENGTH being 0 (meaning an empty prefix) to get it
-        cached for many hosts).</t>
+        cached for many hosts.</t>
 
         <t>To counter this, every ECS option in a response packet MUST contain
         the FAMILY and SOURCE PREFIX-LENGTH fields from the corresponding
@@ -829,17 +924,17 @@
         to 0.</t>
       </section>
 
-      <section title="Whitelist">
+      <section anchor="whitelist" title="Whitelist">
         <t>As described previously, it is expected that only a few Recursive
         Resolvers will need to use ECS, and that it will generally be enabled
         only if it offers a clear benefit to the users.</t>
 
         <t>To avoid the complexity of implementing a probing and detection
-        mechanism (and the possible query loss/delay that may come with it),
-        an implementation could decide to use a statically configured
-        whitelist of Authoritative Namesevers to send the option to.
-        Implementations MAY also allow additionally configuring this based on
-        other criteria, such as zone or query type.</t>
+        mechanism (and the possible query loss/delay that may come with it), an
+        implementation could use a whitelist of Authoritative
+        Namesevers to send the option to, likely specified by their domain
+        name. Implementations MAY also allow additionally configuring this
+        based on other criteria, such as zone or query type.</t>
 
         <t>An additional advantage of using a whitelist is that partial client
         address information is only disclosed to Nameservers that are known to
@@ -848,6 +943,15 @@
         <t>A major drawback is scalability. The operator needs to track which
         Authoritative Nameservers support ECS, making it harder for new
         Authoritative Nameservers to start using the option.</t>
+
+        <t>Similarly, Authoritative Nameservers can also use whitelists to
+        limit the feature to only certain clients.  For example, a CDN that
+        does not want all of their mapping trivially walked might require a
+        legal agreement with the Recursive Resolver operator, to clearly
+        describe the acceptable use of the feature.</t>
+
+        <t>The maintenance of access control mechanisms is out of scope for
+        this protocol definition.</t>
       </section>
     </section>
 
@@ -913,8 +1017,8 @@
               <t>SCOPE PREFIX-LENGTH, set to 0x1B, indicating a /27
               network.</t>
 
-              <t>ADDRESS, set to 0xC0 0x00 0x02 0xE0, extended from the
-              query.</t>
+              <t>ADDRESS, set to 0xC0 0x00 0x02 0xE0, copied and extended from
+              the query.</t>
             </list></t>
 
           <t>RNS receives the response containing an ECS option. The resolver
@@ -982,8 +1086,8 @@ USA
       Edward Lewis, Eric Burger from Neustar, David Ulevitch, Matthew Dempsky
       from OpenDNS, Steve Hill, Patrick W. Gilmore from Akamai, Andrew
       Sullivan from Dyn, Colm MacCarthaigh, John Dickinson, Richard Sheehan,
-      Antonio Querubin, and all the other people that replied to our emails on
-      various mailing lists.</t>
+      Antonio Querubin, Mark Delany, and all the other people that replied to
+      our emails on various mailing lists.</t>
     </section>
   </middle>
 
@@ -1018,6 +1122,13 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-01.4 to -01.5<list style="symbols">
+          <t>More wordsmithing largely inspired by John Dickinson's dnsop
+          review comments.</t>
+
+          <t>Added some open issues directly to the text.</t>
+        </list></t>
 
       <t>-01.3 to -01.4<list style="symbols">
           <t>Removed incorrect assertion about NXDOMAIN implications.</t>
