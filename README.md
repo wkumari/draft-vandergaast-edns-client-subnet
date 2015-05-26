@@ -15,7 +15,7 @@ Expires: November 27, 2015                                   D. Lawrence
 
 
                       Client Subnet in DNS Querys
-                 draft-ietf-dnsop-edns-client-subnet-02
+                 draft-ietf-dnsop-edns-client-subnet-01
 
 Abstract
 
@@ -123,7 +123,7 @@ Internet-Draft         Client Subnet in DNS Querys              May 2015
    Appendix A.  Document History . . . . . . . . . . . . . . . . . .  23
      A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  24
      A.2.  -01 . . . . . . . . . . . . . . . . . . . . . . . . . . .  25
-     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  26
+     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  25
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  26
 
 1.  Introduction
@@ -1257,14 +1257,12 @@ Appendix A.  Document History
 
    [RFC Editor: Please delete this section before publication.]
 
-   -01 to -02
-
-   o  Made the document describe how things are actually implmented now.
-      This makes the document be more of a "this is how we are doing
-      things, this provides information on that".  There may be a future
-      document that describes additional funcationality.
-
    -00 to -01 (IETF)
+
+   o  <David> Made the document describe how things are actually
+      implmented now.  This makes the document be more of a "this is how
+      we are doing things, this provides information on that".  There
+      may be a future document that describes additional funcationality.
 
    o  NETMASK was not a good desription, changed to PREFIX-LENGTH
       (Jinmei, others).  Stole most of the definition for prefix length
@@ -1284,6 +1282,8 @@ Appendix A.  Document History
 
    o  Fixed some of legacy IPv4 cruft (things like 0.0.0.0/0)
 
+   o  Some more grammar / working cleanups.
+
 
 
 
@@ -1291,8 +1291,6 @@ Contavalli, et al.      Expires November 27, 2015              [Page 23]
 
 Internet-Draft         Client Subnet in DNS Querys              May 2015
 
-
-   o  Some more grammar / working cleanups.
 
    o  Replaced a whole heap of occurances of "edns-client-subnet" with
       "ECS" for readability.  (John Dickinson)
@@ -1339,6 +1337,8 @@ A.1.  -00
    o  Fully take multi-tier DNS setups in mind and be more clear about
       where the option should be originated.
 
+   o  A note on Authoritative Nameservers receiving queries that specify
+      private address space.
 
 
 
@@ -1347,9 +1347,6 @@ Contavalli, et al.      Expires November 27, 2015              [Page 24]
 
 Internet-Draft         Client Subnet in DNS Querys              May 2015
 
-
-   o  A note on Authoritative Nameservers receiving queries that specify
-      private address space.
 
    o  A note to always ask for the longest acceptable SOURCE prefix
       length, even if a prior answer indicated that a shorter prefix
@@ -1394,6 +1391,9 @@ A.2.  -01
 
    o  Minor corrections in various other sections.
 
+A.3.  -02
+
+   o  Added IANA-assigned option code.
 
 
 
@@ -1403,10 +1403,6 @@ Contavalli, et al.      Expires November 27, 2015              [Page 25]
 
 Internet-Draft         Client Subnet in DNS Querys              May 2015
 
-
-A.3.  -02
-
-   o  Added IANA-assigned option code.
 
 Authors' Addresses
 
@@ -1444,6 +1440,10 @@ Authors' Addresses
    US
 
    Email: warren@kumari.net
+
+
+
+
 
 
 

@@ -14,7 +14,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-02"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -1124,14 +1124,12 @@ USA
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
-      <t>-01 to -02<list style="symbols">
-          <t> Made the document describe how things are actually implmented
-          now. This makes the document be more of a "this is how we are doing
-          things, this provides information on that". There may be a future
-          document that describes additional funcationality.</t>
-        </list></t>
-
       <t>-00 to -01 (IETF)<list style="symbols">
+          <t>&lt;David&gt; Made the document describe how things are actually
+          implmented now. This makes the document be more of a "this is how we
+          are doing things, this provides information on that". There may be a
+          future document that describes additional funcationality.</t>
+
           <t>NETMASK was not a good desription, changed to PREFIX-LENGTH
           (Jinmei, others). Stole most of the definition for prefix length
           from RFC4291.</t>
