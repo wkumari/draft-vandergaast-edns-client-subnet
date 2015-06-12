@@ -1271,14 +1271,14 @@ Appendix A.  Document History
 
    -01 to -02 (IETF)
 
-      Note ambiguity with multiple RRsets appearing in reply, eg, for an
+   o  Note ambiguity with multiple RRsets appearing in reply, eg, for an
       ANY query or CNAME chain.  (Duane Wessels)
 
-      Open issue questioning the guidance about resolvers behind a NAT.
+   o  Open issue questioning the guidance about resolvers behind a NAT.
       How do they know they are?  What real requirement is this
       imposing?  (Duane Wessels)
 
-      Some other wording changes based on Duane's review of an earlier
+   o  Some other wording changes based on Duane's review of an earlier
       draft.
 
    -00 to -01 (IETF)
@@ -1290,36 +1290,41 @@ Contavalli, et al.      Expires December 14, 2015              [Page 23]
 Internet-Draft         Client Subnet in DNS Querys             June 2015
 
 
-      NETMASK was not a good desription, changed to PREFIX-LENGTH
+   o  <David> Made the document describe how things are actually
+      implmented now.  This makes the document be more of a "this is how
+      we are doing things, this provides information on that".  There
+      may be a future document that describes additional funcationality.
+
+   o  NETMASK was not a good desription, changed to PREFIX-LENGTH
       (Jinmei, others).  Stole most of the definition for prefix length
       from RFC4291.
 
-      Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
+   o  Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
       IPv6 (Tatuya Jinmei)
 
-      Comment that ECS cannot be used to hand NXDOMAIN to some clients
+   o  Comment that ECS cannot be used to hand NXDOMAIN to some clients
       and not others, primarily because of interoperability issues.
       (Tatuya Jinmei)
 
-      Added text explaining that implmentations need to document thier
+   o  Added text explaining that implmentations need to document thier
       behavior with overlapping networks.
 
-      Soften "optimized reply" language.  (Andrew Sullivan).
+   o  Soften "optimized reply" language.  (Andrew Sullivan).
 
-      Fixed some of legacy IPv4 cruft (things like 0.0.0.0/0)
+   o  Fixed some of legacy IPv4 cruft (things like 0.0.0.0/0)
 
-      Some more grammar / working cleanups.
+   o  Some more grammar / working cleanups.
 
-      Replaced a whole heap of occurances of "edns-client-subnet" with
+   o  Replaced a whole heap of occurances of "edns-client-subnet" with
       "ECS" for readability.  (John Dickinson)
 
-      More clearly describe the process from the point of view of each
+   o  More clearly describe the process from the point of view of each
       type of nameserver.  (John Dickinson)
 
-      Birthday attack still possible if attacker floods with ECS-less
+   o  Birthday attack still possible if attacker floods with ECS-less
       responses.  (Yuri Schaeffer)
 
-      Added some open issues directly to the text.
+   o  Added some open issues directly to the text.
 
 A.1.  -00
 
@@ -1333,11 +1338,6 @@ A.1.  -00
 
    o  Updated NAT section.
 
-   o  Added recommendation to not use the default /24 recommendation for
-      the source prefix-length field if more detailed information about
-      the network is available.
-
-
 
 
 
@@ -1345,6 +1345,10 @@ Contavalli, et al.      Expires December 14, 2015              [Page 24]
 
 Internet-Draft         Client Subnet in DNS Querys             June 2015
 
+
+   o  Added recommendation to not use the default /24 recommendation for
+      the source prefix-length field if more detailed information about
+      the network is available.
 
    o  Rewritten problem statement to be more clear about the goal of ECS
       and the fact that it's entirely optional.
@@ -1391,16 +1395,15 @@ A.2.  -01
    o  Moved description on how to forward ECS option in dedicated
       section.
 
-   o  Queries with wrongly formatted ECS options should now be rejected
-      with FORMERR.
-
-
 
 
 Contavalli, et al.      Expires December 14, 2015              [Page 25]
 
 Internet-Draft         Client Subnet in DNS Querys             June 2015
 
+
+   o  Queries with wrongly formatted ECS options should now be rejected
+      with FORMERR.
 
    o  Added an "Overview" section, providing an introduction to the
       document.
@@ -1442,13 +1445,10 @@ Authors' Addresses
    Email: wilmer@google.com
 
 
-   David C Lawrence
-   Akamai Technologies
-   8 Cambridge Center
-   Cambridge, MA  02142
-   US
 
-   Email: tale@akamai.com
+
+
+
 
 
 
@@ -1458,6 +1458,15 @@ Contavalli, et al.      Expires December 14, 2015              [Page 26]
 Internet-Draft         Client Subnet in DNS Querys             June 2015
 
 
+   David C Lawrence
+   Akamai Technologies
+   8 Cambridge Center
+   Cambridge, MA  02142
+   US
+
+   Email: tale@akamai.com
+
+
    Warren Kumari
    Google
    1600 Amphitheatre Parkway
@@ -1465,15 +1474,6 @@ Internet-Draft         Client Subnet in DNS Querys             June 2015
    US
 
    Email: warren@kumari.net
-
-
-
-
-
-
-
-
-
 
 
 
