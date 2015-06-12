@@ -108,7 +108,7 @@
       </address>
     </author>
 
-    <date day="20" month="May" year="2015"/>
+    <date day="12" month="Jun" year="2015"/>
 
     <area>ops</area>
 
@@ -264,17 +264,15 @@
       target="transitivity"/>.</t>
 
       <t>The mechanisms provided by ECS raise various security
-      related concerns, related to cache growth, the ability to spoof EDNS0
+      related concerns related to cache growth, the ability to spoof EDNS0
       options, and privacy. <xref target="security"/> explores various
       mitigation techniques.</t>
 
-      <t>The expectation, however, is that this option will only be used by
-      Recursive Resolvers and Authoritative Nameservers that incur geolocation
-      issues.</t>
-
-      <t>Most Recursive Resolvers, Authoritative Nameservers and Stub Resolvers
-      will never know about this option, and will continue working as they had
-      been.</t>
+      <t>The expectation, however, is that this option will primarily be used
+      between Recursive Resolvers and Authoritative Nameservers that are
+      sensitive to network location issues.  Most Recursive Resolvers,
+      Authoritative Nameservers and Stub Resolvers will never need to know
+      about this option, and will continue working as they had been.</t>
 
       <t>Failure to support this option or its improper handling will, at
       worst, cause suboptimal identification of client location, which is a
@@ -291,7 +289,7 @@
     </section>
 
     <section anchor="format" title="Option Format">
-      <t>This draft uses an <xref target="RFC6891">EDNS0</xref>) option to
+      <t>This protocol uses an <xref target="RFC6891">EDNS0</xref>) option to
       include client address information in DNS messages. The option is
       structured as follows:</t>
 
@@ -494,6 +492,21 @@
           return different values of SCOPE PREFIX-LENGTH for different
           networks.</t>
 
+          <t>Since some queries can result in multiple RRsets being added to
+          the response, there is an unfortunate ambiguity from the original
+          draft as to how SCOPE PREFIX-LENGTH would apply to each individual
+          RRset.  For example, multiple types in response to an ANY metaquery
+          could all have different applicable SCOPE PREFIX-LENGTH values, but
+          this protocol only has the abiity to signal one.  The response SHOULD
+          therefore include the longest relevant PREFIX-LENGTH of any RRset in
+          the answer, which could have the unfortunate side-effect of
+          redundantly caching some data that could be cached more broadly. For
+          the specific case of a CNAME chain, the Authoritative Nameserver
+          SHOULD only place the CNAME, likely with a SCOPE-PREFIX LENGTH of 0,
+          to have it cached appropriately. Most modern Recursive Resolvers
+          restart the query with the canonical name, so the remainder of the
+          chain is typically ignored anyway.</t>
+
           <t>The specific logic that an Authoritative Nameserver uses to choose
           a tailored response is not in the scope of this document.
           Implementers are encouraged, however, to consider carefully their
@@ -565,7 +578,7 @@
         this in <xref target="security" />.</t>
 
         <section title="Caching the Response">
-          <t>In the cache, any resource record in the answer section will be
+          <t>In the cache, all resource records in the answer section MUST be
           tied to the network specified by the FAMILY, ADDRESS and SCOPE
           PREFIX-LENGTH fields, as limited by the Intermediate Nameserver's own
           configuration for maximum cacheable prefix length. Note that the
@@ -674,9 +687,9 @@
         behaviour described in <xref target="caching"/>.</t>
 
         <t>Intermediate Nameservers supporting ECS MUST forward options with
-        SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized), MUST
-        forward the query with SOURCE PREFIX-LENGTH set to 0 and MUST NOT be
-        replaced with an option with more accurate address information.</t>
+        SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized).  Such
+        options MUST NOT be replaced with more accurate address
+        information.</t>
 
         <t>An Intermediate Nameserver MAY also forward ECS options with actual
         address information. This information MAY match the source IP address
@@ -688,8 +701,8 @@
         the information in an ECS option it receives (too little address
         information, network address from a range not authorized to use the
         server, private/unroutable address space, etc), it SHOULD drop the
-        query and return a REFUSED response. Note again that an ECS option with
-        0 address bits MUST NOT be refused.</t>
+        query and return a REFUSED response. Note again that a query MUST NOT
+        be refused solely because it provides 0 address bits.</t>
 
         <t>Be aware that at least one major existing implementation does not
         return REFUSED and instead just process the query as though the
@@ -740,9 +753,12 @@
 
       <t>In other cases, Recursive Resolvers sited behind a NAT device SHOULD
       NOT originate ECS options with their external IP address, and instead
-      rely on downstream Intermediate Nameservers doing so. They MAY,
-      however, choose to include the option with their internal address for the
-      purposes of signaling a shorter, more anonymous SOURCE PREFIX-LENGTH.</t>
+      rely on downstream Intermediate Nameservers to do so. They MAY, however,
+      choose to include the option with their internal address for the purposes
+      of signaling a shorter, more anonymous SOURCE PREFIX-LENGTH. [Open
+      issue: this sounds like a configuration requirement, since a resolver
+      might well not have any idea that it behind NAT.  Should this be
+      described better?  Stricken?] </t>
 
       <t>If an Authoritative Nameserver on the publicly routed Internet
       receives a query that specifies an ADDRESS in <xref target="RFC1918" />
@@ -799,7 +815,7 @@
         a higher chance of success to send a matching response with the SCOPE
         PREFIX-LENGTH set to 0 to get it cached for all hosts.</t>
 
-        <t>To counter this, every ECS option in a response packet MUST contain
+        <t>To counter this, the ECS option in a response packet MUST contain
         the full FAMILY, ADDRESS and SOURCE PREFIX-LENGTH fields from the
         corresponding query. Intermediate Nameservers processing a response
         MUST verify that these match, and SHOULD discard the entire response if
@@ -856,7 +872,7 @@
             feature SHOULD be disabled in all default configurations.</t>
 
             <t>Recursive Resolvers SHOULD limit the number of networks and
-            answers they keep in the cache for a given query.</t>
+            answers they keep in the cache for any given query.</t>
 
             <t>Recursive Resolvers SHOULD limit the number of total different
             networks that they keep in cache.</t>
@@ -918,7 +934,7 @@
         information for one of its zones, MUST indicate support for the option
         in all of its responses to ECS queries. If the option is supported but
         not actually used for generating a response, its SCOPE PREFIX-LENGTH
-        SHOULD be set to 0.</t>
+        MUST be set to 0.</t>
       </section>
 
       <section anchor="whitelist" title="Whitelist">
@@ -1079,9 +1095,9 @@ USA
       Patrick W. Gilmore and Steve Hill from Akamai; Colm MacCarthaigh and
       Richard Sheehan from Amazon; Tatuya Jinmei from Internet Software
       Consortium; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
-      Delany from Apple; Yuri Schaeffer from NLnet Labs; Antonio Querubin; and
-      all of the other people that replied to our emails on various mailing
-      lists.</t>
+      Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
+      from Verisign; Antonio Querubin; and all of the other people that replied
+      to our emails on various mailing lists.</t>
     </section>
   </middle>
 
@@ -1118,6 +1134,18 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-01 to -02 (IETF)<list>
+          <t>Note ambiguity with multiple RRsets appearing in reply, eg, for
+          an ANY query or CNAME chain. (Duane Wessels)</t>
+
+          <t>Open issue questioning the guidance about resolvers behind a NAT.
+          How do they know they are?  What real requirement is this imposing?
+          (Duane Wessels)</t>
+
+          <t>Some other wording changes based on Duane's review of an earlier
+          draft.</t>
+      </list></t>
 
       <t>-00 to -01 (IETF)<list>
           <t>NETMASK was not a good desription, changed to PREFIX-LENGTH
