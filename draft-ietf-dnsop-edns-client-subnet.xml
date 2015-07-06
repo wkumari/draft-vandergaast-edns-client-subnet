@@ -475,8 +475,7 @@
           match those in the query, unless the query specified only the SOURCE
           PREFIX-LENGTH for privacy (with FAMILY and ADDRESS set to
           0). Echoing back these values helps to mitigate certain attack
-          vectors, as described in <xref target="security"/>.</t> incoming ECS
-          option specified only a
+          vectors, as described in <xref target="security"/>.</t>
 
           <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
           which the answer is intended.</t>
@@ -544,7 +543,7 @@
           the server MUST NOT provide one in its response. If the client query
           did include the option, the server MUST include one in its response,
           especially as it could be talking to a Forwarder which would need
-          the information for its own caching.
+          the information for its own caching.</t>
 
           <t>If an Intermediate Nameserver receives a response which has a
           longer SCOPE PREFIX-LENGTH than the SOURCE PREFIX-LENGTH that it
@@ -573,10 +572,10 @@
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
         of ADDRESS in the response don't match the non-zero fields in the
         corresponding query, the full response MUST be dropped, as described
-        in <xref target="security"/>.</t>  For a response to query which
+        in <xref target="security"/>.  For a response to query which
         specified only the SOURCE PREFIX-LENGTH for privacy masking, the
         FAMILY and ADDRESS fields should contain the appropriate non-zero
-        information for caching.
+        information for caching.</t>
 
         <t>If no ECS option is contained in the response, the Intermediate
         Nameserver SHOULD treat this as being equivalent to having received a
