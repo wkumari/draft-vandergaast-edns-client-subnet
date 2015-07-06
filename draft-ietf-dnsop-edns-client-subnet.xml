@@ -29,7 +29,7 @@
   <?rfc strict="yes" ?>
 
   <front>
-    <title>Client Subnet in DNS Querys</title>
+    <title>Client Subnet in DNS Queries</title>
 
     <author fullname="Carlo Contavalli" initials="C." surname="Contavalli">
       <organization>Google</organization>
@@ -375,16 +375,17 @@
           PREFIX-LENGTH bits, rather than the full width that would normally
           be used by addresses in FAMILY.</t>
 
-          <t>FAMILY and ADDRESS information MAY be used from the ECS option
-          incoming query. Passing the existing address data is supportive of
-          the Recursive Resolver being used as the target of a Forwarder, but
-          could possibly run into policy problems with regard to usage
+          <t>FAMILY and ADDRESS information MAY be used from the ECS option in
+          the incoming query. Passing the existing address data is supportive
+          of the Recursive Resolver being used as the target of a Forwarder,
+          but could possibly run into policy problems with regard to usage
           agreements between the Recursive Resolver and Authoritative
           Namserver. See <xref target="whitelist"/> for more discussion on
           this point. If the Recursive Resolver will not forward the FAMILY
           and ADDRESS data from the incoming ECS option, it SHOULD return a
-          REFUSED response. [*dcl* -- discussion of existing
-          implementations]</t>
+          REFUSED response.  An ECS-aware resolver MUST retry the query
+          without ECS to distinguish the response from a lame delegation,
+          which is the common convention for a REFUSED status.</t>
 
           <t>Subsequent queries to refresh the data MUST, if unrestricted by
           an incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE
@@ -471,9 +472,11 @@
           query.</t>
 
           <t>The FAMILY, SOURCE PREFIX-LENGTH and ADDRESS in the response MUST
-          match those in the query. Echoing back these values helps to
-          mitigate certain attack vectors, as described in <xref
-          target="security"/>.</t>
+          match those in the query, unless the query specified only the SOURCE
+          PREFIX-LENGTH for privacy (with FAMILY and ADDRESS set to
+          0). Echoing back these values helps to mitigate certain attack
+          vectors, as described in <xref target="security"/>.</t> incoming ECS
+          option specified only a
 
           <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
           which the answer is intended.</t>
@@ -482,7 +485,7 @@
           indicates that the provided prefix length was not specific enough to
           select the most appropriate Tailored Response. Future queries for
           the name within the specified network SHOULD use the longer SCOPE
-          PREIX-LENGTH.</t>
+          PREFIX-LENGTH.</t>
 
           <t>Conversely, a shorter SCOPE PREFIX-LENGTH indicates that more
           bits than necessary were provided, and the answer is suitable for a
@@ -499,22 +502,24 @@
           draft as to how SCOPE PREFIX-LENGTH would apply to each individual
           RRset.  For example, multiple types in response to an ANY metaquery
           could all have different applicable SCOPE PREFIX-LENGTH values, but
-          this protocol only has the abiity to signal one.  The response SHOULD
-          therefore include the longest relevant PREFIX-LENGTH of any RRset in
-          the answer, which could have the unfortunate side-effect of
+          this protocol only has the ability to signal one.  The response
+          SHOULD therefore include the longest relevant PREFIX-LENGTH of any
+          RRset in the answer, which could have the unfortunate side-effect of
           redundantly caching some data that could be cached more broadly. For
           the specific case of a CNAME chain, the Authoritative Nameserver
-          SHOULD only place the CNAME, likely with a SCOPE-PREFIX LENGTH of 0,
-          to have it cached appropriately. Most modern Recursive Resolvers
-          restart the query with the canonical name, so the remainder of the
-          chain is typically ignored anyway.</t>
+          SHOULD only place the CNAME to have it cached unambiguously
+          appropriately. Most modern Recursive Resolvers restart the query with
+          the canonical name, so the remainder of the chain is typically
+          ignored anyway. For message-focused resolvers, rather than
+          RRset-focused ones, this will mean caching the entire CNAME chain
+          at the longest PREFIX-LENGTH of any RRset in the chain.</t>
 
           <t>The specific logic that an Authoritative Nameserver uses to choose
           a tailored response is not in the scope of this document.
           Implementers are encouraged, however, to consider carefully their
           selection of SCOPE PREFIX-LENGTH for the response in the event that
-          the best tailored response cannot be determined. [Open issue: This
-          seems so very vague; More text here about possible strategy?]</t>
+          the best tailored response cannot be determined, and what
+          the implications would be over the life of the TTL.</t>
 
           <t>If the Authoritative Nameserver operator configures a more
           specific (longer prefix length) Tailored Response within a
@@ -539,10 +544,7 @@
           the server MUST NOT provide one in its response. If the client query
           did include the option, the server MUST include one in its response,
           especially as it could be talking to a Forwarder which would need
-          the information for its own caching. [Open issue: if the Forwarder
-          sent 0s for FAMILY and ADDRESS, how could it take back a response
-          with non-zero FAMILY and ADDRESS when the spec says this mismatch
-          MUST be dropped?]</t>
+          the information for its own caching.
 
           <t>If an Intermediate Nameserver receives a response which has a
           longer SCOPE PREFIX-LENGTH than the SOURCE PREFIX-LENGTH that it
@@ -569,9 +571,12 @@
         complete answer section for caching.</t>
 
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
-        of ADDRESS in the response don't match the fields in the corresponding
-        query, the full response MUST be dropped, as described in <xref
-        target="security"/>.</t>
+        of ADDRESS in the response don't match the non-zero fields in the
+        corresponding query, the full response MUST be dropped, as described
+        in <xref target="security"/>.</t>  For a response to query which
+        specified only the SOURCE PREFIX-LENGTH for privacy masking, the
+        FAMILY and ADDRESS fields should contain the appropriate non-zero
+        information for caching.
 
         <t>If no ECS option is contained in the response, the Intermediate
         Nameserver SHOULD treat this as being equivalent to having received a
@@ -586,11 +591,7 @@
           own configuration for maximum cacheable prefix length. Note that the
           additional and authority sections from a DNS response message are
           specifically excluded here. Any records from these sections MUST NOT
-          be tied to a network. [Open issue: this conflicts a bit with
-          draft-kumari-dnsop-multiple-responses, which wants to put data in
-          the additional section that an authoritative nameserver that does
-          ECS would probably want to tailor.] See more at <xref
-          target="otheranswers"/>.</t>
+          be tied to a network. See more at <xref target="otheranswers"/>.</t>
 
           <t>Records that are cached as /0 because of a query's SOURCE
           PREFIX-LENGTH of 0 MUST be distinguished from those that are cached
@@ -759,10 +760,7 @@
       NOT originate ECS options with their external IP address, and instead
       rely on downstream Intermediate Nameservers to do so. They MAY, however,
       choose to include the option with their internal address for the purposes
-      of signaling a shorter, more anonymous SOURCE PREFIX-LENGTH. [Open
-      issue: this sounds like a configuration requirement, since a resolver
-      might well not have any idea that it behind NAT.  Should this be
-      described better?  Stricken?] </t>
+      of signaling a shorter, more anonymous SOURCE PREFIX-LENGTH.</t>
 
       <t>If an Authoritative Nameserver on the publicly routed Internet
       receives a query that specifies an ADDRESS in <xref target="RFC1918"/>
@@ -1138,6 +1136,15 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-02 to -03 (IETF)<list style="symbols">
+          <t>Clean up the open issues, mostly by saying that they were
+          out of scope for this document.</t>
+
+          <t>How in the world did no reviewers note that "Queries" had
+          been spelled as "Querys" in the title? (Aaron Falk did.)</t>
+
+      </list></t>
 
       <t>-01 to -02 (IETF)<list style="symbols">
           <t>Note ambiguity with multiple RRsets appearing in reply, eg, for
