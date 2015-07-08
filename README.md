@@ -1,3 +1,5 @@
+**Important:** Read CONTRIBUTING.md before submitting feedback or contributing
+```
 
 
 
@@ -5,15 +7,15 @@
 dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
-Expires: December 14, 2015                                   D. Lawrence
+Expires: January 7, 2016                                     D. Lawrence
                                                      Akamai Technologies
                                                                W. Kumari
                                                                   Google
-                                                            Jun 12, 2015
+                                                            July 6, 2015
 
 
                       Client Subnet in DNS Queries
-                 draft-ietf-dnsop-edns-client-subnet-01
+                 draft-ietf-dnsop-edns-client-subnet-02
 
 Abstract
 
@@ -46,16 +48,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 14, 2015.
+   This Internet-Draft will expire on January 7, 2016.
 
 
 
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 1]
+Contavalli, et al.       Expires January 7, 2016                [Page 1]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
 Copyright Notice
@@ -109,9 +111,9 @@ Table of Contents
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 2]
+Contavalli, et al.       Expires January 7, 2016                [Page 2]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
@@ -165,9 +167,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 3]
+Contavalli, et al.       Expires January 7, 2016                [Page 3]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    deployment.  It is completely optional and can safely be ignored by
@@ -221,9 +223,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 4]
+Contavalli, et al.       Expires January 7, 2016                [Page 4]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    Centralized Resolvers:  Recursive Resolvers that serve a
@@ -277,9 +279,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 5]
+Contavalli, et al.       Expires January 7, 2016                [Page 5]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    Authoritative Nameservers and Stub Resolvers will never need to know
@@ -333,9 +335,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 6]
+Contavalli, et al.       Expires January 7, 2016                [Page 6]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    o  SOURCE PREFIX-LENGTH, an unsigned octet representing the leftmost
@@ -389,9 +391,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 7]
+Contavalli, et al.       Expires January 7, 2016                [Page 7]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    PREFIX-LENGTH bits, rather than the full width that would normally be
@@ -445,9 +447,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 8]
+Contavalli, et al.       Expires January 7, 2016                [Page 8]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
 6.1.3.  Forwarders
@@ -501,9 +503,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015               [Page 9]
+Contavalli, et al.       Expires January 7, 2016                [Page 9]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    The FAMILY, SOURCE PREFIX-LENGTH and ADDRESS in the response MUST
@@ -557,9 +559,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 10]
+Contavalli, et al.       Expires January 7, 2016               [Page 10]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    If the Authoritative Nameserver operator configures a more specific
@@ -613,9 +615,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 11]
+Contavalli, et al.       Expires January 7, 2016               [Page 11]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits of
@@ -669,9 +671,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 12]
+Contavalli, et al.       Expires January 7, 2016               [Page 12]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    use for comparison will depend on whether the Intermediate Nameserver
@@ -725,9 +727,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 13]
+Contavalli, et al.       Expires January 7, 2016               [Page 13]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    Several other implementations, however, do not support being able to
@@ -781,9 +783,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 14]
+Contavalli, et al.       Expires January 7, 2016               [Page 14]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
 7.  IANA Considerations
@@ -837,9 +839,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 15]
+Contavalli, et al.       Expires January 7, 2016               [Page 15]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    with a SOURCE PREFIX-LENGTH of 24 would get a returned SCOPE PREFIX-
@@ -893,9 +895,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 16]
+Contavalli, et al.       Expires January 7, 2016               [Page 16]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    With multiple queries for the same name in flight, the attacker has a
@@ -949,9 +951,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 17]
+Contavalli, et al.       Expires January 7, 2016               [Page 17]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    responses for different networks, putting more memory pressure on the
@@ -1005,9 +1007,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 18]
+Contavalli, et al.       Expires January 7, 2016               [Page 18]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
 11.1.  Probing
@@ -1061,9 +1063,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 19]
+Contavalli, et al.       Expires January 7, 2016               [Page 19]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    A major drawback is scalability.  The operator needs to track which
@@ -1117,9 +1119,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 20]
+Contavalli, et al.       Expires January 7, 2016               [Page 20]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
         *  ADDRESS, set to 0xC0 0x00 0x02, providing only the first 24
@@ -1173,9 +1175,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 21]
+Contavalli, et al.       Expires January 7, 2016               [Page 21]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    Edward Lewis
@@ -1229,9 +1231,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 22]
+Contavalli, et al.       Expires January 7, 2016               [Page 22]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    [RFC1918]  Rekhter, Y., Moskowitz, R., Karrenberg, D., Groot, G., and
@@ -1285,9 +1287,9 @@ Appendix A.  Document History
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 23]
+Contavalli, et al.       Expires January 7, 2016               [Page 23]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    o  Clean up the open issues, mostly by saying that they were out of
@@ -1341,9 +1343,9 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 24]
+Contavalli, et al.       Expires January 7, 2016               [Page 24]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    o  More clearly describe the process from the point of view of each
@@ -1397,9 +1399,9 @@ A.1.  -00
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 25]
+Contavalli, et al.       Expires January 7, 2016               [Page 25]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    o  Marked up a few more references.
@@ -1453,9 +1455,9 @@ Authors' Addresses
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 26]
+Contavalli, et al.       Expires January 7, 2016               [Page 26]
 
-Internet-Draft        Client Subnet in DNS Queries              Jun 2015
+Internet-Draft        Client Subnet in DNS Queries             July 2015
 
 
    Carlo Contavalli
@@ -1509,4 +1511,5 @@ Internet-Draft        Client Subnet in DNS Queries              Jun 2015
 
 
 
-Contavalli, et al.      Expires December 14, 2015              [Page 27]
+Contavalli, et al.       Expires January 7, 2016               [Page 27]
+```

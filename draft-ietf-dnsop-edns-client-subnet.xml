@@ -14,7 +14,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-01"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-02"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -108,7 +108,7 @@
       </address>
     </author>
 
-    <date day="12" month="Jun" year="2015"/>
+    <date day="6" month="July" year="2015"/>
 
     <area>ops</area>
 
@@ -263,14 +263,14 @@
       queries they receive. This is described in <xref
       target="transitivity"/>.</t>
 
-      <t>The mechanisms provided by ECS raise various security
-      related concerns related to cache growth, the ability to spoof EDNS0
-      options, and privacy. <xref target="security"/> explores various
-      mitigation techniques.</t>
+      <t>The mechanisms provided by ECS raise various security related
+      concerns related to cache growth, the ability to spoof EDNS0 options,
+      and privacy. <xref target="security"/> explores various mitigation
+      techniques.</t>
 
       <t>The expectation, however, is that this option will primarily be used
       between Recursive Resolvers and Authoritative Nameservers that are
-      sensitive to network location issues.  Most Recursive Resolvers,
+      sensitive to network location issues. Most Recursive Resolvers,
       Authoritative Nameservers and Stub Resolvers will never need to know
       about this option, and will continue working as they had been.</t>
 
@@ -383,9 +383,9 @@
           Namserver. See <xref target="whitelist"/> for more discussion on
           this point. If the Recursive Resolver will not forward the FAMILY
           and ADDRESS data from the incoming ECS option, it SHOULD return a
-          REFUSED response.  An ECS-aware resolver MUST retry the query
-          without ECS to distinguish the response from a lame delegation,
-          which is the common convention for a REFUSED status.</t>
+          REFUSED response. An ECS-aware resolver MUST retry the query without
+          ECS to distinguish the response from a lame delegation, which is the
+          common convention for a REFUSED status.</t>
 
           <t>Subsequent queries to refresh the data MUST, if unrestricted by
           an incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE
@@ -473,9 +473,9 @@
 
           <t>The FAMILY, SOURCE PREFIX-LENGTH and ADDRESS in the response MUST
           match those in the query, unless the query specified only the SOURCE
-          PREFIX-LENGTH for privacy (with FAMILY and ADDRESS set to
-          0). Echoing back these values helps to mitigate certain attack
-          vectors, as described in <xref target="security"/>.</t>
+          PREFIX-LENGTH for privacy (with FAMILY and ADDRESS set to 0).
+          Echoing back these values helps to mitigate certain attack vectors,
+          as described in <xref target="security"/>.</t>
 
           <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
           which the answer is intended.</t>
@@ -499,26 +499,26 @@
           <t>Since some queries can result in multiple RRsets being added to
           the response, there is an unfortunate ambiguity from the original
           draft as to how SCOPE PREFIX-LENGTH would apply to each individual
-          RRset.  For example, multiple types in response to an ANY metaquery
+          RRset. For example, multiple types in response to an ANY metaquery
           could all have different applicable SCOPE PREFIX-LENGTH values, but
-          this protocol only has the ability to signal one.  The response
+          this protocol only has the ability to signal one. The response
           SHOULD therefore include the longest relevant PREFIX-LENGTH of any
           RRset in the answer, which could have the unfortunate side-effect of
           redundantly caching some data that could be cached more broadly. For
           the specific case of a CNAME chain, the Authoritative Nameserver
           SHOULD only place the CNAME to have it cached unambiguously
-          appropriately. Most modern Recursive Resolvers restart the query with
-          the canonical name, so the remainder of the chain is typically
+          appropriately. Most modern Recursive Resolvers restart the query
+          with the canonical name, so the remainder of the chain is typically
           ignored anyway. For message-focused resolvers, rather than
-          RRset-focused ones, this will mean caching the entire CNAME chain
-          at the longest PREFIX-LENGTH of any RRset in the chain.</t>
+          RRset-focused ones, this will mean caching the entire CNAME chain at
+          the longest PREFIX-LENGTH of any RRset in the chain.</t>
 
-          <t>The specific logic that an Authoritative Nameserver uses to choose
-          a tailored response is not in the scope of this document.
+          <t>The specific logic that an Authoritative Nameserver uses to
+          choose a tailored response is not in the scope of this document.
           Implementers are encouraged, however, to consider carefully their
           selection of SCOPE PREFIX-LENGTH for the response in the event that
-          the best tailored response cannot be determined, and what
-          the implications would be over the life of the TTL.</t>
+          the best tailored response cannot be determined, and what the
+          implications would be over the life of the TTL.</t>
 
           <t>If the Authoritative Nameserver operator configures a more
           specific (longer prefix length) Tailored Response within a
@@ -572,10 +572,10 @@
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
         of ADDRESS in the response don't match the non-zero fields in the
         corresponding query, the full response MUST be dropped, as described
-        in <xref target="security"/>.  For a response to query which
-        specified only the SOURCE PREFIX-LENGTH for privacy masking, the
-        FAMILY and ADDRESS fields should contain the appropriate non-zero
-        information for caching.</t>
+        in <xref target="security"/>. For a response to query which specified
+        only the SOURCE PREFIX-LENGTH for privacy masking, the FAMILY and
+        ADDRESS fields should contain the appropriate non-zero information for
+        caching.</t>
 
         <t>If no ECS option is contained in the response, the Intermediate
         Nameserver SHOULD treat this as being equivalent to having received a
@@ -691,7 +691,7 @@
         behaviour described in <xref target="caching"/>.</t>
 
         <t>Intermediate Nameservers supporting ECS MUST forward options with
-        SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized).  Such
+        SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized). Such
         options MUST NOT be replaced with more accurate address
         information.</t>
 
@@ -758,8 +758,9 @@
       <t>In other cases, Recursive Resolvers sited behind a NAT device SHOULD
       NOT originate ECS options with their external IP address, and instead
       rely on downstream Intermediate Nameservers to do so. They MAY, however,
-      choose to include the option with their internal address for the purposes
-      of signaling a shorter, more anonymous SOURCE PREFIX-LENGTH.</t>
+      choose to include the option with their internal address for the
+      purposes of signaling a shorter, more anonymous SOURCE
+      PREFIX-LENGTH.</t>
 
       <t>If an Authoritative Nameserver on the publicly routed Internet
       receives a query that specifies an ADDRESS in <xref target="RFC1918"/>
@@ -1086,19 +1087,19 @@ USA
     </section>
 
     <section title="Acknowledgements">
-      <t>The authors wish to thank Darryl Rodden for his work as a co-author on
-      previous versions, and the following people for reviewing early drafts of
-      this document and for providing useful feedback: Paul S. R.  Chisholm,
-      B. Narendran, Leonidas Kontothanassis, David Presotto, Philip Rowlands,
-      Chris Morrow, Kara Moscoe, Alex Nizhner, Warren Kumari, and Richard
-      Rabbat from Google; Terry Farmer, Mark Teodoro, Edward Lewis, and Eric
-      Burger from Neustar; David Ulevitch and Matthew Dempsky from OpenDNS;
-      Patrick W. Gilmore and Steve Hill from Akamai; Colm MacCarthaigh and
-      Richard Sheehan from Amazon; Tatuya Jinmei from Internet Software
-      Consortium; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
-      Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
-      from Verisign; Antonio Querubin; and all of the other people that replied
-      to our emails on various mailing lists.</t>
+      <t>The authors wish to thank Darryl Rodden for his work as a co-author
+      on previous versions, and the following people for reviewing early
+      drafts of this document and for providing useful feedback: Paul S. R.
+      Chisholm, B. Narendran, Leonidas Kontothanassis, David Presotto, Philip
+      Rowlands, Chris Morrow, Kara Moscoe, Alex Nizhner, Warren Kumari, and
+      Richard Rabbat from Google; Terry Farmer, Mark Teodoro, Edward Lewis,
+      and Eric Burger from Neustar; David Ulevitch and Matthew Dempsky from
+      OpenDNS; Patrick W. Gilmore and Steve Hill from Akamai; Colm
+      MacCarthaigh and Richard Sheehan from Amazon; Tatuya Jinmei from
+      Internet Software Consortium; Andrew Sullivan from Dyn; John Dickinson
+      from Sinodun; Mark Delany from Apple; Yuri Schaeffer from NLnet Labs;
+      Duane Wessels from from Verisign; Antonio Querubin; and all of the other
+      people that replied to our emails on various mailing lists.</t>
     </section>
   </middle>
 
@@ -1137,25 +1138,24 @@ USA
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-02 to -03 (IETF)<list style="symbols">
-          <t>Clean up the open issues, mostly by saying that they were
-          out of scope for this document.</t>
+          <t>Clean up the open issues, mostly by saying that they were out of
+          scope for this document.</t>
 
-          <t>How in the world did no reviewers note that "Queries" had
-          been spelled as "Querys" in the title? (Aaron Falk did.)</t>
-
-      </list></t>
+          <t>How in the world did no reviewers note that "Queries" had been
+          spelled as "Querys" in the title? (Aaron Falk did.)</t>
+        </list></t>
 
       <t>-01 to -02 (IETF)<list style="symbols">
           <t>Note ambiguity with multiple RRsets appearing in reply, eg, for
           an ANY query or CNAME chain. (Duane Wessels)</t>
 
           <t>Open issue questioning the guidance about resolvers behind a NAT.
-          How do they know they are?  What real requirement is this imposing?
+          How do they know they are? What real requirement is this imposing?
           (Duane Wessels)</t>
 
           <t>Some other wording changes based on Duane's review of an earlier
           draft.</t>
-      </list></t>
+        </list></t>
 
       <t>-00 to -01 (IETF)<list style="symbols">
           <t>&lt;David&gt; Made the document describe how things are actually
