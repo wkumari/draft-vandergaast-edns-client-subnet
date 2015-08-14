@@ -14,7 +14,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-02"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-02.1"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -108,7 +108,7 @@
       </address>
     </author>
 
-    <date day="6" month="July" year="2015"/>
+    <date day="14" month="August" year="2015"/>
 
     <area>ops</area>
 
@@ -950,13 +950,14 @@
         an implementation could use a whitelist of Authoritative Namesevers to
         send the option to, likely specified by their domain name.
         Implementations MAY also allow additionally configuring this based on
-        other criteria, such as zone or query type.</t>
+        other criteria, such as zone or query type. As of the time of this
+        writing, at least one implemetaion makes use of a whitelist. </t>
 
-        <t>An additional advantage of using a whitelist is that partial client
-        address information is only disclosed to Nameservers that are known to
-        use the information, improving privacy.</t>
+        <t>An advantage of using a whitelist is that partial client address
+        information is only disclosed to Nameservers that are known to use the
+        information, improving privacy.</t>
 
-        <t>A major drawback is scalability. The operator needs to track which
+        <t>A drawback is scalability. The operator needs to track which
         Authoritative Nameservers support ECS, making it harder for new
         Authoritative Nameservers to start using the option.</t>
 
@@ -1137,7 +1138,11 @@ USA
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
-      <t>-02 to -03 (IETF)<list style="symbols">
+      <t>-02 to 02.1:<list style="symbols">
+          <t>Some cleanup of the whitelist text.</t>
+        </list></t>
+
+      <t>-01 to -02 (IETF)<list style="symbols">
           <t>Clean up the open issues, mostly by saying that they were out of
           scope for this document.</t>
 
@@ -1145,7 +1150,7 @@ USA
           spelled as "Querys" in the title? (Aaron Falk did.)</t>
         </list></t>
 
-      <t>-01 to -02 (IETF)<list style="symbols">
+      <t>-00 to -01 (IETF)<list style="symbols">
           <t>Note ambiguity with multiple RRsets appearing in reply, eg, for
           an ANY query or CNAME chain. (Duane Wessels)</t>
 
@@ -1157,7 +1162,7 @@ USA
           draft.</t>
         </list></t>
 
-      <t>-00 to -01 (IETF)<list style="symbols">
+      <t>-IND to -00 (IETF)<list style="symbols">
           <t>&lt;David&gt; Made the document describe how things are actually
           implmented now. This makes the document be more of a "this is how we
           are doing things, this provides information on that". There may be a
