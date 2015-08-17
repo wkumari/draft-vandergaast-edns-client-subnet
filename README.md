@@ -623,7 +623,7 @@ Internet-Draft        Client Subnet in DNS Queries           August 2015
    If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits of
    ADDRESS in the response don't match the non-zero fields in the
    corresponding query, the full response MUST be dropped, as described
-   in Section 10.  For a response to query which specified only the
+   in Section 10.  For a response to a query which specified only the
    SOURCE PREFIX-LENGTH for privacy masking, the FAMILY and ADDRESS
    fields should contain the appropriate non-zero information for
    caching.
@@ -1246,13 +1246,13 @@ Internet-Draft        Client Subnet in DNS Queries           August 2015
               <http://www.rfc-editor.org/info/rfc1918>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
-              RFC2119, March 1997,
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "DNS Security Introduction and Requirements", RFC
-              4033, DOI 10.17487/RFC4033, March 2005,
+              Rose, "DNS Security Introduction and Requirements",
+              RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <http://www.rfc-editor.org/info/rfc4033>.
 
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
@@ -1270,18 +1270,18 @@ Internet-Draft        Client Subnet in DNS Queries           August 2015
               <http://www.rfc-editor.org/info/rfc4193>.
 
    [RFC6177]  Narten, T., Huston, G., and L. Roberts, "IPv6 Address
-              Assignment to End Sites", BCP 157, RFC 6177, DOI 10.17487/
-              RFC6177, March 2011,
+              Assignment to End Sites", BCP 157, RFC 6177,
+              DOI 10.17487/RFC6177, March 2011,
               <http://www.rfc-editor.org/info/rfc6177>.
 
    [RFC6890]  Cotton, M., Vegoda, L., Bonica, R., Ed., and B. Haberman,
-              "Special-Purpose IP Address Registries", BCP 153, RFC
-              6890, DOI 10.17487/RFC6890, April 2013,
+              "Special-Purpose IP Address Registries", BCP 153,
+              RFC 6890, DOI 10.17487/RFC6890, April 2013,
               <http://www.rfc-editor.org/info/rfc6890>.
 
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
-              for DNS (EDNS(0))", STD 75, RFC 6891, DOI 10.17487/
-              RFC6891, April 2013,
+              for DNS (EDNS(0))", STD 75, RFC 6891,
+              DOI 10.17487/RFC6891, April 2013,
               <http://www.rfc-editor.org/info/rfc6891>.
 
 
@@ -1295,8 +1295,8 @@ Internet-Draft        Client Subnet in DNS Queries           August 2015
 15.2.  Informative References
 
    [RFC2663]  Srisuresh, P. and M. Holdrege, "IP Network Address
-              Translator (NAT) Terminology and Considerations", RFC
-              2663, DOI 10.17487/RFC2663, August 1999,
+              Translator (NAT) Terminology and Considerations",
+              RFC 2663, DOI 10.17487/RFC2663, August 1999,
               <http://www.rfc-editor.org/info/rfc2663>.
 
 15.3.  URIs

@@ -572,7 +572,7 @@
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
         of ADDRESS in the response don't match the non-zero fields in the
         corresponding query, the full response MUST be dropped, as described
-        in <xref target="security"/>. For a response to query which specified
+        in <xref target="security"/>. For a response to a query which specified
         only the SOURCE PREFIX-LENGTH for privacy masking, the FAMILY and
         ADDRESS fields should contain the appropriate non-zero information for
         caching.</t>
