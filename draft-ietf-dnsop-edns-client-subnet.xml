@@ -108,7 +108,7 @@
       </address>
     </author>
 
-    <date day="14" month="August" year="2015"/>
+    <date day="25" month="September" year="2015"/>
 
     <area>ops</area>
 
@@ -120,16 +120,6 @@
       subsequent response can be cached.</t>
     </abstract>
 
-    <note title="IESG Note">
-      <t>[RFC Editor: Please remove this note prior to publication ]</t>
-
-      <t>This informational document describes an existing, implemented and
-      deployed system. A subset of the operators using this is at <eref
-      target="http://www.afasterinternet.com/participants.htm">
-      http://www.afasterinternet.com/participants.htm</eref>. The authors
-      believe that it is better to document this system (even if not everyone
-      agrees with the concept) than leave it undocumented and proprietary.</t>
-    </note>
   </front>
 
   <middle>
@@ -176,9 +166,39 @@
 
       <t>At least a dozen different client and server implementations had been
       written based on the original specification, first known as
-      draft-vandergaast-edns-client-subnet. While they interoperate for the
-      primary goal, they have varying behaviour around poorly specified edge
-      cases. Known incompatibilities will be described.</t>
+      <eref target="https://tools.ietf.org/html/draft-vandergaast-edns-client-subnet-00">
+      draft-vandergaast-edns-client-subnet</eref>. The protocol is in active
+      production use among several major Internet companies, a subset of which
+      are listed at
+      <eref target="http://www.afasterinternet.com/participants.htm">
+      http://www.afasterinternet.com/participants.htm</eref>.  While they
+      interoperate for the primary goal, they have varying behaviour around
+      poorly specified edge cases. Known incompatibilities will be
+      described. The authors believe that it is better to document this system,
+      even if not everyone agrees with the concept or the details of the
+      original specification, rather than leave it undocumented and
+      proprietary.</t>
+    </section>
+
+    <section title="Privacy Note">
+      <t>If we were just beginning to design this mechanism, and not
+      documenting existing protocol, it is unlikely that we would have done
+      things exactly this way.</t>
+
+      <t>The IETF is actively working on 
+      <eref target="https://datatracker.ietf.org/doc/charter-ietf-dprive/">
+      enhancing DNS privacy</eref>, and the re-injection of metadata has been
+      <eref target="https://github.com/IAB-PrivSec-program/draft-iab-privsec-metadata-insertion/blob/master/draft-iab-privsec-metadata-insertion.md">
+      identified as a problematic design pattern</eref>.</t>
+
+      <t>As noted above, however, this document primarily describes existing
+      behavior of a deployed method, to further the understanding of the
+      Internet community.</t>
+
+      <t>We encourage the deployment of means to allow users to make use of the
+      opt-out provided. We also recommend that others avoid techniques that may
+      introduce additional metadata in future work, as it may damage user
+      trust.</t>
     </section>
 
     <section title="Requirements Notation">
@@ -335,10 +355,15 @@
           MUST be set to 0.</t>
 
           <t>ADDRESS, variable number of octets, contains either an IPv4 or
-          IPv6 address, depending on FAMILY, truncated to the number of bits
-          indicated by the SOURCE PREFIX-LENGTH field, with bits set to 0 to
-          pad to the end of the last octet needed. Trailing all-zero octets
-          SHOULD be omitted.</t>
+          IPv6 address, depending on FAMILY, which MUST be truncated to the
+          number of bits indicated by the SOURCE PREFIX-LENGTH field, padding
+          with 0 bits to pad to the end of the last octet needed.</t>
+
+          <t>A server receiving an ECS option that uses more ADDRESS octets
+          than are needed, or that has non-zero bits set beyond SOURCE
+          PREFIX-LENGTH, SHOULD return REFUSED to reject the packet, as a
+          signal to the developer of the software making the request to fix
+          their implementation.</t>
         </list> All fields are in network byte order ("big-endian", per <xref
       target="RFC1700"/>, Data Notation).</t>
     </section>
@@ -371,9 +396,9 @@
           <t>Finally, in both cases, SCOPE PREFIX-LENGTH is set to 0 and the
           ADDRESS is then added up to the SOURCE PREFIX-LENGTH number of bits,
           with trailing 0 bits added, if needed, to fill the final octet. The
-          total number of octets used should only be enough to cover SOURCE
-          PREFIX-LENGTH bits, rather than the full width that would normally
-          be used by addresses in FAMILY.</t>
+          total number of octets used MUST only be enough to cover SOURCE
+          PREFIX-LENGTH bits, rather than the full width that would normally be
+          used by addresses in FAMILY.</t>
 
           <t>FAMILY and ADDRESS information MAY be used from the ECS option in
           the incoming query. Passing the existing address data is supportive
