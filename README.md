@@ -15,7 +15,7 @@ Expires: March 28, 2016                                      D. Lawrence
 
 
                       Client Subnet in DNS Queries
-                draft-ietf-dnsop-edns-client-subnet-02.1
+                 draft-ietf-dnsop-edns-client-subnet-03
 
 Abstract
 
@@ -1352,7 +1352,7 @@ Appendix A.  Document History
 
    [RFC Editor: Please delete this section before publication.]
 
-   -02 to 02.1:
+   -02 to -03:
 
    o  Some cleanup of the whitelist text.
 
