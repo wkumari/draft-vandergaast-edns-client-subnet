@@ -15,7 +15,7 @@ Expires: March 28, 2016                                      D. Lawrence
 
 
                       Client Subnet in DNS Queries
-                 draft-ietf-dnsop-edns-client-subnet-03
+                 draft-ietf-dnsop-edns-client-subnet-04
 
 Abstract
 
@@ -1270,13 +1270,13 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
               <http://www.rfc-editor.org/info/rfc1918>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119,
-              DOI 10.17487/RFC2119, March 1997,
+              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
+              RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "DNS Security Introduction and Requirements",
-              RFC 4033, DOI 10.17487/RFC4033, March 2005,
+              Rose, "DNS Security Introduction and Requirements", RFC
+              4033, DOI 10.17487/RFC4033, March 2005,
               <http://www.rfc-editor.org/info/rfc4033>.
 
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
@@ -1302,25 +1302,25 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
               <http://www.rfc-editor.org/info/rfc4193>.
 
    [RFC6177]  Narten, T., Huston, G., and L. Roberts, "IPv6 Address
-              Assignment to End Sites", BCP 157, RFC 6177,
-              DOI 10.17487/RFC6177, March 2011,
+              Assignment to End Sites", BCP 157, RFC 6177, DOI 10.17487/
+              RFC6177, March 2011,
               <http://www.rfc-editor.org/info/rfc6177>.
 
    [RFC6890]  Cotton, M., Vegoda, L., Bonica, R., Ed., and B. Haberman,
-              "Special-Purpose IP Address Registries", BCP 153,
-              RFC 6890, DOI 10.17487/RFC6890, April 2013,
+              "Special-Purpose IP Address Registries", BCP 153, RFC
+              6890, DOI 10.17487/RFC6890, April 2013,
               <http://www.rfc-editor.org/info/rfc6890>.
 
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
-              for DNS (EDNS(0))", STD 75, RFC 6891,
-              DOI 10.17487/RFC6891, April 2013,
+              for DNS (EDNS(0))", STD 75, RFC 6891, DOI 10.17487/
+              RFC6891, April 2013,
               <http://www.rfc-editor.org/info/rfc6891>.
 
 16.2.  Informative References
 
    [RFC2663]  Srisuresh, P. and M. Holdrege, "IP Network Address
-              Translator (NAT) Terminology and Considerations",
-              RFC 2663, DOI 10.17487/RFC2663, August 1999,
+              Translator (NAT) Terminology and Considerations", RFC
+              2663, DOI 10.17487/RFC2663, August 1999,
               <http://www.rfc-editor.org/info/rfc2663>.
 
 16.3.  URIs
@@ -1351,6 +1351,14 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 Appendix A.  Document History
 
    [RFC Editor: Please delete this section before publication.]
+
+   -03 to -04:
+
+   o  Privacy note per Ted Hardie's suggestion.
+
+   o  MUST use minimum octet length to cover PREFIX bits.
+
+   o  Expose note about documenting deployed, if flawed, protocol.
 
    -02 to -03:
 
@@ -1387,6 +1395,15 @@ Appendix A.  Document History
       (Jinmei, others).  Stole most of the definition for prefix length
       from RFC4291.
 
+
+
+
+
+Contavalli, et al.       Expires March 28, 2016                [Page 25]
+
+Internet-Draft        Client Subnet in DNS Queries        September 2015
+
+
    o  Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
       IPv6 (Tatuya Jinmei)
 
@@ -1396,13 +1413,6 @@ Appendix A.  Document History
 
    o  Added text explaining that implmentations need to document thier
       behavior with overlapping networks.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 25]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  Soften "optimized reply" language.  (Andrew Sullivan).
 
@@ -1443,6 +1453,13 @@ A.1.  -00
    o  Wire format changed to include the original address and prefix
       length in responses in defence against birthday attacks.
 
+
+
+Contavalli, et al.       Expires March 28, 2016                [Page 26]
+
+Internet-Draft        Client Subnet in DNS Queries        September 2015
+
+
    o  Security considerations now includes a section about birthday
       attacks.
 
@@ -1451,14 +1468,6 @@ A.1.  -00
 
    o  Clarified behavior of resolvers when presented with an invalid ECS
       option.
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 26]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  Fully take multi-tier DNS setups in mind and be more clear about
       where the option should be originated.
@@ -1499,6 +1508,14 @@ A.2.  -01
    o  Intermediate Nameservers can now remove an ECS option, or reduce
       the SOURCE PREFIX-LENGTH to increase privacy.
 
+
+
+
+Contavalli, et al.       Expires March 28, 2016                [Page 27]
+
+Internet-Draft        Client Subnet in DNS Queries        September 2015
+
+
    o  Added a reference to DoS attacks in the Security section.
 
    o  Don't use "network range", as it seems to have different meaning
@@ -1508,13 +1525,6 @@ A.2.  -01
       lower.  Add a better explanation in the format section.
 
    o  Minor corrections in various other sections.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 27]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
 A.3.  -02
 
@@ -1549,6 +1559,19 @@ Authors' Addresses
    Email: tale@akamai.com
 
 
+
+
+
+
+
+
+
+
+Contavalli, et al.       Expires March 28, 2016                [Page 28]
+
+Internet-Draft        Client Subnet in DNS Queries        September 2015
+
+
    Warren Kumari
    Google
    1600 Amphitheatre Parkway
@@ -1567,5 +1590,38 @@ Authors' Addresses
 
 
 
-Contavalli, et al.       Expires March 28, 2016                [Page 28]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Contavalli, et al.       Expires March 28, 2016                [Page 29]
 ```

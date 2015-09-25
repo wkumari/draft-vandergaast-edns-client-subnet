@@ -14,7 +14,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-03"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-04"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -119,7 +119,6 @@
       network that originated a DNS query, and the network for which the
       subsequent response can be cached.</t>
     </abstract>
-
   </front>
 
   <middle>
@@ -165,19 +164,18 @@
       should be used.</t>
 
       <t>At least a dozen different client and server implementations had been
-      written based on the original specification, first known as
-      <eref target="https://tools.ietf.org/html/draft-vandergaast-edns-client-subnet-00">
+      written based on the original specification, first known as <eref
+      target="https://tools.ietf.org/html/draft-vandergaast-edns-client-subnet-00">
       draft-vandergaast-edns-client-subnet</eref>. The protocol is in active
       production use among several major Internet companies, a subset of which
-      are listed at
-      <eref target="http://www.afasterinternet.com/participants.htm">
-      http://www.afasterinternet.com/participants.htm</eref>.  While they
+      are listed at <eref
+      target="http://www.afasterinternet.com/participants.htm">
+      http://www.afasterinternet.com/participants.htm</eref>. While they
       interoperate for the primary goal, they have varying behaviour around
-      poorly specified edge cases. Known incompatibilities will be
-      described. The authors believe that it is better to document this system,
-      even if not everyone agrees with the concept or the details of the
-      original specification, rather than leave it undocumented and
-      proprietary.</t>
+      poorly specified edge cases. Known incompatibilities will be described.
+      The authors believe that it is better to document this system, even if
+      not everyone agrees with the concept or the details of the original
+      specification, rather than leave it undocumented and proprietary.</t>
     </section>
 
     <section title="Privacy Note">
@@ -185,20 +183,21 @@
       documenting existing protocol, it is unlikely that we would have done
       things exactly this way.</t>
 
-      <t>The IETF is actively working on 
-      <eref target="https://datatracker.ietf.org/doc/charter-ietf-dprive/">
+      <t>The IETF is actively working on <eref
+      target="https://datatracker.ietf.org/doc/charter-ietf-dprive/">
       enhancing DNS privacy</eref>, and the re-injection of metadata has been
-      <eref target="https://github.com/IAB-PrivSec-program/draft-iab-privsec-metadata-insertion/blob/master/draft-iab-privsec-metadata-insertion.md">
+      <eref
+      target="https://github.com/IAB-PrivSec-program/draft-iab-privsec-metadata-insertion/blob/master/draft-iab-privsec-metadata-insertion.md">
       identified as a problematic design pattern</eref>.</t>
 
       <t>As noted above, however, this document primarily describes existing
       behavior of a deployed method, to further the understanding of the
       Internet community.</t>
 
-      <t>We encourage the deployment of means to allow users to make use of the
-      opt-out provided. We also recommend that others avoid techniques that may
-      introduce additional metadata in future work, as it may damage user
-      trust.</t>
+      <t>We encourage the deployment of means to allow users to make use of
+      the opt-out provided. We also recommend that others avoid techniques
+      that may introduce additional metadata in future work, as it may damage
+      user trust.</t>
     </section>
 
     <section title="Requirements Notation">
@@ -397,8 +396,8 @@
           ADDRESS is then added up to the SOURCE PREFIX-LENGTH number of bits,
           with trailing 0 bits added, if needed, to fill the final octet. The
           total number of octets used MUST only be enough to cover SOURCE
-          PREFIX-LENGTH bits, rather than the full width that would normally be
-          used by addresses in FAMILY.</t>
+          PREFIX-LENGTH bits, rather than the full width that would normally
+          be used by addresses in FAMILY.</t>
 
           <t>FAMILY and ADDRESS information MAY be used from the ECS option in
           the incoming query. Passing the existing address data is supportive
@@ -1162,6 +1161,14 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-03 to -04:<list style="symbols">
+          <t>Privacy note per Ted Hardie&rsquo;s suggestion.</t>
+
+          <t>MUST use minimum octet length to cover PREFIX bits.</t>
+
+          <t>Expose note about documenting deployed, if flawed, protocol.</t>
+        </list></t>
 
       <t>-02 to -03:<list style="symbols">
           <t>Some cleanup of the whitelist text.</t>
