@@ -7,11 +7,11 @@
 dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
-Expires: March 28, 2016                                      D. Lawrence
+Expires: April 5, 2016                                       D. Lawrence
                                                      Akamai Technologies
                                                                W. Kumari
                                                                   Google
-                                                      September 25, 2015
+                                                         October 3, 2015
 
 
                       Client Subnet in DNS Queries
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 28, 2016.
+   This Internet-Draft will expire on April 5, 2016.
 
 Copyright Notice
 
@@ -55,9 +55,9 @@ Copyright Notice
 
 
 
-Contavalli, et al.       Expires March 28, 2016                 [Page 1]
+Contavalli, et al.        Expires April 5, 2016                 [Page 1]
 
-Internet-Draft        Client Subnet in DNS Queries        September 2015
+Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -71,16 +71,16 @@ Table of Contents
    4.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
    5.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   5
    6.  Option Format . . . . . . . . . . . . . . . . . . . . . . . .   6
-   7.  Protocol Description  . . . . . . . . . . . . . . . . . . . .   7
-     7.1.  Originating the Option  . . . . . . . . . . . . . . . . .   7
+   7.  Protocol Description  . . . . . . . . . . . . . . . . . . . .   8
+     7.1.  Originating the Option  . . . . . . . . . . . . . . . . .   8
        7.1.1.  Recursive Resolvers . . . . . . . . . . . . . . . . .   8
        7.1.2.  Stub Resolvers  . . . . . . . . . . . . . . . . . . .   9
-       7.1.3.  Forwarders  . . . . . . . . . . . . . . . . . . . . .   9
-     7.2.  Generating a Response . . . . . . . . . . . . . . . . . .   9
-       7.2.1.  Authoritative Nameserver  . . . . . . . . . . . . . .   9
-       7.2.2.  Intermediate Nameserver . . . . . . . . . . . . . . .  11
+       7.1.3.  Forwarding Resolvers  . . . . . . . . . . . . . . . .   9
+     7.2.  Generating a Response . . . . . . . . . . . . . . . . . .  10
+       7.2.1.  Authoritative Nameserver  . . . . . . . . . . . . . .  10
+       7.2.2.  Intermediate Nameserver . . . . . . . . . . . . . . .  12
      7.3.  Handling ECS Responses and Caching  . . . . . . . . . . .  12
-       7.3.1.  Caching the Response  . . . . . . . . . . . . . . . .  12
+       7.3.1.  Caching the Response  . . . . . . . . . . . . . . . .  13
        7.3.2.  Answering from Cache  . . . . . . . . . . . . . . . .  13
      7.4.  Delegations and Negative Answers  . . . . . . . . . . . .  14
      7.5.  Transitivity  . . . . . . . . . . . . . . . . . . . . . .  14
@@ -96,14 +96,14 @@ Table of Contents
      12.2.  Whitelist  . . . . . . . . . . . . . . . . . . . . . . .  20
    13. Example . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
    14. Contributing Authors  . . . . . . . . . . . . . . . . . . . .  22
-   15. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  22
+   15. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  23
    16. References  . . . . . . . . . . . . . . . . . . . . . . . . .  23
      16.1.  Normative References . . . . . . . . . . . . . . . . . .  23
      16.2.  Informative References . . . . . . . . . . . . . . . . .  24
      16.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  24
    Appendix A.  Document History . . . . . . . . . . . . . . . . . .  25
-     A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  26
-     A.2.  -01 . . . . . . . . . . . . . . . . . . . . . . . . . . .  27
+     A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  27
+     A.2.  -01 . . . . . . . . . . . . . . . . . . . . . . . . . . .  28
      A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  28
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  28
 
@@ -111,9 +111,9 @@ Table of Contents
 
 
 
-Contavalli, et al.       Expires March 28, 2016                 [Page 2]
+Contavalli, et al.        Expires April 5, 2016                 [Page 2]
 
-Internet-Draft        Client Subnet in DNS Queries        September 2015
+Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 1.  Introduction
@@ -127,10 +127,10 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    Traditionally, and probably still in the majority of instances,
    Recursive Resolvers are reasonably close in the topological sense to
-   the Stub Resolvers or Forwarders that are the source of queries.  For
-   these resolvers, using their own IP address is sufficient for
-   authority servers that tailor responses based upon location of the
-   querier.
+   the Stub Resolvers or Forwarding Resolvers that are the source of
+   queries.  For these resolvers, using their own IP address is
+   sufficient for authority servers that tailor responses based upon
+   location of the querier.
 
    Increasingly, though, a class of Recursive Resolvers has arisen that
    handle query sources that are often not topologically close.  The
@@ -167,9 +167,9 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
 
 
-Contavalli, et al.       Expires March 28, 2016                 [Page 3]
+Contavalli, et al.        Expires April 5, 2016                 [Page 3]
 
-Internet-Draft        Client Subnet in DNS Queries        September 2015
+Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
    which are listed at http://www.afasterinternet.com/participants.htm .
@@ -209,25 +209,27 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    ECS  EDNS Client Subnet.
 
-   Client  A Stub Resolver, Forwarder or Recursive Resolver.  A client
-      to a Recursive Resolver or a Forwarder.
+   Client  A Stub Resolver, Forwarding Resolver, or Recursive Resolver.
+      A client to a Recursive Resolver or a Forwarding Resolver.
 
-   Server  A Forwarder, Recursive Resolver or Authoritative Nameserver.
+   Server  A Forwarding Resolver, Recursive Resolver or Authoritative
+      Nameserver.
 
    Stub Resolver:  A simple DNS protocol implementation on the client
       side as described in [RFC1034] section 5.3.1.  A client to a
-      Recursive Resolver or a Forwarder.
+      Recursive Resolver or a Forwarding Resolver.
+
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                 [Page 4]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
 
    Authoritative Nameserver:  A nameserver that has authority over one
       or more DNS zones.  These are normally not contacted by Stub
-
-
-
-Contavalli, et al.       Expires March 28, 2016                 [Page 4]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
-
       Resolver or end user clients directly but by Recursive Resolvers.
       Described in [RFC1035] Section 6.
 
@@ -237,11 +239,16 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
       respond to client queries quickly.  Described in [RFC1035]
       Section 7.
 
-   Intermediate Nameserver:  Any nameserver (possibly a Recursive
-      Resolver) in between the Stub Resolver and the Authoritative
-      Nameserver.
+   Forwarding Resolver  A nameserver that does not do iterative
+      resolution itself, but instead passes that responsibility to
+      another Recursive Resolver, called a "Forwarder" in [RFC2308]
+      section 1.
 
-   Centralized Resolvers:  Recursive Resolvers that serve a
+   Intermediate Nameserver:  Any nameserver in between the Stub Resolver
+      and the Authoritative Nameserver, such as a Recursive Resolver or
+      a Forwarding Resolver.
+
+   Centralized Resolvers:  Intermediate Nameservers that serve a
       topologically diverse network address space.
 
    Tailored Response:  A response from a nameserver that is customized
@@ -268,6 +275,15 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    transparent to Stub Resolvers and end users, as described in
    Section 7.1.  ECS is only defined for the Internet (IN) DNS class.
 
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                 [Page 5]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    As described in Section 7.2, an Authoritative Nameserver could use
    this EDNS0 option as a hint to better locate the network of the end
    user and provide a better answer.
@@ -275,14 +291,6 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    Its response would contain an edns-client-subnet (ECS) option,
    clearly indicating that the server made use of this information, and
    that the answer is tied to the network of the client.
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                 [Page 5]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    As described in Section 7.3, Intermediate Nameservers would use this
    information to cache the response.
@@ -319,6 +327,19 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    address information in DNS messages.  The option is structured as
    follows:
 
+
+
+
+
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                 [Page 6]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
                 +0 (MSB)                            +1 (LSB)
       +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
    0: |                          OPTION-CODE                          |
@@ -331,14 +352,6 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
       +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
    7: |                           ADDRESS...                          /
       +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                 [Page 6]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  (Defined in [RFC6891]) OPTION-CODE, 2 octets, for ECS is 8 (0x00
       0x08).
@@ -355,12 +368,12 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    (IP version 6), which are as follows:
 
    o  SOURCE PREFIX-LENGTH, an unsigned octet representing the leftmost
-      significant bits of ADDRESS to be used for the lookup.  In
-      responses, it mirrors the same value as in the queries.
+      number of significant bits of ADDRESS to be used for the lookup.
+      In responses, it mirrors the same value as in the queries.
 
    o  SCOPE PREFIX-LENGTH, an unsigned octet representing the leftmost
-      significant bits of ADDRESS that the response covers.  In queries,
-      it MUST be set to 0.
+      number of significant bits of ADDRESS that the response covers.
+      In queries, it MUST be set to 0.
 
    o  ADDRESS, variable number of octets, contains either an IPv4 or
       IPv6 address, depending on FAMILY, which MUST be truncated to the
@@ -376,25 +389,21 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    All fields are in network byte order ("big-endian", per [RFC1700],
    Data Notation).
 
+
+
+Contavalli, et al.        Expires April 5, 2016                 [Page 7]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 7.  Protocol Description
 
 7.1.  Originating the Option
 
    The ECS option should generally be added by Recursive Resolvers when
    querying Authoritative Nameservers, as described in Section 12.  The
-   option can also be initialized by a Stub Resolver or Forwarder.
-
-
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                 [Page 7]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
+   option can also be initialized by a Stub Resolver or Forwarding
+   Resolver.
 
 7.1.1.  Recursive Resolvers
 
@@ -424,33 +433,30 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    FAMILY and ADDRESS information MAY be used from the ECS option in the
    incoming query.  Passing the existing address data is supportive of
-   the Recursive Resolver being used as the target of a Forwarder, but
-   could possibly run into policy problems with regard to usage
-   agreements between the Recursive Resolver and Authoritative
+   the Recursive Resolver being used as the target of a Forwarding
+   Resolver, but could possibly run into policy problems with regard to
+   usage agreements between the Recursive Resolver and Authoritative
    Namserver.  See Section 12.2 for more discussion on this point.  If
    the Recursive Resolver will not forward the FAMILY and ADDRESS data
    from the incoming ECS option, it SHOULD return a REFUSED response.
    An ECS-aware resolver MUST retry the query without ECS to distinguish
-   the response from a lame delegation, which is the common convention
-   for a REFUSED status.
+   the authoritative response from a lame delegation, which is the
+   common convention for a REFUSED status.
+
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                 [Page 8]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
 
    Subsequent queries to refresh the data MUST, if unrestricted by an
    incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE PREFIX-
    LENGTH that the Recursive Resolver is willing to cache, even if a
    previous response indicated that a shorter prefix length was
    sufficient.
-
-
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                 [Page 8]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
 7.1.2.  Stub Resolvers
 
@@ -477,21 +483,30 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    that denies forwarding of the ADDRESS.  If there is no ADDRESS set,
    FAMILY MUST be set to 0.
 
-7.1.3.  Forwarders
+7.1.3.  Forwarding Resolvers
 
-   Forwarders essentially appear to be Stub Resolvers to whatever
-   Recursive Resolver is ultimately handling the query, but look like a
-   Recursive Resolver to their client.  A Forwarder using this option
-   MUST prepare it as described in the Section 7.1.1 section above.  In
-   particular, a Forwarder that implements this protocol MUST honor
-   SOURCE PREFIX-LENGTH restrictions indicated in the incoming query
-   from its client.  See also Section 7.5.
+   Forwarding Resolvers essentially appear to be Stub Resolvers to
+   whatever Recursive Resolver is ultimately handling the query, but
+   look like a Recursive Resolver to their client.  A Forwarding
+   Resolver using this option MUST prepare it as described in the
+   Section 7.1.1 section above.  In particular, a Forwarding Resolver
+   that implements this protocol MUST honor SOURCE PREFIX-LENGTH
+   restrictions indicated in the incoming query from its client.  See
+   also Section 7.5.
 
    Since the Recursive Resolver it contacts will essentially treat it as
-   a Stub Resolver, the Forwarder must be prepared for a REFUSED
-   response if the Recursive Resolver does not permit incoming ADDRESS
-   information.  The Forwarded MUST retry with FAMILY and ADDRESS set to
-   0.
+   a Stub Resolver, the Forwarding Resolver must be prepared for a
+   REFUSED response if the Recursive Resolver does not permit incoming
+   ADDRESS information.  The Forwarded MUST retry with FAMILY and
+   ADDRESS set to 0.
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                 [Page 9]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
 
 7.2.  Generating a Response
 
@@ -500,13 +515,6 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    When a query containing an ECS option is received, an Authoritative
    Nameserver supporting ECS MAY use the address information specified
    in the option in order to generate a tailored response.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                 [Page 9]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    Authoritative Nameservers that have not implemented or enabled
    support for the ECS option ought to safely ignore it within incoming
@@ -548,6 +556,14 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    the name within the specified network SHOULD use the longer SCOPE
    PREFIX-LENGTH.
 
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 10]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    Conversely, a shorter SCOPE PREFIX-LENGTH indicates that more bits
    than necessary were provided, and the answer is suitable for a
    broader range of addresses.  This could be as short as 0, to indicate
@@ -556,13 +572,6 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    As the logical topology of any part of the network with regard to the
    tailored response can vary, an Authoritative Nameserver may return
    different values of SCOPE PREFIX-LENGTH for different networks.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 10]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    Since some queries can result in multiple RRsets being added to the
    response, there is an unfortunate ambiguity from the original draft
@@ -602,6 +611,15 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    Implementations SHOULD document their chosen behavior.
 
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 11]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 7.2.2.  Intermediate Nameserver
 
    When an Intermediate Nameserver uses ECS, whether it passes an ECS
@@ -610,15 +628,8 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    use an ECS option might not be able to understand it, the server MUST
    NOT provide one in its response.  If the client query did include the
    option, the server MUST include one in its response, especially as it
-   could be talking to a Forwarder which would need the information for
-   its own caching.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 11]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
+   could be talking to a Forwaring Resolver which would need the
+   information for its own caching.
 
    If an Intermediate Nameserver receives a response which has a longer
    SCOPE PREFIX-LENGTH than the SOURCE PREFIX-LENGTH that it provided in
@@ -657,6 +668,14 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    addresses.  See further discussion on the security implications of
    this in Section 11.
 
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 12]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 7.3.1.  Caching the Response
 
    In the cache, all resource records in the answer section MUST be tied
@@ -666,15 +685,6 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    additional and authority sections from a DNS response message are
    specifically excluded here.  Any records from these sections MUST NOT
    be tied to a network.  See more at Section 7.4.
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 12]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    Records that are cached as /0 because of a query's SOURCE PREFIX-
    LENGTH of 0 MUST be distinguished from those that are cached as /0
@@ -713,6 +723,15 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    If a matching network is found and the relevant data is unexpired,
    the response is generated as per Section 7.2.
 
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 13]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    If no matching network is found, the Intermediate Nameserver MUST
    perform resolution as usual.  This is necessary to avoid Tailored
    Responses in the cache from being returned to the wrong clients, and
@@ -720,26 +739,15 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    from polluting the cache with a Tailored Response for all the users
    of that resolver.
 
-
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 13]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
-
 7.4.  Delegations and Negative Answers
 
    The prohibition against tying ECS data to records from the Authority
    and Additional section left an unfortunate ambiguity in the original
    specification, primarily with regard to negative answers.  The
    expectation of the original authors was that ECS would only really be
-   used for address records, the use case that was driving the
-   definition of the protocol.
+   used for address requests and the positive result in the answer
+   section, the use case that was driving the definition of the
+   protocol.
 
    The delegations case is a bit easier to tease out.  In operational
    practice, if an authoritative server is using address information to
@@ -771,22 +779,21 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    Generally, ECS options will only be present in DNS messages between a
    Recursive Resolver and an Authoritative Nameserver, i.e., one hop.
    In certain configurations however, for example multi-tier nameserver
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 14]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    setups, it may be necessary to implement transitive behaviour on
    Intermediate Nameservers.
 
    It is important that any Intermediate Nameserver that forwards ECS
    options received from their clients MUST fully implement the caching
    behaviour described in Section 7.3.
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 14]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    Intermediate Nameservers supporting ECS MUST forward options with
    SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized).  Such
@@ -830,19 +837,16 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    authentication and data integrity to the DNS, as described in
    [RFC4033], [RFC4034] and [RFC4035].  OPT records are not signed.
 
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 15]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    Use of this option, however, does imply increased DNS traffic between
    any given Recursive Resolver and Authoritative Nameserver, which
    could be another barrier to further DNSSEC adoption in this area.
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 15]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
 10.  NAT Considerations
 
@@ -859,12 +863,12 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    internal network.  In such cases, the Intermediate Nameserver MAY use
    that information when originating ECS options.
 
-   In other cases, Recursive Resolvers sited behind a NAT device SHOULD
-   NOT originate ECS options with their external IP address, and instead
-   rely on downstream Intermediate Nameservers to do so.  They MAY,
-   however, choose to include the option with their internal address for
-   the purposes of signaling a shorter, more anonymous SOURCE PREFIX-
-   LENGTH.
+   In other cases, if a Recursive Resolvers knows it is sited behind a
+   NAT device, it SHOULD NOT originate ECS options with their external
+   IP address, and instead rely on downstream Intermediate Nameservers
+   to do so.  They MAY, however, choose to include the option with their
+   internal address for the purposes of signaling a shorter, more
+   anonymous SOURCE PREFIX-LENGTH.
 
    If an Authoritative Nameserver on the publicly routed Internet
    receives a query that specifies an ADDRESS in [RFC1918] or [RFC4193]
@@ -888,17 +892,16 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    To protect users' privacy, Recursive Resolvers are strongly
    encouraged to conceal part of the IP address of the user by
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 16]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    truncating IPv4 addresses to 24 bits. 56 bits are recommended for
    IPv6, based on [RFC6177].
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 16]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    ISPs should have more detailed knowledge of their own networks.  That
    is, they might know that all 24-bit prefixes in a /20 are in the same
@@ -945,17 +948,17 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    option data and just needs to flood back responses that have no ECS
    option at all.
 
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 17]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    This type of attack could be detected in ongoing operations by
    marking whether the responding nameserver had previously been sending
    ECS option, and/or by taking note of an incoming flood of bogus
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 17]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
-
    responses and flagging the relevant query for re-resolution.  This is
    more complex than existing nameserver responses to spoof floods, and
    would also need to be sensitive to a nameserver legitimately stopping
@@ -1000,17 +1003,18 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    o  Recursive Resolvers SHOULD limit the number of total different
       networks that they keep in cache.
 
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 18]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    o  Recursive Resolvers MUST never send an ECS option with a SOURCE
       PREFIX-LENGTH providing more bits in the ADDRESS than they are
       willing to cache responses for.
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 18]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  Recursive Resolvers should implement algorithms to improve the
       cache hit rate, given the size constraints indicated above.
@@ -1046,9 +1050,9 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    Additionally, Recursive Resolvers SHOULD be configured to never send
    the option when querying root, top-level, and effective top-level
-   domain servers.  These domains are delegation-centric and are very
-   unlikely to generate different responses based on the address of the
-   client.
+   (ie, "public suffix") [6] domain servers.  These domains are
+   delegation-centric and are very unlikely to generate different
+   responses based on the address of the client.
 
    When probing, it is important that several things are probed: support
    for ECS, support for EDNS0, support for EDNS0 options, or possibly an
@@ -1056,18 +1060,18 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    DNS packets with OPT RRs (with or without options), thus several
    probes are required to discover what is supported.
 
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 19]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    Probing, if implemented, MUST be repeated periodically, e.g., daily.
    If an Authoritative Nameserver indicates ECS support for one zone, it
    is to be expected that the Nameserver supports ECS for all of its
    zones.  Likewise, an Authoritative Nameserver that uses ECS
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 19]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
-
    information for one of its zones, MUST indicate support for the
    option in all of its responses to ECS queries.  If the option is
    supported but not actually used for generating a response, its SCOPE
@@ -1113,17 +1117,16 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    2.   RNS, supporting ECS, looks up www.example.com in its cache.  An
         entry is found neither for www.example.com, nor for example.com.
 
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 20]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    3.   RNS builds a query to send to the root and .com servers.  The
         implementation of RNS provides facilities so an administrator
         can configure it not to forward ECS in certain cases.  In
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 20]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
-
         particular, RNS is configured to not include an ECS option when
         talking to TLD or root nameservers, as described in Section 7.1.
         Thus, no ECS option is added, and resolution is performed as
@@ -1170,15 +1173,14 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
         *  SCOPE PREFIX-LENGTH, set to 0x10, indicating a /16 network.
 
-        *  ADDRESS, set to 0xC0 0x00 0x02, copied from the query.
 
 
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 21]
+Contavalli, et al.        Expires April 5, 2016                [Page 21]
 
-Internet-Draft        Client Subnet in DNS Queries        September 2015
+Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+        *  ADDRESS, set to 0xC0 0x00 0x02, copied from the query.
 
    9.   RNS receives the response containing an ECS option.  It verifies
         that FAMILY, SOURCE PREFIX-LENGTH, and ADDRESS match the query.
@@ -1223,30 +1225,32 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    Cambridge MA 02142-1413
    USA
 
+
+
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 22]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 15.  Acknowledgements
 
    The authors wish to thank Darryl Rodden for his work as a co-author
    on previous versions, and the following people for reviewing early
    drafts of this document and for providing useful feedback: Paul S.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 22]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
-
    R.  Chisholm, B.  Narendran, Leonidas Kontothanassis, David Presotto,
    Philip Rowlands, Chris Morrow, Kara Moscoe, Alex Nizhner, Warren
    Kumari, and Richard Rabbat from Google; Terry Farmer, Mark Teodoro,
    Edward Lewis, and Eric Burger from Neustar; David Ulevitch and
    Matthew Dempsky from OpenDNS; Patrick W.  Gilmore and Steve Hill from
    Akamai; Colm MacCarthaigh and Richard Sheehan from Amazon; Tatuya
-   Jinmei from Internet Software Consortium; Andrew Sullivan from Dyn;
-   John Dickinson from Sinodun; Mark Delany from Apple; Yuri Schaeffer
-   from NLnet Labs; Duane Wessels from from Verisign; Antonio Querubin;
-   and all of the other people that replied to our emails on various
-   mailing lists.
+   Jinmei from Infoblox; Andrew Sullivan from Dyn; John Dickinson from
+   Sinodun; Mark Delany from Apple; Yuri Schaeffer from NLnet Labs;
+   Duane Wessels from from Verisign; Antonio Querubin; and all of the
+   other people that replied to our emails on various mailing lists.
 
 16.  References
 
@@ -1270,27 +1274,28 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
               <http://www.rfc-editor.org/info/rfc1918>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, DOI 10.17487/
-              RFC2119, March 1997,
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
 
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "DNS Security Introduction and Requirements", RFC
-              4033, DOI 10.17487/RFC4033, March 2005,
+              Rose, "DNS Security Introduction and Requirements",
+              RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <http://www.rfc-editor.org/info/rfc4033>.
+
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 23]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
 
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Resource Records for the DNS Security Extensions",
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <http://www.rfc-editor.org/info/rfc4034>.
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 23]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
@@ -1302,25 +1307,29 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
               <http://www.rfc-editor.org/info/rfc4193>.
 
    [RFC6177]  Narten, T., Huston, G., and L. Roberts, "IPv6 Address
-              Assignment to End Sites", BCP 157, RFC 6177, DOI 10.17487/
-              RFC6177, March 2011,
+              Assignment to End Sites", BCP 157, RFC 6177,
+              DOI 10.17487/RFC6177, March 2011,
               <http://www.rfc-editor.org/info/rfc6177>.
 
    [RFC6890]  Cotton, M., Vegoda, L., Bonica, R., Ed., and B. Haberman,
-              "Special-Purpose IP Address Registries", BCP 153, RFC
-              6890, DOI 10.17487/RFC6890, April 2013,
+              "Special-Purpose IP Address Registries", BCP 153,
+              RFC 6890, DOI 10.17487/RFC6890, April 2013,
               <http://www.rfc-editor.org/info/rfc6890>.
 
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
-              for DNS (EDNS(0))", STD 75, RFC 6891, DOI 10.17487/
-              RFC6891, April 2013,
+              for DNS (EDNS(0))", STD 75, RFC 6891,
+              DOI 10.17487/RFC6891, April 2013,
               <http://www.rfc-editor.org/info/rfc6891>.
 
 16.2.  Informative References
 
+   [RFC2308]  Andrews, M., "Negative Caching of DNS Queries (DNS
+              NCACHE)", RFC 2308, DOI 10.17487/RFC2308, March 1998,
+              <http://www.rfc-editor.org/info/rfc2308>.
+
    [RFC2663]  Srisuresh, P. and M. Holdrege, "IP Network Address
-              Translator (NAT) Terminology and Considerations", RFC
-              2663, DOI 10.17487/RFC2663, August 1999,
+              Translator (NAT) Terminology and Considerations",
+              RFC 2663, DOI 10.17487/RFC2663, August 1999,
               <http://www.rfc-editor.org/info/rfc2663>.
 
 16.3.  URIs
@@ -1330,27 +1339,39 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    [3] https://datatracker.ietf.org/doc/charter-ietf-dprive/
 
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 24]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    [4] https://github.com/IAB-PrivSec-program/draft-iab-privsec-
        metadata-insertion/blob/master/draft-iab-privsec-metadata-
        insertion.md
 
    [5] http://www.iana.org/assignments/address-family-numbers/
 
-
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 24]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
+   [6] https://publicsuffix.org/
 
 Appendix A.  Document History
 
    [RFC Editor: Please delete this section before publication.]
+
+   -04 to -05:
+
+   o  "Forwarders" had been used as though they were the source of a
+      forwarded query rather than the targeted of one; clarified and
+      defined as "Forwarding Resolver".  (Jinmei)
+
+   o  "representing the leftmost significant bits" => "representing the
+      leftmost number of significant bits".  (Jinmei)
+
+   o  Minor other clarifying text.  (Jinmei)
+
+   o  Jinmei's affiliation.
 
    -03 to -04:
 
@@ -1374,6 +1395,15 @@ Appendix A.  Document History
 
    -00 to -01 (IETF)
 
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 25]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    o  Note ambiguity with multiple RRsets appearing in reply, eg, for an
       ANY query or CNAME chain.  (Duane Wessels)
 
@@ -1394,15 +1424,6 @@ Appendix A.  Document History
    o  NETMASK was not a good desription, changed to PREFIX-LENGTH
       (Jinmei, others).  Stole most of the definition for prefix length
       from RFC4291.
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 25]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
       IPv6 (Tatuya Jinmei)
@@ -1431,6 +1452,14 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
    o  Added some open issues directly to the text.
 
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 26]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 A.1.  -00
 
    o  Document moved to experimental track, added experiment description
@@ -1452,13 +1481,6 @@ A.1.  -00
 
    o  Wire format changed to include the original address and prefix
       length in responses in defence against birthday attacks.
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 26]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  Security considerations now includes a section about birthday
       attacks.
@@ -1484,6 +1506,16 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
    o  Added a few definitions in the Terminology section, and a few more
       aesthetic changes in the rest of the document.
 
+
+
+
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 27]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 A.2.  -01
 
    o  Document version number reset from -02 to -00 due to the rename to
@@ -1507,14 +1539,6 @@ A.2.  -01
 
    o  Intermediate Nameservers can now remove an ECS option, or reduce
       the SOURCE PREFIX-LENGTH to increase privacy.
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 27]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
-
 
    o  Added a reference to DoS attacks in the Security section.
 
@@ -1541,6 +1565,13 @@ Authors' Addresses
    Email: ccontavalli@google.com
 
 
+
+
+Contavalli, et al.        Expires April 5, 2016                [Page 28]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    Wilmer van der Gaast
    Google
    Belgrave House, 76 Buckingham Palace Road
@@ -1557,19 +1588,6 @@ Authors' Addresses
    US
 
    Email: tale@akamai.com
-
-
-
-
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 28]
-
-Internet-Draft        Client Subnet in DNS Queries        September 2015
 
 
    Warren Kumari
@@ -1605,23 +1623,5 @@ Internet-Draft        Client Subnet in DNS Queries        September 2015
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Contavalli, et al.       Expires March 28, 2016                [Page 29]
+Contavalli, et al.        Expires April 5, 2016                [Page 29]
 ```

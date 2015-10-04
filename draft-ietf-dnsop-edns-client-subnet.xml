@@ -5,6 +5,7 @@
 <!ENTITY rfc1700 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1700.xml">
 <!ENTITY rfc1918 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.1918.xml">
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY rfc2308 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2308.xml">
 <!ENTITY rfc2663 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2663.xml">
 <!ENTITY rfc4033 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4033.xml">
 <!ENTITY rfc4034 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4034.xml">
@@ -108,7 +109,7 @@
       </address>
     </author>
 
-    <date day="25" month="September" year="2015"/>
+    <date day="3" month="October" year="2015"/>
 
     <area>ops</area>
 
@@ -132,9 +133,10 @@
 
       <t>Traditionally, and probably still in the majority of instances,
       Recursive Resolvers are reasonably close in the topological sense to the
-      Stub Resolvers or Forwarders that are the source of queries. For these
-      resolvers, using their own IP address is sufficient for authority
-      servers that tailor responses based upon location of the querier.</t>
+      Stub Resolvers or Forwarding Resolvers that are the source of
+      queries. For these resolvers, using their own IP address is sufficient
+      for authority servers that tailor responses based upon location of the
+      querier.</t>
 
       <t>Increasingly, though, a class of Recursive Resolvers has arisen that
       handle query sources that are often not topologically close. The
@@ -211,15 +213,16 @@
       <t><list style="hanging">
           <t hangText="ECS">EDNS Client Subnet.</t>
 
-          <t hangText="Client">A Stub Resolver, Forwarder or Recursive
-          Resolver. A client to a Recursive Resolver or a Forwarder.</t>
+          <t hangText="Client">A Stub Resolver, Forwarding Resolver, or
+          Recursive Resolver. A client to a Recursive Resolver or a
+          Forwarding Resolver.</t>
 
-          <t hangText="Server">A Forwarder, Recursive Resolver or
+          <t hangText="Server">A Forwarding Resolver, Recursive Resolver or
           Authoritative Nameserver.</t>
 
           <t hangText="Stub Resolver:">A simple DNS protocol implementation on
           the client side as described in <xref target="RFC1034"/> section
-          5.3.1. A client to a Recursive Resolver or a Forwarder.</t>
+          5.3.1. A client to a Recursive Resolver or a Forwarding Resolver.</t>
 
           <t hangText="Authoritative Nameserver:">A nameserver that has
           authority over one or more DNS zones. These are normally not
@@ -233,12 +236,17 @@
           able to respond to client queries quickly. Described in <xref
           target="RFC1035"/> Section 7.</t>
 
-          <t hangText="Intermediate Nameserver:">Any nameserver (possibly a
-          Recursive Resolver) in between the Stub Resolver and the
-          Authoritative Nameserver.</t>
+          <t hangText="Forwarding Resolver">A nameserver that does not do
+          iterative resolution itself, but instead passes that responsibility
+          to another Recursive Resolver, called a "Forwarder" in 
+          <xref target="RFC2308"/> section 1.</t>
 
-          <t hangText="Centralized Resolvers:">Recursive Resolvers that serve
-          a topologically diverse network address space.</t>
+          <t hangText="Intermediate Nameserver:">Any nameserver in between the
+          Stub Resolver and the Authoritative Nameserver, such as a Recursive
+          Resolver or a Forwarding Resolver.</t>
+
+          <t hangText="Centralized Resolvers:">Intermediate Nameservers that
+          serve a topologically diverse network address space.</t>
 
           <t hangText="Tailored Response:">A response from a nameserver that
           is customized for the node that sent the query, often based on
@@ -346,12 +354,12 @@
       This document only defines the format for FAMILY 1 (IP version 4) and 2
       (IP version 6), which are as follows: <list style="symbols">
           <t>SOURCE PREFIX-LENGTH, an unsigned octet representing the leftmost
-          significant bits of ADDRESS to be used for the lookup. In responses,
-          it mirrors the same value as in the queries.</t>
+          number of significant bits of ADDRESS to be used for the lookup. In
+          responses, it mirrors the same value as in the queries.</t>
 
           <t>SCOPE PREFIX-LENGTH, an unsigned octet representing the leftmost
-          significant bits of ADDRESS that the response covers. In queries, it
-          MUST be set to 0.</t>
+          number of significant bits of ADDRESS that the response covers. In
+          queries, it MUST be set to 0.</t>
 
           <t>ADDRESS, variable number of octets, contains either an IPv4 or
           IPv6 address, depending on FAMILY, which MUST be truncated to the
@@ -372,7 +380,7 @@
         <t>The ECS option should generally be added by Recursive Resolvers
         when querying Authoritative Nameservers, as described in <xref
         target="send_when"/>. The option can also be initialized by a Stub
-        Resolver or Forwarder.</t>
+        Resolver or Forwarding Resolver.</t>
 
         <section anchor="originating_recursor" title="Recursive Resolvers">
           <t>The setup of the ECS option in a Recursive Resolver depends on
@@ -401,15 +409,15 @@
 
           <t>FAMILY and ADDRESS information MAY be used from the ECS option in
           the incoming query. Passing the existing address data is supportive
-          of the Recursive Resolver being used as the target of a Forwarder,
-          but could possibly run into policy problems with regard to usage
-          agreements between the Recursive Resolver and Authoritative
-          Namserver. See <xref target="whitelist"/> for more discussion on
-          this point. If the Recursive Resolver will not forward the FAMILY
-          and ADDRESS data from the incoming ECS option, it SHOULD return a
-          REFUSED response. An ECS-aware resolver MUST retry the query without
-          ECS to distinguish the response from a lame delegation, which is the
-          common convention for a REFUSED status.</t>
+          of the Recursive Resolver being used as the target of a Forwarding
+          Resolver, but could possibly run into policy problems with regard to
+          usage agreements between the Recursive Resolver and Authoritative
+          Namserver. See <xref target="whitelist"/> for more discussion on this
+          point. If the Recursive Resolver will not forward the FAMILY and
+          ADDRESS data from the incoming ECS option, it SHOULD return a REFUSED
+          response. An ECS-aware resolver MUST retry the query without ECS to
+          distinguish the authoritative response from a lame delegation, which
+          is the common convention for a REFUSED status.</t>
 
           <t>Subsequent queries to refresh the data MUST, if unrestricted by
           an incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE
@@ -443,21 +451,21 @@
           FAMILY MUST be set to 0.</t>
         </section>
 
-        <section title="Forwarders">
-          <t>Forwarders essentially appear to be Stub Resolvers to whatever
-          Recursive Resolver is ultimately handling the query, but look like a
-          Recursive Resolver to their client. A Forwarder using this option
-          MUST prepare it as described in the <xref
-          target="originating_recursor"/> section above. In particular, a
-          Forwarder that implements this protocol MUST honor SOURCE
+        <section title="Forwarding Resolvers">
+          <t>Forwarding Resolvers essentially appear to be Stub Resolvers to
+          whatever Recursive Resolver is ultimately handling the query, but
+          look like a Recursive Resolver to their client. A Forwarding Resolver
+          using this option MUST prepare it as described in the
+          <xref target="originating_recursor"/> section above. In particular, a
+          Forwarding Resolver that implements this protocol MUST honor SOURCE
           PREFIX-LENGTH restrictions indicated in the incoming query from its
           client. See also <xref target="transitivity"/>.</t>
 
-          <t>Since the Recursive Resolver it contacts will essentially treat
-          it as a Stub Resolver, the Forwarder must be prepared for a REFUSED
-          response if the Recursive Resolver does not permit incoming ADDRESS
-          information. The Forwarded MUST retry with FAMILY and ADDRESS set to
-          0.</t>
+          <t>Since the Recursive Resolver it contacts will essentially treat it
+          as a Stub Resolver, the Forwarding Resolver must be prepared for a
+          REFUSED response if the Recursive Resolver does not permit incoming
+          ADDRESS information. The Forwarded MUST retry with FAMILY and ADDRESS
+          set to 0.</t>
         </section>
       </section>
 
@@ -566,8 +574,8 @@
           that did not use an ECS option might not be able to understand it,
           the server MUST NOT provide one in its response. If the client query
           did include the option, the server MUST include one in its response,
-          especially as it could be talking to a Forwarder which would need
-          the information for its own caching.</t>
+          especially as it could be talking to a Forwaring Resolver which
+          would need the information for its own caching.</t>
 
           <t>If an Intermediate Nameserver receives a response which has a
           longer SCOPE PREFIX-LENGTH than the SOURCE PREFIX-LENGTH that it
@@ -674,8 +682,9 @@
         Authority and Additional section left an unfortunate ambiguity in the
         original specification, primarily with regard to negative answers. The
         expectation of the original authors was that ECS would only really be
-        used for address records, the use case that was driving the definition
-        of the protocol.</t>
+        used for address requests and the positive result in the answer
+        section, the use case that was driving the definition of the protocol.
+        </t>
 
         <t>The delegations case is a bit easier to tease out. In operational
         practice, if an authoritative server is using address information to
@@ -779,11 +788,11 @@
       network. In such cases, the Intermediate Nameserver MAY use that
       information when originating ECS options.</t>
 
-      <t>In other cases, Recursive Resolvers sited behind a NAT device SHOULD
-      NOT originate ECS options with their external IP address, and instead
-      rely on downstream Intermediate Nameservers to do so. They MAY, however,
-      choose to include the option with their internal address for the
-      purposes of signaling a shorter, more anonymous SOURCE
+      <t>In other cases, if a Recursive Resolvers knows it is sited behind a
+      NAT device, it SHOULD NOT originate ECS options with their external IP
+      address, and instead rely on downstream Intermediate Nameservers to do
+      so. They MAY, however, choose to include the option with their internal
+      address for the purposes of signaling a shorter, more anonymous SOURCE
       PREFIX-LENGTH.</t>
 
       <t>If an Authoritative Nameserver on the publicly routed Internet
@@ -944,6 +953,7 @@
 
         <t>Additionally, Recursive Resolvers SHOULD be configured to never
         send the option when querying root, top-level, and effective top-level
+        (ie, <eref target="https://publicsuffix.org/">"public suffix")</eref>
         domain servers. These domains are delegation-centric and are very
         unlikely to generate different responses based on the address of the
         client.</t>
@@ -1121,10 +1131,10 @@ USA
       and Eric Burger from Neustar; David Ulevitch and Matthew Dempsky from
       OpenDNS; Patrick W. Gilmore and Steve Hill from Akamai; Colm
       MacCarthaigh and Richard Sheehan from Amazon; Tatuya Jinmei from
-      Internet Software Consortium; Andrew Sullivan from Dyn; John Dickinson
-      from Sinodun; Mark Delany from Apple; Yuri Schaeffer from NLnet Labs;
-      Duane Wessels from from Verisign; Antonio Querubin; and all of the other
-      people that replied to our emails on various mailing lists.</t>
+      Infoblox; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
+      Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
+      from Verisign; Antonio Querubin; and all of the other people that
+      replied to our emails on various mailing lists.</t>
     </section>
   </middle>
 
@@ -1156,11 +1166,26 @@ USA
     </references>
 
     <references title="Informative References">
+      &rfc2308;
+
       &rfc2663;
     </references>
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-04 to -05:<list style="symbols">
+          <t>"Forwarders" had been used as though they were the source of a
+          forwarded query rather than the targeted of one; clarified and
+          defined as "Forwarding Resolver". (Jinmei)</t>
+
+          <t>"representing the leftmost significant bits" => "representing
+          the leftmost number of significant bits".  (Jinmei)</t>
+
+          <t>Minor other clarifying text. (Jinmei)</t>
+
+          <t>Jinmei's affiliation.</t>
+        </list></t>
 
       <t>-03 to -04:<list style="symbols">
           <t>Privacy note per Ted Hardie&rsquo;s suggestion.</t>
