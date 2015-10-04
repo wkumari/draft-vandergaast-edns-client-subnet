@@ -163,7 +163,7 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    At least a dozen different client and server implementations had been
    written based on the original specification, first known as draft-
    vandergaast-edns-client-subnet [1].  The protocol is in active
-   production use among several major Internet companies, a subset of
+
 
 
 
@@ -172,13 +172,17 @@ Contavalli, et al.        Expires April 5, 2016                 [Page 3]
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
+   production use among several major Internet companies, a subset of
    which are listed at http://www.afasterinternet.com/participants.htm .
+
    While they interoperate for the primary goal, they have varying
    behaviour around poorly specified edge cases.  Known
    incompatibilities will be described.  The authors believe that it is
    better to document this system, even if not everyone agrees with the
    concept or the details of the original specification, rather than
-   leave it undocumented and proprietary.
+   leave it undocumented and proprietary.  A revised proposal to improve
+   upon the minor flaws in this protocol will be forthcoming to the
+   IETF.
 
 2.  Privacy Note
 
@@ -215,10 +219,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    Server  A Forwarding Resolver, Recursive Resolver or Authoritative
       Nameserver.
 
-   Stub Resolver:  A simple DNS protocol implementation on the client
-      side as described in [RFC1034] section 5.3.1.  A client to a
-      Recursive Resolver or a Forwarding Resolver.
-
 
 
 
@@ -227,6 +227,10 @@ Contavalli, et al.        Expires April 5, 2016                 [Page 4]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+   Stub Resolver:  A simple DNS protocol implementation on the client
+      side as described in [RFC1034] section 5.3.1.  A client to a
+      Recursive Resolver or a Forwarding Resolver.
 
    Authoritative Nameserver:  A nameserver that has authority over one
       or more DNS zones.  These are normally not contacted by Stub
@@ -272,10 +276,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    The format of this option is described in Section 6, and is meant to
    be added in queries sent by Intermediate Nameservers in a way
-   transparent to Stub Resolvers and end users, as described in
-   Section 7.1.  ECS is only defined for the Internet (IN) DNS class.
-
-
 
 
 
@@ -283,6 +283,9 @@ Contavalli, et al.        Expires April 5, 2016                 [Page 5]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+   transparent to Stub Resolvers and end users, as described in
+   Section 7.1.  ECS is only defined for the Internet (IN) DNS class.
 
    As described in Section 7.2, an Authoritative Nameserver could use
    this EDNS0 option as a hint to better locate the network of the end
@@ -326,9 +329,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    This protocol uses an EDNS0 [RFC6891]) option to include client
    address information in DNS messages.  The option is structured as
    follows:
-
-
-
 
 
 
@@ -745,8 +745,8 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    and Additional section left an unfortunate ambiguity in the original
    specification, primarily with regard to negative answers.  The
    expectation of the original authors was that ECS would only really be
-   used for address requests and the positive result in the answer
-   section, the use case that was driving the definition of the
+   used for address requests and the positive result in the response's
+   answer section, the use case that was driving the definition of the
    protocol.
 
    The delegations case is a bit easier to tease out.  In operational
@@ -1362,6 +1362,9 @@ Appendix A.  Document History
 
    -04 to -05:
 
+   o  Clarify that a new proposal for an improved ECS protool is
+      expected.
+
    o  "Forwarders" had been used as though they were the source of a
       forwarded query rather than the targeted of one; clarified and
       defined as "Forwarding Resolver".  (Jinmei)
@@ -1393,9 +1396,6 @@ Appendix A.  Document History
    o  How in the world did no reviewers note that "Queries" had been
       spelled as "Querys" in the title?  (Aaron Falk did.)
 
-   -00 to -01 (IETF)
-
-
 
 
 
@@ -1403,6 +1403,8 @@ Contavalli, et al.        Expires April 5, 2016                [Page 25]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+   -00 to -01 (IETF)
 
    o  Note ambiguity with multiple RRsets appearing in reply, eg, for an
       ANY query or CNAME chain.  (Duane Wessels)
@@ -1450,8 +1452,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    o  Birthday attack still possible if attacker floods with ECS-less
       responses.  (Yuri Schaeffer)
 
-   o  Added some open issues directly to the text.
-
 
 
 
@@ -1459,6 +1459,8 @@ Contavalli, et al.        Expires April 5, 2016                [Page 26]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+   o  Added some open issues directly to the text.
 
 A.1.  -00
 
@@ -1509,8 +1511,6 @@ A.1.  -00
 
 
 
-
-
 Contavalli, et al.        Expires April 5, 2016                [Page 27]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
@@ -1518,8 +1518,8 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 A.2.  -01
 
-   o  Document version number reset from -02 to -00 due to the rename to
-      ECS.
+   o  Document version number reset from -02 to -00 due to the rename of
+      base document.
 
    o  Clarified example (dealing with TLDs, and various minor errors).
 

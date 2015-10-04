@@ -172,12 +172,15 @@
       production use among several major Internet companies, a subset of which
       are listed at <eref
       target="http://www.afasterinternet.com/participants.htm">
-      http://www.afasterinternet.com/participants.htm</eref>. While they
-      interoperate for the primary goal, they have varying behaviour around
-      poorly specified edge cases. Known incompatibilities will be described.
-      The authors believe that it is better to document this system, even if
-      not everyone agrees with the concept or the details of the original
-      specification, rather than leave it undocumented and proprietary.</t>
+      http://www.afasterinternet.com/participants.htm</eref>.</t>
+
+      <t>While they interoperate for the primary goal, they have varying
+      behaviour around poorly specified edge cases. Known incompatibilities
+      will be described. The authors believe that it is better to document this
+      system, even if not everyone agrees with the concept or the details of
+      the original specification, rather than leave it undocumented and
+      proprietary. A revised proposal to improve upon the minor flaws in this
+      protocol will be forthcoming to the IETF.</t>
     </section>
 
     <section title="Privacy Note">
@@ -682,9 +685,9 @@
         Authority and Additional section left an unfortunate ambiguity in the
         original specification, primarily with regard to negative answers. The
         expectation of the original authors was that ECS would only really be
-        used for address requests and the positive result in the answer
-        section, the use case that was driving the definition of the protocol.
-        </t>
+        used for address requests and the positive result in the response's
+        answer section, the use case that was driving the definition of the
+        protocol.</t>
 
         <t>The delegations case is a bit easier to tease out. In operational
         practice, if an authoritative server is using address information to
@@ -1175,6 +1178,9 @@ USA
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-04 to -05:<list style="symbols">
+          <t>Clarify that a new proposal for an improved ECS protool is
+          expected.</t>
+
           <t>"Forwarders" had been used as though they were the source of a
           forwarded query rather than the targeted of one; clarified and
           defined as "Forwarding Resolver". (Jinmei)</t>
@@ -1309,7 +1315,7 @@ USA
       <section title="-01">
         <t><list style="symbols">
             <t>Document version number reset from -02 to -00 due to the rename
-            to ECS.</t>
+            of base document.</t>
 
             <t>Clarified example (dealing with TLDs, and various minor
             errors).</t>
