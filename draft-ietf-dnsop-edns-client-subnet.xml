@@ -109,7 +109,7 @@
       </address>
     </author>
 
-    <date day="3" month="October" year="2015"/>
+    <date day="6" month="October" year="2015"/>
 
     <area>ops</area>
 
@@ -174,13 +174,17 @@
       target="http://www.afasterinternet.com/participants.htm">
       http://www.afasterinternet.com/participants.htm</eref>.</t>
 
-      <t>While they interoperate for the primary goal, they have varying
-      behaviour around poorly specified edge cases. Known incompatibilities
-      will be described. The authors believe that it is better to document this
-      system, even if not everyone agrees with the concept or the details of
-      the original specification, rather than leave it undocumented and
-      proprietary. A revised proposal to improve upon the minor flaws in this
-      protocol will be forthcoming to the IETF.</t>
+      <t>This document describes the protocol as it is used in the hope that
+      new implementations can be as interoperable as those currently deployed.
+      However, the existing implementations have varying behaviour around
+      poorly specified edge cases, and several technical issues that can cause
+      interoperability problems have been identified through the review
+      process of the document. Some of those issues are described here but are
+      not necessarily resolved. The authors believe that it is better to
+      document this system, even if not everyone agrees with the concept or
+      the details of the original specification, rather than leave it
+      undocumented and proprietary. A revised proposal to improve upon the
+      minor flaws in this protocol will be forthcoming to the IETF.</t>
     </section>
 
     <section title="Privacy Note">
@@ -418,9 +422,7 @@
           Namserver. See <xref target="whitelist"/> for more discussion on this
           point. If the Recursive Resolver will not forward the FAMILY and
           ADDRESS data from the incoming ECS option, it SHOULD return a REFUSED
-          response. An ECS-aware resolver MUST retry the query without ECS to
-          distinguish the authoritative response from a lame delegation, which
-          is the common convention for a REFUSED status.</t>
+          response.</t>
 
           <t>Subsequent queries to refresh the data MUST, if unrestricted by
           an incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE
@@ -617,6 +619,14 @@
         SCOPE PREFIX-LENGTH of 0, which is an answer suitable for all client
         addresses. See further discussion on the security implications of this
         in <xref target="security"/>.</t>
+
+        <t>If a REFUSED response is received from an Authoritative Nameserver,
+        an ECS-aware resolver MUST retry the query without ECS to distinguish
+        the authoritative response from a lame delegation, which is the common
+        convention for a REFUSED status.  Similarly, a client of a Recursive
+        Resolver should retry for REFUSED because it is not sufficiently clear
+        whether the REFUSED was because of the ECS option or some other
+        reason.</t>
 
         <section title="Caching the Response">
           <t>In the cache, all resource records in the answer section MUST be
@@ -1178,6 +1188,9 @@ USA
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-04 to -05:<list style="symbols">
+          <t>Moved comment about retrying for REFUSED to section on "Handling
+          ECS Responses". (Jinmei)</t>
+
           <t>Clarify that a new proposal for an improved ECS protool is
           expected.</t>
 

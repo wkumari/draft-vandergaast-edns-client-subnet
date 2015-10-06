@@ -7,11 +7,11 @@
 dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
-Expires: April 5, 2016                                       D. Lawrence
+Expires: April 8, 2016                                       D. Lawrence
                                                      Akamai Technologies
                                                                W. Kumari
                                                                   Google
-                                                         October 3, 2015
+                                                         October 6, 2015
 
 
                       Client Subnet in DNS Queries
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 5, 2016.
+   This Internet-Draft will expire on April 8, 2016.
 
 Copyright Notice
 
@@ -55,7 +55,7 @@ Copyright Notice
 
 
 
-Contavalli, et al.        Expires April 5, 2016                 [Page 1]
+Contavalli, et al.        Expires April 8, 2016                 [Page 1]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -83,35 +83,35 @@ Table of Contents
        7.3.1.  Caching the Response  . . . . . . . . . . . . . . . .  13
        7.3.2.  Answering from Cache  . . . . . . . . . . . . . . . .  13
      7.4.  Delegations and Negative Answers  . . . . . . . . . . . .  14
-     7.5.  Transitivity  . . . . . . . . . . . . . . . . . . . . . .  14
+     7.5.  Transitivity  . . . . . . . . . . . . . . . . . . . . . .  15
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
-   9.  DNSSEC Considerations . . . . . . . . . . . . . . . . . . . .  15
+   9.  DNSSEC Considerations . . . . . . . . . . . . . . . . . . . .  16
    10. NAT Considerations  . . . . . . . . . . . . . . . . . . . . .  16
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  16
-     11.1.  Privacy  . . . . . . . . . . . . . . . . . . . . . . . .  16
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  17
+     11.1.  Privacy  . . . . . . . . . . . . . . . . . . . . . . . .  17
      11.2.  Birthday Attacks . . . . . . . . . . . . . . . . . . . .  17
      11.3.  Cache Pollution  . . . . . . . . . . . . . . . . . . . .  18
    12. Sending the Option  . . . . . . . . . . . . . . . . . . . . .  19
      12.1.  Probing  . . . . . . . . . . . . . . . . . . . . . . . .  19
      12.2.  Whitelist  . . . . . . . . . . . . . . . . . . . . . . .  20
-   13. Example . . . . . . . . . . . . . . . . . . . . . . . . . . .  20
+   13. Example . . . . . . . . . . . . . . . . . . . . . . . . . . .  21
    14. Contributing Authors  . . . . . . . . . . . . . . . . . . . .  22
    15. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  23
    16. References  . . . . . . . . . . . . . . . . . . . . . . . . .  23
      16.1.  Normative References . . . . . . . . . . . . . . . . . .  23
      16.2.  Informative References . . . . . . . . . . . . . . . . .  24
-     16.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  24
+     16.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  25
    Appendix A.  Document History . . . . . . . . . . . . . . . . . .  25
      A.1.  -00 . . . . . . . . . . . . . . . . . . . . . . . . . . .  27
      A.2.  -01 . . . . . . . . . . . . . . . . . . . . . . . . . . .  28
-     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  28
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  28
+     A.3.  -02 . . . . . . . . . . . . . . . . . . . . . . . . . . .  29
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
 
 
 
 
 
-Contavalli, et al.        Expires April 5, 2016                 [Page 2]
+Contavalli, et al.        Expires April 8, 2016                 [Page 2]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -167,7 +167,7 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-Contavalli, et al.        Expires April 5, 2016                 [Page 3]
+Contavalli, et al.        Expires April 8, 2016                 [Page 3]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -175,14 +175,18 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    production use among several major Internet companies, a subset of
    which are listed at http://www.afasterinternet.com/participants.htm .
 
-   While they interoperate for the primary goal, they have varying
-   behaviour around poorly specified edge cases.  Known
-   incompatibilities will be described.  The authors believe that it is
-   better to document this system, even if not everyone agrees with the
-   concept or the details of the original specification, rather than
-   leave it undocumented and proprietary.  A revised proposal to improve
-   upon the minor flaws in this protocol will be forthcoming to the
-   IETF.
+   This document describes the protocol as it is used in the hope that
+   new implementations can be as interoperable as those currently
+   deployed.  However, the existing implementations have varying
+   behaviour around poorly specified edge cases, and several technical
+   issues that can cause interoperability problems have been identified
+   through the review process of the document.  Some of those issues are
+   described here but are not necessarily resolved.  The authors believe
+   that it is better to document this system, even if not everyone
+   agrees with the concept or the details of the original specification,
+   rather than leave it undocumented and proprietary.  A revised
+   proposal to improve upon the minor flaws in this protocol will be
+   forthcoming to the IETF.
 
 2.  Privacy Note
 
@@ -216,17 +220,16 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    Client  A Stub Resolver, Forwarding Resolver, or Recursive Resolver.
       A client to a Recursive Resolver or a Forwarding Resolver.
 
-   Server  A Forwarding Resolver, Recursive Resolver or Authoritative
-      Nameserver.
 
 
 
-
-
-Contavalli, et al.        Expires April 5, 2016                 [Page 4]
+Contavalli, et al.        Expires April 8, 2016                 [Page 4]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+   Server  A Forwarding Resolver, Recursive Resolver or Authoritative
+      Nameserver.
 
    Stub Resolver:  A simple DNS protocol implementation on the client
       side as described in [RFC1034] section 5.3.1.  A client to a
@@ -274,16 +277,15 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    about the origin network from which a query is coming when talking to
    other Nameservers.
 
-   The format of this option is described in Section 6, and is meant to
-   be added in queries sent by Intermediate Nameservers in a way
 
 
-
-Contavalli, et al.        Expires April 5, 2016                 [Page 5]
+Contavalli, et al.        Expires April 8, 2016                 [Page 5]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
+   The format of this option is described in Section 6, and is meant to
+   be added in queries sent by Intermediate Nameservers in a way
    transparent to Stub Resolvers and end users, as described in
    Section 7.1.  ECS is only defined for the Internet (IN) DNS class.
 
@@ -333,9 +335,7 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-
-
-Contavalli, et al.        Expires April 5, 2016                 [Page 6]
+Contavalli, et al.        Expires April 8, 2016                 [Page 6]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -391,7 +391,7 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-Contavalli, et al.        Expires April 5, 2016                 [Page 7]
+Contavalli, et al.        Expires April 8, 2016                 [Page 7]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -439,22 +439,19 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    Namserver.  See Section 12.2 for more discussion on this point.  If
    the Recursive Resolver will not forward the FAMILY and ADDRESS data
    from the incoming ECS option, it SHOULD return a REFUSED response.
-   An ECS-aware resolver MUST retry the query without ECS to distinguish
-   the authoritative response from a lame delegation, which is the
-   common convention for a REFUSED status.
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                 [Page 8]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    Subsequent queries to refresh the data MUST, if unrestricted by an
    incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE PREFIX-
    LENGTH that the Recursive Resolver is willing to cache, even if a
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                 [Page 8]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    previous response indicated that a shorter prefix length was
    sufficient.
 
@@ -503,7 +500,10 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-Contavalli, et al.        Expires April 5, 2016                 [Page 9]
+
+
+
+Contavalli, et al.        Expires April 8, 2016                 [Page 9]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -559,7 +559,7 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-Contavalli, et al.        Expires April 5, 2016                [Page 10]
+Contavalli, et al.        Expires April 8, 2016                [Page 10]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -615,7 +615,7 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-Contavalli, et al.        Expires April 5, 2016                [Page 11]
+Contavalli, et al.        Expires April 8, 2016                [Page 11]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
@@ -671,10 +671,18 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-Contavalli, et al.        Expires April 5, 2016                [Page 12]
+Contavalli, et al.        Expires April 8, 2016                [Page 12]
 
 Internet-Draft        Client Subnet in DNS Queries          October 2015
 
+
+   If a REFUSED response is received from an Authoritative Nameserver,
+   an ECS-aware resolver MUST retry the query without ECS to distinguish
+   the authoritative response from a lame delegation, which is the
+   common convention for a REFUSED status.  Similarly, a client of a
+   Recursive Resolver should retry for REFUSED because it is not
+   sufficiently clear whether the REFUSED was because of the ECS option
+   or some other reason.
 
 7.3.1.  Caching the Response
 
@@ -716,21 +724,20 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    o  If there was an ECS option, the ADDRESS from it MAY be used if
       local policy allows.  Policy can vary depending on the agreements
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 13]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
       the operator of the Intermediate Nameserver has with Authoritative
       Nameserver operators; see Section 12.2.  If policy does not allow,
       a REFUSED response must be sent.
 
    If a matching network is found and the relevant data is unexpired,
    the response is generated as per Section 7.2.
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 13]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    If no matching network is found, the Intermediate Nameserver MUST
    perform resolution as usual.  This is necessary to avoid Tailored
@@ -774,20 +781,18 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    answers.  There are implications for cache data structures that
    developers should consider when writing new ECS code.
 
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 14]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 7.5.  Transitivity
 
    Generally, ECS options will only be present in DNS messages between a
    Recursive Resolver and an Authoritative Nameserver, i.e., one hop.
    In certain configurations however, for example multi-tier nameserver
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 14]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
-
    setups, it may be necessary to implement transitive behaviour on
    Intermediate Nameservers.
 
@@ -829,6 +834,16 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    The IANA is requested to update the reference ("draft-vandergaast-
    edns-client-subnet") to refer to this RFC when published.
 
+
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 15]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 9.  DNSSEC Considerations
 
    The presence or absence of an [RFC6891] EDNS0 OPT resource record
@@ -836,13 +851,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    the resource records and mechanisms used to provide data origin
    authentication and data integrity to the DNS, as described in
    [RFC4033], [RFC4034] and [RFC4035].  OPT records are not signed.
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 15]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    Use of this option, however, does imply increased DNS traffic between
    any given Recursive Resolver and Authoritative Nameserver, which
@@ -881,6 +889,17 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    answer under one entry for special-purpose addresses [RFC6890]; see
    Section 11.3.
 
+
+
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 16]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 11.  Security Considerations
 
 11.1.  Privacy
@@ -892,14 +911,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    To protect users' privacy, Recursive Resolvers are strongly
    encouraged to conceal part of the IP address of the user by
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 16]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
-
    truncating IPv4 addresses to 24 bits. 56 bits are recommended for
    IPv6, based on [RFC6177].
 
@@ -937,6 +948,14 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    To counter this, the ECS option in a response packet MUST contain the
    full FAMILY, ADDRESS and SOURCE PREFIX-LENGTH fields from the
    corresponding query.  Intermediate Nameservers processing a response
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 17]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    MUST verify that these match, and SHOULD discard the entire response
    if they do not.
 
@@ -947,14 +966,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    attacker does not need to worry about matching the original ECS
    option data and just needs to flood back responses that have no ECS
    option at all.
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 17]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    This type of attack could be detected in ongoing operations by
    marking whether the responding nameserver had previously been sending
@@ -993,6 +1004,14 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    o  Recursive Resolvers implementing ECS should only enable it in
       deployments where it is expected to bring clear advantages to the
       end users.  For example, when expecting clients from a variety of
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 18]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
       networks or from a wide geographical area.  Due to the high cache
       pressure introduced by ECS, the feature SHOULD be disabled in all
       default configurations.
@@ -1002,15 +1021,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    o  Recursive Resolvers SHOULD limit the number of total different
       networks that they keep in cache.
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 18]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    o  Recursive Resolvers MUST never send an ECS option with a SOURCE
       PREFIX-LENGTH providing more bits in the ADDRESS than they are
@@ -1050,6 +1060,14 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    Additionally, Recursive Resolvers SHOULD be configured to never send
    the option when querying root, top-level, and effective top-level
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 19]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    (ie, "public suffix") [6] domain servers.  These domains are
    delegation-centric and are very unlikely to generate different
    responses based on the address of the client.
@@ -1059,14 +1077,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    unreachable Nameserver.  Various implementations are known to drop
    DNS packets with OPT RRs (with or without options), thus several
    probes are required to discover what is supported.
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 19]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    Probing, if implemented, MUST be repeated periodically, e.g., daily.
    If an Authoritative Nameserver indicates ECS support for one zone, it
@@ -1105,6 +1115,15 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    agreement with the Recursive Resolver operator, to clearly describe
    the acceptable use of the feature.
 
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 20]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    The maintenance of access control mechanisms is out of scope for this
    protocol definition.
 
@@ -1116,13 +1135,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    2.   RNS, supporting ECS, looks up www.example.com in its cache.  An
         entry is found neither for www.example.com, nor for example.com.
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 20]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    3.   RNS builds a query to send to the root and .com servers.  The
         implementation of RNS provides facilities so an administrator
@@ -1161,6 +1173,13 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
         tailored for the whole /16 of the client that performed the
         query.
 
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 21]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    8.   ANS adds an ECS option in the response, containing:
 
         *  OPTION-CODE, set to 8.
@@ -1172,13 +1191,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
         *  SOURCE PREFIX-LENGTH, set to 0x18, copied from the query.
 
         *  SCOPE PREFIX-LENGTH, set to 0x10, indicating a /16 network.
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 21]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
         *  ADDRESS, set to 0xC0 0x00 0x02, copied from the query.
 
@@ -1214,6 +1226,16 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    USA
    Email: edward.lewis@icann.org
 
+
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 22]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    Sean Leach
    Fastly
    POBox 78266
@@ -1224,17 +1246,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
    8 Cambridge Ctr
    Cambridge MA 02142-1413
    USA
-
-
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 22]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
 15.  Acknowledgements
 
@@ -1273,6 +1284,14 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
               BCP 5, RFC 1918, DOI 10.17487/RFC1918, February 1996,
               <http://www.rfc-editor.org/info/rfc1918>.
 
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 23]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -1282,15 +1301,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
               Rose, "DNS Security Introduction and Requirements",
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <http://www.rfc-editor.org/info/rfc4033>.
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 23]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Resource Records for the DNS Security Extensions",
@@ -1327,6 +1337,17 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
               NCACHE)", RFC 2308, DOI 10.17487/RFC2308, March 1998,
               <http://www.rfc-editor.org/info/rfc2308>.
 
+
+
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 24]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    [RFC2663]  Srisuresh, P. and M. Holdrege, "IP Network Address
               Translator (NAT) Terminology and Considerations",
               RFC 2663, DOI 10.17487/RFC2663, August 1999,
@@ -1338,15 +1359,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
        subnet-00
 
    [3] https://datatracker.ietf.org/doc/charter-ietf-dprive/
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 24]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    [4] https://github.com/IAB-PrivSec-program/draft-iab-privsec-
        metadata-insertion/blob/master/draft-iab-privsec-metadata-
@@ -1361,6 +1373,9 @@ Appendix A.  Document History
    [RFC Editor: Please delete this section before publication.]
 
    -04 to -05:
+
+   o  Moved comment about retrying for REFUSED to section on "Handling
+      ECS Responses".  (Jinmei)
 
    o  Clarify that a new proposal for an improved ECS protool is
       expected.
@@ -1382,6 +1397,13 @@ Appendix A.  Document History
 
    o  MUST use minimum octet length to cover PREFIX bits.
 
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 25]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    o  Expose note about documenting deployed, if flawed, protocol.
 
    -02 to -03:
@@ -1395,14 +1417,6 @@ Appendix A.  Document History
 
    o  How in the world did no reviewers note that "Queries" had been
       spelled as "Querys" in the title?  (Aaron Falk did.)
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 25]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    -00 to -01 (IETF)
 
@@ -1439,6 +1453,13 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    o  Soften "optimized reply" language.  (Andrew Sullivan).
 
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 26]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    o  Fixed some of legacy IPv4 cruft (things like 0.0.0.0/0)
 
    o  Some more grammar / working cleanups.
@@ -1451,14 +1472,6 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
    o  Birthday attack still possible if attacker floods with ECS-less
       responses.  (Yuri Schaeffer)
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 26]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
    o  Added some open issues directly to the text.
 
@@ -1496,6 +1509,13 @@ A.1.  -00
    o  Fully take multi-tier DNS setups in mind and be more clear about
       where the option should be originated.
 
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 27]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
    o  A note on Authoritative Nameservers receiving queries that specify
       private address space.
 
@@ -1507,14 +1527,6 @@ A.1.  -00
 
    o  Added a few definitions in the Terminology section, and a few more
       aesthetic changes in the rest of the document.
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 27]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
-
 
 A.2.  -01
 
@@ -1550,6 +1562,16 @@ A.2.  -01
 
    o  Minor corrections in various other sections.
 
+
+
+
+
+
+Contavalli, et al.        Expires April 8, 2016                [Page 28]
+
+Internet-Draft        Client Subnet in DNS Queries          October 2015
+
+
 A.3.  -02
 
    o  Added IANA-assigned option code.
@@ -1563,13 +1585,6 @@ Authors' Addresses
    US
 
    Email: ccontavalli@google.com
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 28]
-
-Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
    Wilmer van der Gaast
@@ -1608,20 +1623,5 @@ Internet-Draft        Client Subnet in DNS Queries          October 2015
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Contavalli, et al.        Expires April 5, 2016                [Page 29]
+Contavalli, et al.        Expires April 8, 2016                [Page 29]
 ```
