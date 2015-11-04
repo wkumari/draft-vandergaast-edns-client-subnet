@@ -15,7 +15,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-04"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-06"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -109,7 +109,7 @@
       </address>
     </author>
 
-    <date day="6" month="October" year="2015"/>
+    <date day="4" month="November" year="2015"/>
 
     <area>ops</area>
 
@@ -453,7 +453,7 @@
           FAMILY and ADDRESS data, but should be prepared to handle a REFUSED
           response if the Intermediate Nameserver that it queries has a policy
           that denies forwarding of the ADDRESS. If there is no ADDRESS set,
-          FAMILY MUST be set to 0.</t>
+          i.e. SOURCE PREFIX-LENGTH is set to 0, FAMILY MUST be set to 0.</t>
         </section>
 
         <section title="Forwarding Resolvers">
@@ -466,10 +466,11 @@
           PREFIX-LENGTH restrictions indicated in the incoming query from its
           client. See also <xref target="transitivity"/>.</t>
 
-          <t>Since the Recursive Resolver it contacts will essentially treat it
-          as a Stub Resolver, the Forwarding Resolver must be prepared for a
-          REFUSED response if the Recursive Resolver does not permit incoming
-          ADDRESS information. The Forwarded MUST retry with FAMILY and ADDRESS
+          <t>Since the Recursive Resolver it contacts will treat it like a
+          Stub Resolver, the Recursive Resolver's policies regarding incoming
+          ADDRESS information will apply in the same way. If the Forwarding
+          Resover receives a REFUSED response when it sends a query which
+          includes a non-zero ADDRESS, it MUST retry with FAMILY and ADDRESS
           set to 0.</t>
         </section>
       </section>
@@ -1146,8 +1147,9 @@ USA
       MacCarthaigh and Richard Sheehan from Amazon; Tatuya Jinmei from
       Infoblox; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
       Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
-      from Verisign; Antonio Querubin; and all of the other people that
-      replied to our emails on various mailing lists.</t>
+      from Verisign; Antonio Querubin; Daniel Kahn Gillmor from the ACLU, and
+      all of the other people that replied to our emails on various mailing
+      lists.</t>
     </section>
   </middle>
 
@@ -1186,6 +1188,10 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-05 to -06(?):<list style="symbols">
+      <t>Minor wording clarifications. (David Kahn Gillmor)</t>
+      </list></t>
 
       <t>-04 to -05:<list style="symbols">
           <t>Moved comment about retrying for REFUSED to section on "Handling
