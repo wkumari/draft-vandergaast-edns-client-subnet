@@ -116,8 +116,8 @@
     <workgroup>dnsop</workgroup>
 
     <abstract>
-      <t>This draft defines an EDNS0 extension to carry information about the
-      network that originated a DNS query, and the network for which the
+      <t>This document defines an EDNS0 extension to carry information about
+      the network that originated a DNS query, and the network for which the
       subsequent response can be cached.</t>
     </abstract>
   </front>
@@ -150,9 +150,9 @@
       the resolvers serve. These cases all lead to less than desirable
       responses from topology-sensitive Authoritative Nameservers.</t>
 
-      <t>This draft defines an <xref target="RFC6891">EDNS0</xref> option to
-      convey network information that is relevant to the DNS message. It will
-      carry sufficient network information about the originator for the
+      <t>This document defines an <xref target="RFC6891">EDNS0</xref> option
+      to convey network information that is relevant to the DNS message. It
+      will carry sufficient network information about the originator for the
       Authoritative Nameserver to tailor responses. It will also provide for
       the Authoritative Nameserver to indicate the scope of network addresses
       for which the tailored answer is intended. This EDNS0 option is intended
@@ -161,30 +161,23 @@
       optional and can safely be ignored by servers that choose not to
       implement it or enable it.</t>
 
-      <t>This draft also includes guidelines on how to best cache those
+      <t>This document also includes guidelines on how to best cache those
       results and provides recommendations on when this protocol extension
       should be used.</t>
 
-      <t>At least a dozen different client and server implementations had been
-      written based on the original specification, first known as <xref
-      target="I-D.vandergaast-edns-client-subnet">draft-vandergaast-edns-client-subnet</xref>.
-      The protocol is in active production use among several major Internet
-      companies, a subset of which are listed at <xref
-      target="a_faster_internet"/>.</t>
+      <t>At least a dozen different client and server implementations have
+      been written based on earlier versions of this specification. The
+      protocol is in active production use today. While the implementations
+      interoperate, there is varying behavior around edge cases that were
+      poorly specified. Known incompatibilities are described in this
+      document, and the authors believe that it is better to describe the
+      system as it is working today, even if not everyone agrees with the
+      details of the original specification <xref
+      target="I-D.vandergaast-edns-client-subnet">(</xref>). The alternative
+      is an undocumented and proprietary system.</t>
 
-      <t>This document describes the protocol as it is used in the hope that
-      new implementations can be as interoperable as those currently deployed.
-      However, the existing implementations have varying behaviour around
-      poorly specified edge cases, and several technical issues that can cause
-      interoperability problems have been identified through the review
-      process of the document. Some of those issues are described here but are
-      not necessarily resolved. The authors believe that it is better to
-      document this system, even if not everyone agrees with the concept or
-      the details of the original specification, rather than leave it
-      undocumented and proprietary. A revised proposal to improve upon the
-      minor flaws in this protocol will be forthcoming to the IETF.</t>
-
-      <t/>
+      <t>A revised proposal to improve upon the minor flaws in this protocol
+      will be forthcoming to the IETF.</t>
     </section>
 
     <section title="Privacy Note">
@@ -217,13 +210,13 @@
 
     <section title="Terminology">
       <t><list style="hanging">
-          <t hangText="ECS">EDNS Client Subnet.</t>
+          <t hangText="ECS:">EDNS Client Subnet.</t>
 
-          <t hangText="Client">A Stub Resolver, Forwarding Resolver, or
+          <t hangText="Client:">A Stub Resolver, Forwarding Resolver, or
           Recursive Resolver. A client to a Recursive Resolver or a Forwarding
           Resolver.</t>
 
-          <t hangText="Server">A Forwarding Resolver, Recursive Resolver or
+          <t hangText="Server:">A Forwarding Resolver, Recursive Resolver or
           Authoritative Nameserver.</t>
 
           <t hangText="Stub Resolver:">A simple DNS protocol implementation on
@@ -243,7 +236,7 @@
           able to respond to client queries quickly. Described in <xref
           target="RFC1035"/> Section 7.</t>
 
-          <t hangText="Forwarding Resolver">A nameserver that does not do
+          <t hangText="Forwarding Resolver:">A nameserver that does not do
           iterative resolution itself, but instead passes that responsibility
           to another Recursive Resolver, called a "Forwarder" in <xref
           target="RFC2308"/> section 1.</t>
@@ -535,20 +528,21 @@
 
           <t>Since some queries can result in multiple RRsets being added to
           the response, there is an unfortunate ambiguity from the original
-          draft as to how SCOPE PREFIX-LENGTH would apply to each individual
-          RRset. For example, multiple types in response to an ANY metaquery
-          could all have different applicable SCOPE PREFIX-LENGTH values, but
-          this protocol only has the ability to signal one. The response
-          SHOULD therefore include the longest relevant PREFIX-LENGTH of any
-          RRset in the answer, which could have the unfortunate side-effect of
-          redundantly caching some data that could be cached more broadly. For
-          the specific case of a CNAME chain, the Authoritative Nameserver
-          SHOULD only place the CNAME to have it cached unambiguously
-          appropriately. Most modern Recursive Resolvers restart the query
-          with the canonical name, so the remainder of the chain is typically
-          ignored anyway. For message-focused resolvers, rather than
-          RRset-focused ones, this will mean caching the entire CNAME chain at
-          the longest PREFIX-LENGTH of any RRset in the chain.</t>
+          specification as to how SCOPE PREFIX-LENGTH would apply to each
+          individual RRset. For example, multiple types in response to an ANY
+          metaquery could all have different applicable SCOPE PREFIX-LENGTH
+          values, but this protocol only has the ability to signal one. The
+          response SHOULD therefore include the longest relevant PREFIX-LENGTH
+          of any RRset in the answer, which could have the unfortunate
+          side-effect of redundantly caching some data that could be cached
+          more broadly. For the specific case of a CNAME chain, the
+          Authoritative Nameserver SHOULD only place the CNAME to have it
+          cached unambiguously appropriately. Most modern Recursive Resolvers
+          restart the query with the canonical name, so the remainder of the
+          chain is typically ignored anyway. For message-focused resolvers,
+          rather than RRset-focused ones, this will mean caching the entire
+          CNAME chain at the longest PREFIX-LENGTH of any RRset in the
+          chain.</t>
 
           <t>The specific logic that an Authoritative Nameserver uses to
           choose a tailored response is not in the scope of this document.
@@ -733,9 +727,9 @@
         setups, it may be necessary to implement transitive behaviour on
         Intermediate Nameservers.</t>
 
-        <t>It is important that any Intermediate Nameserver that forwards ECS
-        options received from their clients MUST fully implement the caching
-        behaviour described in <xref target="caching"/>.</t>
+        <t>Any Intermediate Nameserver that forwards ECS options received from
+        their clients MUST fully implement the caching behaviour described in
+        <xref target="caching"/>.</t>
 
         <t>Intermediate Nameservers supporting ECS MUST forward options with
         SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized). Such
@@ -1103,9 +1097,9 @@
     </section>
 
     <section title="Contributing Authors">
-      <t>The below individuals contributed significantly to the draft. The RFC
-      Editor prefers a maximum of 5 names on the front page, and so we have
-      listed additional authors in this section</t>
+      <t>The below individuals contributed significantly to the document. The
+      RFC Editor prefers a maximum of 5 names on the front page, and so we
+      have listed additional authors in this section</t>
 
       <t><figure>
           <artwork><![CDATA[Edward Lewis
@@ -1193,17 +1187,6 @@ USA
                  target="https://datatracker.ietf.org/wg/dprive/charter/">
         <front>
           <title>DPRIVE Working Group</title>
-
-          <author/>
-
-          <date/>
-        </front>
-      </reference>
-
-      <reference anchor="a_faster_internet"
-                 target="http://www.afasterinternet.com/participants.htm">
-        <front>
-          <title>A Faster Internet (Participants)</title>
 
           <author/>
 

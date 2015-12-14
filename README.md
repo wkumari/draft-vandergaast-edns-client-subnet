@@ -19,9 +19,9 @@ Expires: June 16, 2016                                       D. Lawrence
 
 Abstract
 
-   This draft defines an EDNS0 extension to carry information about the
-   network that originated a DNS query, and the network for which the
-   subsequent response can be cached.
+   This document defines an EDNS0 extension to carry information about
+   the network that originated a DNS query, and the network for which
+   the subsequent response can be cached.
 
 Status of This Memo
 
@@ -145,7 +145,7 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    to less than desirable responses from topology-sensitive
    Authoritative Nameservers.
 
-   This draft defines an EDNS0 [RFC6891] option to convey network
+   This document defines an EDNS0 [RFC6891] option to convey network
    information that is relevant to the DNS message.  It will carry
    sufficient network information about the originator for the
    Authoritative Nameserver to tailor responses.  It will also provide
@@ -156,14 +156,14 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    deployment.  It is completely optional and can safely be ignored by
    servers that choose not to implement it or enable it.
 
-   This draft also includes guidelines on how to best cache those
+   This document also includes guidelines on how to best cache those
    results and provides recommendations on when this protocol extension
    should be used.
 
-   At least a dozen different client and server implementations had been
-   written based on the original specification, first known as draft-
-   vandergaast-edns-client-subnet [I-D.vandergaast-edns-client-subnet].
-
+   At least a dozen different client and server implementations have
+   been written based on earlier versions of this specification.  The
+   protocol is in active production use today.  While the
+   implementations interoperate, there is varying behavior around edge
 
 
 
@@ -172,21 +172,15 @@ Contavalli, et al.        Expires June 16, 2016                 [Page 3]
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 
-   The protocol is in active production use among several major Internet
-   companies, a subset of which are listed at [a_faster_internet].
+   cases that were poorly specified.  Known incompatibilities are
+   described in this document, and the authors believe that it is better
+   to describe the system as it is working today, even if not everyone
+   agrees with the details of the original specification (
+   [I-D.vandergaast-edns-client-subnet]).  The alternative is an
+   undocumented and proprietary system.
 
-   This document describes the protocol as it is used in the hope that
-   new implementations can be as interoperable as those currently
-   deployed.  However, the existing implementations have varying
-   behaviour around poorly specified edge cases, and several technical
-   issues that can cause interoperability problems have been identified
-   through the review process of the document.  Some of those issues are
-   described here but are not necessarily resolved.  The authors believe
-   that it is better to document this system, even if not everyone
-   agrees with the concept or the details of the original specification,
-   rather than leave it undocumented and proprietary.  A revised
-   proposal to improve upon the minor flaws in this protocol will be
-   forthcoming to the IETF.
+   A revised proposal to improve upon the minor flaws in this protocol
+   will be forthcoming to the IETF.
 
 2.  Privacy Note
 
@@ -216,10 +210,16 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 4.  Terminology
 
-   ECS  EDNS Client Subnet.
+   ECS:  EDNS Client Subnet.
 
-   Client  A Stub Resolver, Forwarding Resolver, or Recursive Resolver.
+   Client:  A Stub Resolver, Forwarding Resolver, or Recursive Resolver.
       A client to a Recursive Resolver or a Forwarding Resolver.
+
+   Server:  A Forwarding Resolver, Recursive Resolver or Authoritative
+      Nameserver.
+
+
+
 
 
 
@@ -227,9 +227,6 @@ Contavalli, et al.        Expires June 16, 2016                 [Page 4]
 
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
-
-   Server  A Forwarding Resolver, Recursive Resolver or Authoritative
-      Nameserver.
 
    Stub Resolver:  A simple DNS protocol implementation on the client
       side as described in [RFC1034] section 5.3.1.  A client to a
@@ -246,7 +243,7 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
       respond to client queries quickly.  Described in [RFC1035]
       Section 7.
 
-   Forwarding Resolver  A nameserver that does not do iterative
+   Forwarding Resolver:  A nameserver that does not do iterative
       resolution itself, but instead passes that responsibility to
       another Recursive Resolver, called a "Forwarder" in [RFC2308]
       section 1.
@@ -277,6 +274,9 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    about the origin network from which a query is coming when talking to
    other Nameservers.
 
+   The format of this option is described in Section 6, and is meant to
+   be added in queries sent by Intermediate Nameservers in a way
+
 
 
 Contavalli, et al.        Expires June 16, 2016                 [Page 5]
@@ -284,8 +284,6 @@ Contavalli, et al.        Expires June 16, 2016                 [Page 5]
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 
-   The format of this option is described in Section 6, and is meant to
-   be added in queries sent by Intermediate Nameservers in a way
    transparent to Stub Resolvers and end users, as described in
    Section 7.1.  ECS is only defined for the Internet (IN) DNS class.
 
@@ -331,6 +329,8 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    This protocol uses an EDNS0 [RFC6891]) option to include client
    address information in DNS messages.  The option is structured as
    follows:
+
+
 
 
 
@@ -574,21 +574,21 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    different values of SCOPE PREFIX-LENGTH for different networks.
 
    Since some queries can result in multiple RRsets being added to the
-   response, there is an unfortunate ambiguity from the original draft
-   as to how SCOPE PREFIX-LENGTH would apply to each individual RRset.
-   For example, multiple types in response to an ANY metaquery could all
-   have different applicable SCOPE PREFIX-LENGTH values, but this
-   protocol only has the ability to signal one.  The response SHOULD
-   therefore include the longest relevant PREFIX-LENGTH of any RRset in
-   the answer, which could have the unfortunate side-effect of
-   redundantly caching some data that could be cached more broadly.  For
-   the specific case of a CNAME chain, the Authoritative Nameserver
-   SHOULD only place the CNAME to have it cached unambiguously
-   appropriately.  Most modern Recursive Resolvers restart the query
-   with the canonical name, so the remainder of the chain is typically
-   ignored anyway.  For message-focused resolvers, rather than RRset-
-   focused ones, this will mean caching the entire CNAME chain at the
-   longest PREFIX-LENGTH of any RRset in the chain.
+   response, there is an unfortunate ambiguity from the original
+   specification as to how SCOPE PREFIX-LENGTH would apply to each
+   individual RRset.  For example, multiple types in response to an ANY
+   metaquery could all have different applicable SCOPE PREFIX-LENGTH
+   values, but this protocol only has the ability to signal one.  The
+   response SHOULD therefore include the longest relevant PREFIX-LENGTH
+   of any RRset in the answer, which could have the unfortunate side-
+   effect of redundantly caching some data that could be cached more
+   broadly.  For the specific case of a CNAME chain, the Authoritative
+   Nameserver SHOULD only place the CNAME to have it cached
+   unambiguously appropriately.  Most modern Recursive Resolvers restart
+   the query with the canonical name, so the remainder of the chain is
+   typically ignored anyway.  For message-focused resolvers, rather than
+   RRset-focused ones, this will mean caching the entire CNAME chain at
+   the longest PREFIX-LENGTH of any RRset in the chain.
 
    The specific logic that an Authoritative Nameserver uses to choose a
    tailored response is not in the scope of this document.  Implementers
@@ -796,9 +796,9 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    setups, it may be necessary to implement transitive behaviour on
    Intermediate Nameservers.
 
-   It is important that any Intermediate Nameserver that forwards ECS
-   options received from their clients MUST fully implement the caching
-   behaviour described in Section 7.3.
+   Any Intermediate Nameserver that forwards ECS options received from
+   their clients MUST fully implement the caching behaviour described in
+   Section 7.3.
 
    Intermediate Nameservers supporting ECS MUST forward options with
    SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized).  Such
@@ -1215,7 +1215,7 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 14.  Contributing Authors
 
-   The below individuals contributed significantly to the draft.  The
+   The below individuals contributed significantly to the document.  The
    RFC Editor prefers a maximum of 5 names on the front page, and so we
    have listed additional authors in this section
 
@@ -1333,10 +1333,10 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 16.2.  Informative References
 
-   [a_faster_internet]
-              "A Faster Internet (Participants)",
-              <http://www.afasterinternet.com/participants.htm>.
-
+   [Address_Family_Numbers]
+              "Address Family Numbers",
+              <http://www.iana.org/assignments/address-family-numbers/
+              address-family-numbers.xhtml>.
 
 
 
@@ -1347,11 +1347,6 @@ Contavalli, et al.        Expires June 16, 2016                [Page 24]
 
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
-
-   [Address_Family_Numbers]
-              "Address Family Numbers",
-              <http://www.iana.org/assignments/address-family-numbers/
-              address-family-numbers.xhtml>.
 
    [DPRIVE_Working_Group]
               "DPRIVE Working Group",
@@ -1395,7 +1390,12 @@ Appendix A.  Document History
    o  Clarify that a new proposal for an improved ECS protool is
       expected.
 
+   o  "Forwarders" had been used as though they were the source of a
+      forwarded query rather than the targeted of one; clarified and
+      defined as "Forwarding Resolver".  (Jinmei)
 
+   o  "representing the leftmost significant bits" => "representing the
+      leftmost number of significant bits".  (Jinmei)
 
 
 
@@ -1403,13 +1403,6 @@ Contavalli, et al.        Expires June 16, 2016                [Page 25]
 
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
-
-   o  "Forwarders" had been used as though they were the source of a
-      forwarded query rather than the targeted of one; clarified and
-      defined as "Forwarding Resolver".  (Jinmei)
-
-   o  "representing the leftmost significant bits" => "representing the
-      leftmost number of significant bits".  (Jinmei)
 
    o  Minor other clarifying text.  (Jinmei)
 
@@ -1451,6 +1444,13 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
    o  <David> Made the document describe how things are actually
       implmented now.  This makes the document be more of a "this is how
+      we are doing things, this provides information on that".  There
+      may be a future document that describes additional funcationality.
+
+   o  NETMASK was not a good desription, changed to PREFIX-LENGTH
+      (Jinmei, others).  Stole most of the definition for prefix length
+      from RFC4291.
+
 
 
 
@@ -1459,13 +1459,6 @@ Contavalli, et al.        Expires June 16, 2016                [Page 26]
 
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
-
-      we are doing things, this provides information on that".  There
-      may be a future document that describes additional funcationality.
-
-   o  NETMASK was not a good desription, changed to PREFIX-LENGTH
-      (Jinmei, others).  Stole most of the definition for prefix length
-      from RFC4291.
 
    o  Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
       IPv6 (Tatuya Jinmei)
@@ -1506,16 +1499,6 @@ A.1.  -00
 
    o  Updated NAT section.
 
-
-
-
-
-
-Contavalli, et al.        Expires June 16, 2016                [Page 27]
-
-Internet-Draft        Client Subnet in DNS Queries         December 2015
-
-
    o  Added recommendation to not use the default /24 recommendation for
       the source prefix-length field if more detailed information about
       the network is available.
@@ -1525,6 +1508,13 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
    o  Wire format changed to include the original address and prefix
       length in responses in defence against birthday attacks.
+
+
+
+Contavalli, et al.        Expires June 16, 2016                [Page 27]
+
+Internet-Draft        Client Subnet in DNS Queries         December 2015
+
 
    o  Security considerations now includes a section about birthday
       attacks.
@@ -1565,13 +1555,6 @@ A.2.  -01
    o  Moved description on how to forward ECS option in dedicated
       section.
 
-
-
-Contavalli, et al.        Expires June 16, 2016                [Page 28]
-
-Internet-Draft        Client Subnet in DNS Queries         December 2015
-
-
    o  Queries with wrongly formatted ECS options should now be rejected
       with FORMERR.
 
@@ -1580,6 +1563,14 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
    o  Intermediate Nameservers can now remove an ECS option, or reduce
       the SOURCE PREFIX-LENGTH to increase privacy.
+
+
+
+
+Contavalli, et al.        Expires June 16, 2016                [Page 28]
+
+Internet-Draft        Client Subnet in DNS Queries         December 2015
+
 
    o  Added a reference to DoS attacks in the Security section.
 
@@ -1615,6 +1606,15 @@ Authors' Addresses
    Email: wilmer@google.com
 
 
+   David C Lawrence
+   Akamai Technologies
+   8 Cambridge Center
+   Cambridge, MA  02142
+   US
+
+   Email: tale@akamai.com
+
+
 
 
 
@@ -1628,15 +1628,6 @@ Contavalli, et al.        Expires June 16, 2016                [Page 29]
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 
-   David C Lawrence
-   Akamai Technologies
-   8 Cambridge Center
-   Cambridge, MA  02142
-   US
-
-   Email: tale@akamai.com
-
-
    Warren Kumari
    Google
    1600 Amphitheatre Parkway
@@ -1644,6 +1635,15 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    US
 
    Email: warren@kumari.net
+
+
+
+
+
+
+
+
+
 
 
 
