@@ -15,7 +15,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-06"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-05"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -109,7 +109,7 @@
       </address>
     </author>
 
-    <date day="4" month="November" year="2015"/>
+    <date day="14" month="December" year="2015"/>
 
     <area>ops</area>
 
@@ -133,9 +133,9 @@
 
       <t>Traditionally, and probably still in the majority of instances,
       Recursive Resolvers are reasonably close in the topological sense to the
-      Stub Resolvers or Forwarding Resolvers that are the source of
-      queries. For these resolvers, using their own IP address is sufficient
-      for authority servers that tailor responses based upon location of the
+      Stub Resolvers or Forwarding Resolvers that are the source of queries.
+      For these resolvers, using their own IP address is sufficient for
+      authority servers that tailor responses based upon location of the
       querier.</t>
 
       <t>Increasingly, though, a class of Recursive Resolvers has arisen that
@@ -166,13 +166,11 @@
       should be used.</t>
 
       <t>At least a dozen different client and server implementations had been
-      written based on the original specification, first known as <eref
-      target="https://tools.ietf.org/html/draft-vandergaast-edns-client-subnet-00">
-      draft-vandergaast-edns-client-subnet</eref>. The protocol is in active
-      production use among several major Internet companies, a subset of which
-      are listed at <eref
-      target="http://www.afasterinternet.com/participants.htm">
-      http://www.afasterinternet.com/participants.htm</eref>.</t>
+      written based on the original specification, first known as <xref
+      target="I-D.vandergaast-edns-client-subnet">draft-vandergaast-edns-client-subnet</xref>.
+      The protocol is in active production use among several major Internet
+      companies, a subset of which are listed at <xref
+      target="a_faster_internet"/>.</t>
 
       <t>This document describes the protocol as it is used in the hope that
       new implementations can be as interoperable as those currently deployed.
@@ -185,6 +183,8 @@
       the details of the original specification, rather than leave it
       undocumented and proprietary. A revised proposal to improve upon the
       minor flaws in this protocol will be forthcoming to the IETF.</t>
+
+      <t/>
     </section>
 
     <section title="Privacy Note">
@@ -192,12 +192,11 @@
       documenting existing protocol, it is unlikely that we would have done
       things exactly this way.</t>
 
-      <t>The IETF is actively working on <eref
-      target="https://datatracker.ietf.org/doc/charter-ietf-dprive/">
-      enhancing DNS privacy</eref>, and the re-injection of metadata has been
-      <eref
-      target="https://github.com/IAB-PrivSec-program/draft-iab-privsec-metadata-insertion/blob/master/draft-iab-privsec-metadata-insertion.md">
-      identified as a problematic design pattern</eref>.</t>
+      <t>The IETF is actively working on <xref
+      target="DPRIVE_Working_Group">enhancing DNS privacy</xref>, and the
+      re-injection of metadata has been <xref
+      target="I-D.hardie-privsec-metadata-insertion">identified as a
+      problematic design pattern</xref></t>
 
       <t>As noted above, however, this document primarily describes existing
       behavior of a deployed method, to further the understanding of the
@@ -221,15 +220,16 @@
           <t hangText="ECS">EDNS Client Subnet.</t>
 
           <t hangText="Client">A Stub Resolver, Forwarding Resolver, or
-          Recursive Resolver. A client to a Recursive Resolver or a
-          Forwarding Resolver.</t>
+          Recursive Resolver. A client to a Recursive Resolver or a Forwarding
+          Resolver.</t>
 
           <t hangText="Server">A Forwarding Resolver, Recursive Resolver or
           Authoritative Nameserver.</t>
 
           <t hangText="Stub Resolver:">A simple DNS protocol implementation on
           the client side as described in <xref target="RFC1034"/> section
-          5.3.1. A client to a Recursive Resolver or a Forwarding Resolver.</t>
+          5.3.1. A client to a Recursive Resolver or a Forwarding
+          Resolver.</t>
 
           <t hangText="Authoritative Nameserver:">A nameserver that has
           authority over one or more DNS zones. These are normally not
@@ -245,8 +245,8 @@
 
           <t hangText="Forwarding Resolver">A nameserver that does not do
           iterative resolution itself, but instead passes that responsibility
-          to another Recursive Resolver, called a "Forwarder" in 
-          <xref target="RFC2308"/> section 1.</t>
+          to another Recursive Resolver, called a "Forwarder" in <xref
+          target="RFC2308"/> section 1.</t>
 
           <t hangText="Intermediate Nameserver:">Any nameserver in between the
           Stub Resolver and the Authoritative Nameserver, such as a Recursive
@@ -339,7 +339,7 @@
    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 6: |     SOURCE PREFIX-LENGTH      |     SCOPE PREFIX-LENGTH       |
    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-7: |                           ADDRESS...                          /
+8: |                           ADDRESS...                          /
    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 ]]></artwork>
       </figure>
@@ -354,9 +354,8 @@
 
           <t>FAMILY, 2 octets, indicates the family of the address contained
           in the option, using address family codes as assigned by IANA in
-          <eref
-          target="http://www.iana.org/assignments/address-family-numbers/">
-          IANA-AFI</eref>.</t>
+          <xref target="Address_Family_Numbers">Address Family Numbers
+          </xref>.</t>
         </list> The format of the address part depends on the value of FAMILY.
       This document only defines the format for FAMILY 1 (IP version 4) and 2
       (IP version 6), which are as follows: <list style="symbols">
@@ -419,10 +418,10 @@
           of the Recursive Resolver being used as the target of a Forwarding
           Resolver, but could possibly run into policy problems with regard to
           usage agreements between the Recursive Resolver and Authoritative
-          Namserver. See <xref target="whitelist"/> for more discussion on this
-          point. If the Recursive Resolver will not forward the FAMILY and
-          ADDRESS data from the incoming ECS option, it SHOULD return a REFUSED
-          response.</t>
+          Namserver. See <xref target="whitelist"/> for more discussion on
+          this point. If the Recursive Resolver will not forward the FAMILY
+          and ADDRESS data from the incoming ECS option, it SHOULD return a
+          REFUSED response.</t>
 
           <t>Subsequent queries to refresh the data MUST, if unrestricted by
           an incoming SOURCE PREFIX-LENGTH, specify the longest SOURCE
@@ -459,9 +458,9 @@
         <section title="Forwarding Resolvers">
           <t>Forwarding Resolvers essentially appear to be Stub Resolvers to
           whatever Recursive Resolver is ultimately handling the query, but
-          look like a Recursive Resolver to their client. A Forwarding Resolver
-          using this option MUST prepare it as described in the
-          <xref target="originating_recursor"/> section above. In particular, a
+          look like a Recursive Resolver to their client. A Forwarding
+          Resolver using this option MUST prepare it as described in the <xref
+          target="originating_recursor"/> section above. In particular, a
           Forwarding Resolver that implements this protocol MUST honor SOURCE
           PREFIX-LENGTH restrictions indicated in the incoming query from its
           client. See also <xref target="transitivity"/>.</t>
@@ -570,7 +569,8 @@
               <t>Alert the operator that the order of queries will determine
               which answers get cached, and either warn and continue or treat
               this as an error and refuse to load the configuration.</t>
-            </list>Implementations SHOULD document their chosen behavior.</t>
+            </list>This choice should be documented for the operator, for
+          example in the user manual.</t>
         </section>
 
         <section title="Intermediate Nameserver">
@@ -624,7 +624,7 @@
         <t>If a REFUSED response is received from an Authoritative Nameserver,
         an ECS-aware resolver MUST retry the query without ECS to distinguish
         the authoritative response from a lame delegation, which is the common
-        convention for a REFUSED status.  Similarly, a client of a Recursive
+        convention for a REFUSED status. Similarly, a client of a Recursive
         Resolver should retry for REFUSED because it is not sufficiently clear
         whether the REFUSED was because of the ECS option or some other
         reason.</t>
@@ -967,10 +967,9 @@
 
         <t>Additionally, Recursive Resolvers SHOULD be configured to never
         send the option when querying root, top-level, and effective top-level
-        (ie, <eref target="https://publicsuffix.org/">"public suffix")</eref>
-        domain servers. These domains are delegation-centric and are very
-        unlikely to generate different responses based on the address of the
-        client.</t>
+        (ie, <xref target="Public_Suffix_List">("public suffic")</xref> domain
+        servers. These domains are delegation-centric and are very unlikely to
+        generate different responses based on the address of the client.</t>
 
         <t>When probing, it is important that several things are probed:
         support for ECS, support for EDNS0, support for EDNS0 options, or
@@ -1184,14 +1183,63 @@ USA
       &rfc2308;
 
       &rfc2663;
+
+      <?rfc include='reference.I-D.hardie-privsec-metadata-insertion'
+?>
+
+      <?rfc include='reference.I-D.vandergaast-edns-client-subnet'?>
+
+      <reference anchor="DPRIVE_Working_Group"
+                 target="https://datatracker.ietf.org/wg/dprive/charter/">
+        <front>
+          <title>DPRIVE Working Group</title>
+
+          <author/>
+
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="a_faster_internet"
+                 target="http://www.afasterinternet.com/participants.htm">
+        <front>
+          <title>A Faster Internet (Participants)</title>
+
+          <author/>
+
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="Public_Suffix_List"
+                 target="https://publicsuffix.org/">
+        <front>
+          <title>Public Suffix List</title>
+
+          <author/>
+
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="Address_Family_Numbers"
+                 target="http://www.iana.org/assignments/address-family-numbers/address-family-numbers.xhtml">
+        <front>
+          <title>Address Family Numbers</title>
+
+          <author/>
+
+          <date/>
+        </front>
+      </reference>
     </references>
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-05 to -06(?):<list style="symbols">
-      <t>Minor wording clarifications. (David Kahn Gillmor)</t>
-      </list></t>
+          <t>Minor wording clarifications. (David Kahn Gillmor)</t>
+        </list></t>
 
       <t>-04 to -05:<list style="symbols">
           <t>Moved comment about retrying for REFUSED to section on "Handling
@@ -1204,8 +1252,8 @@ USA
           forwarded query rather than the targeted of one; clarified and
           defined as "Forwarding Resolver". (Jinmei)</t>
 
-          <t>"representing the leftmost significant bits" => "representing
-          the leftmost number of significant bits".  (Jinmei)</t>
+          <t>"representing the leftmost significant bits" =&gt; "representing
+          the leftmost number of significant bits". (Jinmei)</t>
 
           <t>Minor other clarifying text. (Jinmei)</t>
 
