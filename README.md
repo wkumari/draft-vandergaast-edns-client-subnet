@@ -628,7 +628,7 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    use an ECS option might not be able to understand it, the server MUST
    NOT provide one in its response.  If the client query did include the
    option, the server MUST include one in its response, especially as it
-   could be talking to a Forwaring Resolver which would need the
+   could be talking to a Forwarding Resolver which would need the
    information for its own caching.
 
    If an Intermediate Nameserver receives a response which has a longer
@@ -800,15 +800,13 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    their clients MUST fully implement the caching behaviour described in
    Section 7.3.
 
-   Intermediate Nameservers supporting ECS MUST forward options with
-   SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized).  Such
-   options MUST NOT be replaced with more accurate address information.
-
-   An Intermediate Nameserver MAY also forward ECS options with actual
-   address information.  This information MAY match the source IP
-   address of the incoming query, and MAY have more or fewer address
-   bits than the Nameserver would normally include in a locally
-   originated ECS option.
+   An Intermediate Nameserver MAY forward ECS options with address
+   information.  This information MAY match the source IP address of the
+   incoming query, and MAY have more or fewer address bits than the
+   Nameserver would normally include in a locally originated ECS option.
+   If an Intermediate Nameservers receives a query with SOURCE PREFIX-
+   LENGTH set to 0 it MUST forward the query as-is and MUST NOT replace
+   it with more accurate address information.
 
    If for any reason the Intermediate Nameserver does not want to use
    the information in an ECS option it receives (too little address
@@ -833,6 +831,8 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
 
    The IANA is requested to update the reference ("draft-vandergaast-
    edns-client-subnet") to refer to this RFC when published.
+
+
 
 
 
@@ -1022,7 +1022,7 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    o  Recursive Resolvers SHOULD limit the number of total different
       networks that they keep in cache.
 
-   o  Recursive Resolvers MUST never send an ECS option with a SOURCE
+   o  Recursive Resolvers MUST NOT send an ECS option with a SOURCE
       PREFIX-LENGTH providing more bits in the ADDRESS than they are
       willing to cache responses for.
 
@@ -1261,8 +1261,8 @@ Internet-Draft        Client Subnet in DNS Queries         December 2015
    Jinmei from Infoblox; Andrew Sullivan from Dyn; John Dickinson from
    Sinodun; Mark Delany from Apple; Yuri Schaeffer from NLnet Labs;
    Duane Wessels from from Verisign; Antonio Querubin; Daniel Kahn
-   Gillmor from the ACLU, and all of the other people that replied to
-   our emails on various mailing lists.
+   Gillmor from the ACLU, Russ Housley and all of the other people that
+   replied to our emails on various mailing lists.
 
 16.  References
 
@@ -1378,10 +1378,6 @@ Appendix A.  Document History
 
    [RFC Editor: Please delete this section before publication.]
 
-   -05 to -06(?):
-
-   o  Minor wording clarifications.  (David Kahn Gillmor)
-
    -04 to -05:
 
    o  Moved comment about retrying for REFUSED to section on "Handling
@@ -1397,6 +1393,10 @@ Appendix A.  Document History
    o  "representing the leftmost significant bits" => "representing the
       leftmost number of significant bits".  (Jinmei)
 
+   o  Minor other clarifying text.  (Jinmei)
+
+   o  Jinmei's affiliation.
+
 
 
 Contavalli, et al.        Expires June 16, 2016                [Page 25]
@@ -1404,9 +1404,9 @@ Contavalli, et al.        Expires June 16, 2016                [Page 25]
 Internet-Draft        Client Subnet in DNS Queries         December 2015
 
 
-   o  Minor other clarifying text.  (Jinmei)
+   o  Minor wording clarifications.  (David Kahn Gillmor)
 
-   o  Jinmei's affiliation.
+   o  Russ Housely's GenART review.
 
    -03 to -04:
 

@@ -574,7 +574,7 @@
           that did not use an ECS option might not be able to understand it,
           the server MUST NOT provide one in its response. If the client query
           did include the option, the server MUST include one in its response,
-          especially as it could be talking to a Forwaring Resolver which
+          especially as it could be talking to a Forwarding Resolver which
           would need the information for its own caching.</t>
 
           <t>If an Intermediate Nameserver receives a response which has a
@@ -731,16 +731,13 @@
         their clients MUST fully implement the caching behaviour described in
         <xref target="caching"/>.</t>
 
-        <t>Intermediate Nameservers supporting ECS MUST forward options with
-        SOURCE PREFIX-LENGTH set to 0 (that is, completely anonymized). Such
-        options MUST NOT be replaced with more accurate address
-        information.</t>
-
-        <t>An Intermediate Nameserver MAY also forward ECS options with actual
-        address information. This information MAY match the source IP address
-        of the incoming query, and MAY have more or fewer address bits than
-        the Nameserver would normally include in a locally originated ECS
-        option.</t>
+        <t>An Intermediate Nameserver MAY forward ECS options with address
+        information. This information MAY match the source IP address of the
+        incoming query, and MAY have more or fewer address bits than the
+        Nameserver would normally include in a locally originated ECS option.
+        If an Intermediate Nameservers receives a query with SOURCE
+        PREFIX-LENGTH set to 0 it MUST forward the query as-is and MUST NOT
+        replace it with more accurate address information. </t>
 
         <t>If for any reason the Intermediate Nameserver does not want to use
         the information in an ECS option it receives (too little address
@@ -920,7 +917,7 @@
             <t>Recursive Resolvers SHOULD limit the number of total different
             networks that they keep in cache.</t>
 
-            <t>Recursive Resolvers MUST never send an ECS option with a SOURCE
+            <t>Recursive Resolvers MUST NOT send an ECS option with a SOURCE
             PREFIX-LENGTH providing more bits in the ADDRESS than they are
             willing to cache responses for.</t>
 
@@ -1140,9 +1137,9 @@ USA
       MacCarthaigh and Richard Sheehan from Amazon; Tatuya Jinmei from
       Infoblox; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
       Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
-      from Verisign; Antonio Querubin; Daniel Kahn Gillmor from the ACLU, and
-      all of the other people that replied to our emails on various mailing
-      lists.</t>
+      from Verisign; Antonio Querubin; Daniel Kahn Gillmor from the ACLU, Russ
+      Housley and all of the other people that replied to our emails on
+      various mailing lists.</t>
     </section>
   </middle>
 
@@ -1220,10 +1217,6 @@ USA
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
-      <t>-05 to -06(?):<list style="symbols">
-          <t>Minor wording clarifications. (David Kahn Gillmor)</t>
-        </list></t>
-
       <t>-04 to -05:<list style="symbols">
           <t>Moved comment about retrying for REFUSED to section on "Handling
           ECS Responses". (Jinmei)</t>
@@ -1241,6 +1234,10 @@ USA
           <t>Minor other clarifying text. (Jinmei)</t>
 
           <t>Jinmei's affiliation.</t>
+
+          <t>Minor wording clarifications. (David Kahn Gillmor)</t>
+
+          <t>Russ Housely's GenART review.</t>
         </list></t>
 
       <t>-03 to -04:<list style="symbols">
