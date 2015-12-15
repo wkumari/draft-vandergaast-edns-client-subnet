@@ -15,7 +15,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-05"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-06"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -109,7 +109,7 @@
       </address>
     </author>
 
-    <date day="14" month="December" year="2015"/>
+    <date day="15" month="December" year="2015"/>
 
     <area>ops</area>
 
@@ -411,7 +411,7 @@
           of the Recursive Resolver being used as the target of a Forwarding
           Resolver, but could possibly run into policy problems with regard to
           usage agreements between the Recursive Resolver and Authoritative
-          Namserver. See <xref target="whitelist"/> for more discussion on
+          Nameserver. See <xref target="whitelist"/> for more discussion on
           this point. If the Recursive Resolver will not forward the FAMILY
           and ADDRESS data from the incoming ECS option, it SHOULD return a
           REFUSED response.</t>
@@ -461,7 +461,7 @@
           <t>Since the Recursive Resolver it contacts will treat it like a
           Stub Resolver, the Recursive Resolver's policies regarding incoming
           ADDRESS information will apply in the same way. If the Forwarding
-          Resover receives a REFUSED response when it sends a query which
+          Resolver receives a REFUSED response when it sends a query which
           includes a non-zero ADDRESS, it MUST retry with FAMILY and ADDRESS
           set to 0.</t>
         </section>
@@ -617,11 +617,11 @@
 
         <t>If a REFUSED response is received from an Authoritative Nameserver,
         an ECS-aware resolver MUST retry the query without ECS to distinguish
-        the authoritative response from a lame delegation, which is the common
-        convention for a REFUSED status. Similarly, a client of a Recursive
-        Resolver should retry for REFUSED because it is not sufficiently clear
-        whether the REFUSED was because of the ECS option or some other
-        reason.</t>
+        the response from one where the Authoritative Nameserver is not
+        responsible for the name, which is a common convention for the REFUSED
+        status. Similarly, a client of a Recursive Resolver should retry for
+        REFUSED because it is not sufficiently clear whether the REFUSED was
+        because of the ECS option or some other reason.</t>
 
         <section title="Caching the Response">
           <t>In the cache, all resource records in the answer section MUST be
@@ -712,7 +712,8 @@
 
         <t>Several other implementations, however, do not support being able
         to mix positive and negative answers, and thus interoperability is a
-        problem.</t>
+        problem. It is recommended that no specific behaviour regarding
+        negative answers be relied upon.</t>
 
         <t>This issue is expected to be revisited in a future revision of the
         protocol, possibly blessing the mixing of positive and negative
@@ -958,7 +959,7 @@
 
         <t>Additionally, Recursive Resolvers SHOULD be configured to never
         send the option when querying root, top-level, and effective top-level
-        (ie, <xref target="Public_Suffix_List">("public suffic")</xref> domain
+        (ie, <xref target="Public_Suffix_List">("public suffix")</xref> domain
         servers. These domains are delegation-centric and are very unlikely to
         generate different responses based on the address of the client.</t>
 
@@ -985,17 +986,17 @@
 
         <t>To avoid the complexity of implementing a probing and detection
         mechanism (and the possible query loss/delay that may come with it),
-        an implementation could use a whitelist of Authoritative Namesevers to
-        send the option to, likely specified by their domain name.
+        an implementation could use a whitelist of Authoritative Nameservers
+        to send the option to, likely specified by their domain name.
         Implementations MAY also allow additionally configuring this based on
         other criteria, such as zone or query type. As of the time of this
-        writing, at least one implemetaion makes use of a whitelist.</t>
+        writing, at least one implementation makes use of a whitelist.</t>
 
         <t>An advantage of using a whitelist is that partial client address
         information is only disclosed to Nameservers that are known to use the
         information, improving privacy.</t>
 
-        <t>A drawback is scalability. The operator needs to track which
+        <t>A drawback is saleability. The operator needs to track which
         Authoritative Nameservers support ECS, making it harder for new
         Authoritative Nameservers to start using the option.</t>
 
@@ -1216,6 +1217,12 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-05 to -06:<list style="symbols">
+          <t>Integrated David Lawrence comments.</t>
+
+          <t>Ran spellcheck again. One ady I';; laern to tyoe/</t>
+        </list></t>
 
       <t>-04 to -05:<list style="symbols">
           <t>Moved comment about retrying for REFUSED to section on "Handling
