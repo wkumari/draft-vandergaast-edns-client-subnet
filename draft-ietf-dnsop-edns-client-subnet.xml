@@ -15,7 +15,7 @@
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-06"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-07"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -140,15 +140,15 @@
 
       <t>Increasingly, though, a class of Recursive Resolvers has arisen that
       handle query sources that are often not topologically close. The
-      motivation for a user to configure such a Centralized Resolver varies
-      but is usually because of some enhanced experience, such as greater
-      cache security or applying policies regarding where users may connect.
-      (Although political censorship usually comes to mind here, the same
-      actions may be used by a parent when setting controls on where a minor
-      may connect.) Similarly, many ISPs and other organizations use a
-      Centralized Resolver infrastructure that can be distant from the clients
-      the resolvers serve. These cases all lead to less than desirable
-      responses from topology-sensitive Authoritative Nameservers.</t>
+      motivation for having such Centralized Resolvers varies but is usually
+      because of some enhanced experience, such as greater cache security or
+      applying policies regarding where users may connect.  (Although
+      political censorship usually comes to mind here, the same actions may be
+      used by a parent when setting controls on where a minor may connect.)
+      Similarly, many ISPs and other organizations use a Centralized Resolver
+      infrastructure that can be distant from the clients the resolvers
+      serve. These cases all lead to less than desirable responses from
+      topology-sensitive Authoritative Nameservers.</t>
 
       <t>This document defines an <xref target="RFC6891">EDNS0</xref> option
       to convey network information that is relevant to the DNS message. It
@@ -195,8 +195,11 @@
       behavior of a deployed method, to further the understanding of the
       Internet community.</t>
 
-      <t>We encourage the deployment of means to allow users to make use of
-      the opt-out provided. We also recommend that others avoid techniques
+      <t>We recommend that the feature be turned off by default in all
+      nameserver software, and that operators only enable it explicitly in
+      those circumstances where it provides a clear benefit for their clients.
+      We also encourage the deployment of means to allow users to make use of
+      the opt-out provided. Finally, we recommend that others avoid techniques
       that may introduce additional metadata in future work, as it may damage
       user trust.</t>
     </section>
@@ -301,8 +304,9 @@
       about this option, and will continue working as they had been.</t>
 
       <t>Failure to support this option or its improper handling will, at
-      worst, cause suboptimal identification of client location, which is a
-      common occurrence in current content delivery network (CDN) setups.</t>
+      worst, cause suboptimal identification of client network location, which
+      is a common occurrence in current content delivery network (CDN)
+      setups.</t>
 
       <t><xref target="originating"/> also provides a mechanism for Stub
       Resolvers to signal Recursive Resolvers that they do not want ECS
@@ -514,7 +518,10 @@
           indicates that the provided prefix length was not specific enough to
           select the most appropriate Tailored Response. Future queries for
           the name within the specified network SHOULD use the longer SCOPE
-          PREFIX-LENGTH.</t>
+          PREFIX-LENGTH. Factors affecting whether the Recursive Resolver
+          would use the longer length include the amount of privacy masking
+          the operator wants to provide their users, and the additional
+          resource implications for the cache.</t>
 
           <t>Conversely, a shorter SCOPE PREFIX-LENGTH indicates that more
           bits than necessary were provided, and the answer is suitable for a
@@ -620,7 +627,7 @@
         an ECS-aware resolver MUST retry the query without ECS to distinguish
         the response from one where the Authoritative Nameserver is not
         responsible for the name, which is a common convention for the REFUSED
-        status. Similarly, a client of a Recursive Resolver should retry for
+        status. Similarly, a client of a Recursive Resolver SHOULD retry for
         REFUSED because it is not sufficiently clear whether the REFUSED was
         because of the ECS option or some other reason.</t>
 
@@ -643,9 +650,8 @@
           <t>Although omitting network-specific caching will significantly
           simplify an implementation, the resulting drop in cache hits is very
           likely to defeat most latency benefits provided by ECS. Therefore,
-          when implementing this option for latency purposes, implementing
-          full caching support as described in this section is strongly
-          recommended.</t>
+          implementing full caching support as described in this section is
+          strongly RECOMMENDED.</t>
 
           <t>Enabling support for ECS in an Intermediate Nameserver will
           significantly increase the size of the cache, reduce the number of
@@ -835,11 +841,12 @@
         privacy, the ISP's Recursive Resolver SHOULD truncate IP addresses in
         this /20 to just 20 bits, instead of 24 as recommended above.</t>
 
-        <t>Users who wish their full IP address to be hidden can include an
-        ECS option specifying the wildcard address (i.e. SOURCE PREFIX-LENGTH
-        of 0). As described in previous sections, this option will be
-        forwarded across all the Recursive Resolvers supporting ECS, which
-        MUST NOT modify it to include the network address of the client.</t>
+        <t>Users who wish their full IP address to be hidden need to configure
+        their client software, if possible, to include an ECS option
+        specifying the wildcard address (i.e. SOURCE PREFIX-LENGTH of 0). As
+        described in previous sections, this option will be forwarded across
+        all the Recursive Resolvers supporting ECS, which MUST NOT modify it
+        to include the network address of the client.</t>
 
         <t>Note that even without an ECS option, any server queried directly
         by the user will be able to see the full client IP address. Recursive
@@ -1142,9 +1149,10 @@ USA
       Infoblox; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
       Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
       from Verisign; Antonio Querubin; Daniel Kahn Gillmor from the ACLU;
-      Mukund Sivaraman from the Internet Software Consortium; Russ Housley;
-      Suzanne Woolf; and all of the other people that replied to our emails on
-      various mailing lists.</t>
+      Mukund Sivaraman from the Internet Software Consortium; Russ Housley
+      from Vigilsec; Stephen Farrell from Trinity College Dublin; Alissa
+      Cooper from Cisco; Suzanne Woolf; and all of the other people that
+      replied to our emails on various mailing lists.</t>
     </section>
   </middle>
 
@@ -1223,7 +1231,7 @@ USA
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-06 to -07:<list style="symbols">
-          <t>Comments from Suzanne, Mukund, and Jinmei.</t>
+          <t>Minor comments from Suzanne, Mukund, Jinmei and from the IESG.</t>
         </list></t>
 
       <t>-05 to -06:<list style="symbols">
