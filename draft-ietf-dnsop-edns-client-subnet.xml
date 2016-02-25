@@ -109,16 +109,18 @@
       </address>
     </author>
 
-    <date day="12" month="January" year="2015"/>
+    <date day="24" month="February" year="2015"/>
 
     <area>ops</area>
 
     <workgroup>dnsop</workgroup>
 
     <abstract>
-      <t>This document defines an EDNS0 extension to carry information about
-      the network that originated a DNS query, and the network for which the
-      subsequent response can be cached.</t>
+      <t>This document describes an EDNS0 extension that is in active use to
+      carry information about the network that originated a DNS query, and the
+      network for which the subsequent response can be cached. Since it has
+      some known operational and privacy shortcomings, a revision will be
+      worked through the IETF for improvement.</t>
     </abstract>
   </front>
 
@@ -202,6 +204,12 @@
       the opt-out provided. Finally, we recommend that others avoid techniques
       that may introduce additional metadata in future work, as it may damage
       user trust.</t>
+
+      <t>Regrettably, support for the opt-out provisions of this specification
+      are currently limited.  Only one stub resolver, getdns, is known to be
+      able to originate queries with anonymity requested, and as yet no
+      applications are known to be able to indicate that user preference to
+      the stub resolver.</t>
     </section>
 
     <section title="Requirements Notation">
