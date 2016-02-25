@@ -14,6 +14,7 @@
 <!ENTITY rfc6177 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6177.xml">
 <!ENTITY rfc6890 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6890.xml">
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
+<!ENTITY rfc7719 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7719.xml">
 ]>
 <rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-07"
      ipr="trust200902">
@@ -272,6 +273,9 @@
           topological perspective, and two geographically distant hosts can be
           quite close on the network.</t>
         </list></t>
+
+        <t>For a more comprehensive treatment of these DNS terms, please see
+        <xref target="RFC7719"/>.</t>
     </section>
 
     <section anchor="overview" title="Overview">
@@ -819,7 +823,10 @@
       address for the purposes of signaling its own limit for SOURCE
       PREFIX-LENGTH.</t>
 
-      <t>If an Authoritative Nameserver on the publicly routed Internet
+      <t>Full treatment of special network addresses is beyond the scope of
+      this document; handling them will likely differ according to the
+      operational environments of each service provider.  As a general
+      guideline, if an Authoritative Nameserver on the publicly routed Internet
       receives a query that specifies an ADDRESS in <xref target="RFC1918"/>
       or <xref target="RFC4193"/> private address space, it SHOULD ignore
       ADDRESS and look up its answer based on the address of the Recursive
@@ -1195,6 +1202,8 @@ USA
       &rfc2308;
 
       &rfc2663;
+
+      &rfc7719;
 
       <?rfc include='reference.I-D.hardie-privsec-metadata-insertion'
 ?>
