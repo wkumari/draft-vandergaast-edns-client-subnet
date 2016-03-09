@@ -570,9 +570,16 @@
           the best tailored response cannot be determined, and what the
           implications would be over the life of the TTL.</t>
 
-          <t>If the Authoritative Nameserver operator configures a more
-          specific (longer prefix length) Tailored Response within a
-          configured less specific (shorter prefix length) Tailored Response,
+          <t>Authoritative Nameservers might have situations where one
+          Tailored Response is appropriate for a relatively broad address
+          range, such as an IPv4 /20, except for some exceptions, such as a
+          few /24 ranges within that /20. Because it can't be guaranteed that
+          queries for all longer prefix lengths would arrive before one that
+          would be answered by the shorter prefix length, an Authoritative
+          Nameserver MUST NOT overlap prefixes.</t>
+          
+          <t>When the Authoritative Nameserver has a longer prefix length
+          Tailored Response within a shorter prefix length Tailored Response,
           then implementations can either:</t>
 
           <t><list style="numbers">
@@ -584,6 +591,15 @@
               this as an error and refuse to load the configuration.</t>
             </list>This choice should be documented for the operator, for
           example in the user manual.</t>
+
+          <t>When deaggregating to correct the overlap, prefix lengths should
+          be optimized to use the minimum necessary to cover the address
+          space, in order to reduce the overhead that results from having
+          multipe copies of the same answer. As a trivial example, if the
+          Tailored Response for 1.2.0/20 is A but there is one exception of
+          1.2.3/24 for B, then the Authoritative Nameserver would need to
+          provide Tailored Responses for 1.2.0/23, 1.2.2/24, 1.2.4/22, and
+          1.2.8/21 all pointing to A, and 1.2.3/24 to B.</t>
         </section>
 
         <section title="Intermediate Nameserver">
@@ -645,12 +661,33 @@
 
         <section title="Caching the Response">
           <t>In the cache, all resource records in the answer section MUST be
-          tied to the network specified by the FAMILY, ADDRESS and SCOPE
-          PREFIX-LENGTH fields, as limited by the Intermediate Nameserver's
-          own configuration for maximum cacheable prefix length. Note that the
-          additional and authority sections from a DNS response message are
-          specifically excluded here. Any records from these sections MUST NOT
-          be tied to a network. See more at <xref target="otheranswers"/>.</t>
+          to the network specified in the response. The appropriate prefix
+          length depends on the relationship between SOURCE PREFIX-LENGTH,
+          SCOPE PREFIX-LENGTH, and the maximum cacheable prefix length
+          configured for the cache.</t>
+          
+          <t>If SCOPE PREFIX-LENGTH is not longer than SOURCE PREFIX-LENGTH
+          store SCOPE PREFIX-LENGTH bits of ADDRESS and mark the response as
+          valid for all addresses that fall within that range.</t>
+
+          <t>Similarly, if SOURCE PREFIX-LENGTH is the maximum configured for
+          the cache, store SOURCE PREFIX-LENGTH bits of ADDRESS and mark the
+          response as valid for all addresses that fall within that range.</t>
+
+          <t>If SOURCE PREFIX-LENGTH is shorter than the configured maximum
+          and SCOPE PREFiX-LENGTH is longer than SOURCE PREFIX-LENGTH, store
+          SOURCE PREFIX-LENGTH bits of ADDRESS and mark the response as only
+          valid to answer client queries that specify exactly the same SOURCE
+          PREFIX-LENGTH in their own ECS option.</t>
+
+          <t>DNSKEY and DS records are the one exception to the above rules
+          for records in the answer section. These records SHOULD always be
+          cached at /0.  See <xref target="dnssec"/> for more.</t>
+
+          <t>Note that the additional and authority sections from a DNS
+          response message are specifically excluded here. Any records from
+          these sections MUST NOT be tied to a network. See more at
+          <xref target="otheranswers"/>.</t>
 
           <t>Records that are cached as /0 because of a query's SOURCE
           PREFIX-LENGTH of 0 MUST be distinguished from those that are cached
@@ -686,12 +723,22 @@
               <t>If no ECS option was provided, the client's address is
               used.</t>
 
-              <t>If there was an ECS option, the ADDRESS from it MAY be used
-              if local policy allows. Policy can vary depending on the
-              agreements the operator of the Intermediate Nameserver has with
-              Authoritative Nameserver operators; see <xref
-              target="whitelist"/>. If policy does not allow, a REFUSED
-              response must be sent.</t>
+              <t>If there was an ECS option specifying SOURCE PREFIX-LENGTH
+              but no ADDRESS, the client's address is used but SOURCE
+              PREFIX-LENGTH is initially ignored. If no covering entry is
+              found and SOURCE PREFIX-LENGTH is shorter than the configured
+              maximum length allowed for the cache, repeat the cache lookup
+              for an entry that exactly matches SOURCE PREFIX-LENGTH.  These
+              special entries, which do not cover longer prefix lengths, occur
+              as described in the previous section.</t>
+
+              <t>If there was an ECS option with an ADDRESS, the ADDRESS from
+              it MAY be used if local policy allows. Policy can vary depending
+              on the agreements the operator of the Intermediate Nameserver
+              has with Authoritative Nameserver operators; see
+              <xref target="whitelist"/>. If policy does not allow, a REFUSED
+              response SHOULD be sent.  See <xref target="transitivity"/> for
+              more.</t>
             </list></t>
 
           <t>If a matching network is found and the relevant data is
@@ -789,7 +836,7 @@
       published.</t>
     </section>
 
-    <section title="DNSSEC Considerations">
+    <section anchor="dnssec" title="DNSSEC Considerations">
       <t>The presence or absence of an <xref target="RFC6891"/> EDNS0 OPT
       resource record containing an ECS option in a DNS query does not change
       the usage of the resource records and mechanisms used to provide data
@@ -800,6 +847,19 @@
       <t>Use of this option, however, does imply increased DNS traffic between
       any given Recursive Resolver and Authoritative Nameserver, which could
       be another barrier to further DNSSEC adoption in this area.</t>
+
+      <t>It is expected that in a signed zone using ECS all signatures will
+      use the same DNSKEY record independent of the Tailored Response that
+      should be cached per network.  Trying to establish a network-specific
+      chain of trust from a non-ECS-enabled zone into an ECS-enabled zone,
+      which tecnically feasbile, has no apparent benefits. Therefore, while
+      RRSIGs are obviously tied to the same network as the Tailored Response
+      that they cover, DNSKEY and DS records SHOULD be invariant for all
+      clients.</t>
+
+      <t>NSEC and NSEC3 are explicitly not addressed in this specification per
+      the discussion about negative answers in
+      <xref target="otheranswers"/>.</t>
     </section>
 
     <section title="NAT Considerations">
@@ -1163,11 +1223,11 @@ USA
       MacCarthaigh and Richard Sheehan from Amazon; Tatuya Jinmei from
       Infoblox; Andrew Sullivan from Dyn; John Dickinson from Sinodun; Mark
       Delany from Apple; Yuri Schaeffer from NLnet Labs; Duane Wessels from
-      from Verisign; Antonio Querubin; Daniel Kahn Gillmor from the ACLU;
-      Mukund Sivaraman from the Internet Software Consortium; Russ Housley
-      from Vigilsec; Stephen Farrell from Trinity College Dublin; Alissa
-      Cooper from Cisco; Suzanne Woolf; and all of the other people that
-      replied to our emails on various mailing lists.</t>
+      from Verisign; Antonio Querubin; Daniel Kahn Gillmor from the ACLU; Evan
+      Hunt and Mukund Sivaraman from the Internet Software Consortium; Russ
+      Housley from Vigilsec; Stephen Farrell from Trinity College Dublin;
+      Alissa Cooper from Cisco; Suzanne Woolf; and all of the other people
+      that replied to our emails on various mailing lists.</t>
     </section>
   </middle>
 
@@ -1248,7 +1308,12 @@ USA
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-06 to -07:<list style="symbols">
-          <t>Minor comments from Suzanne, Mukund, Jinmei and from the IESG.</t>
+          <t>Minor comments from Suzanne, Mukund, Jinmei and from the IESG
+            on the dnsop list.</t>
+
+          <t>Incorporated feedback from conference call with Mukund and Evan,
+            notably clarifying what prefix length to associate with answers in
+            the cache, how and why to deaggregate, and some DNSSEC stuff.</t>
         </list></t>
 
       <t>-05 to -06:<list style="symbols">
