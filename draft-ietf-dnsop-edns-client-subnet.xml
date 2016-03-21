@@ -110,7 +110,7 @@
       </address>
     </author>
 
-    <date day="24" month="February" year="2015"/>
+    <date day="21" month="March" year="2016"/>
 
     <area>ops</area>
 
@@ -145,12 +145,12 @@
       handle query sources that are often not topologically close. The
       motivation for having such Centralized Resolvers varies but is usually
       because of some enhanced experience, such as greater cache security or
-      applying policies regarding where users may connect.  (Although
-      political censorship usually comes to mind here, the same actions may be
-      used by a parent when setting controls on where a minor may connect.)
-      Similarly, many ISPs and other organizations use a Centralized Resolver
-      infrastructure that can be distant from the clients the resolvers
-      serve. These cases all lead to less than desirable responses from
+      applying policies regarding where users may connect. (Although political
+      censorship usually comes to mind here, the same actions may be used by a
+      parent when setting controls on where a minor may connect.) Similarly,
+      many ISPs and other organizations use a Centralized Resolver
+      infrastructure that can be distant from the clients the resolvers serve.
+      These cases all lead to less than desirable responses from
       topology-sensitive Authoritative Nameservers.</t>
 
       <t>This document defines an <xref target="RFC6891">EDNS0</xref> option
@@ -207,7 +207,7 @@
       user trust.</t>
 
       <t>Regrettably, support for the opt-out provisions of this specification
-      are currently limited.  Only one stub resolver, getdns, is known to be
+      are currently limited. Only one stub resolver, getdns, is known to be
       able to originate queries with anonymity requested, and as yet no
       applications are known to be able to indicate that user preference to
       the stub resolver.</t>
@@ -274,8 +274,8 @@
           quite close on the network.</t>
         </list></t>
 
-        <t>For a more comprehensive treatment of these DNS terms, please see
-        <xref target="RFC7719"/>.</t>
+      <t>For a more comprehensive treatment of these DNS terms, please see
+      <xref target="RFC7719"/>.</t>
     </section>
 
     <section anchor="overview" title="Overview">
@@ -287,15 +287,14 @@
       <t>The format of the edns-client-subnet (ECS) EDNS0 option is described
       in <xref target="format"/>, and is meant to be added in queries sent by
       Intermediate Nameservers in a way transparent to Stub Resolvers and end
-      users, as described in <xref target="originating"/>. ECS is only
-      defined for the Internet (IN) DNS class.</t>
+      users, as described in <xref target="originating"/>. ECS is only defined
+      for the Internet (IN) DNS class.</t>
 
       <t>As described in <xref target="responding"/>, an Authoritative
       Nameserver could use ECS as a hint to the network location of the end
-      user and provide a better answer.  Its response would also contain an
-      ECS option, clearly indicating that the server made use of this
-      information, and that the answer is tied to the network of the
-      client.</t>
+      user and provide a better answer. Its response would also contain an ECS
+      option, clearly indicating that the server made use of this information,
+      and that the answer is tied to the network of the client.</t>
 
       <t>As described in <xref target="caching"/>, Intermediate Nameservers
       would use this information to cache the response.</t>
@@ -520,8 +519,8 @@
           <t>The FAMILY, SOURCE PREFIX-LENGTH and ADDRESS in the response MUST
           match those in the query, unless the query specified only the SOURCE
           PREFIX-LENGTH for privacy (and thus with FAMILY set to 0 and no
-          ADDRESS).  Echoing back these values helps to mitigate certain
-          attack vectors, as described in <xref target="security"/>.</t>
+          ADDRESS). Echoing back these values helps to mitigate certain attack
+          vectors, as described in <xref target="security"/>.</t>
 
           <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
           which the answer is intended.</t>
@@ -577,7 +576,7 @@
           queries for all longer prefix lengths would arrive before one that
           would be answered by the shorter prefix length, an Authoritative
           Nameserver MUST NOT overlap prefixes.</t>
-          
+
           <t>When the Authoritative Nameserver has a longer prefix length
           Tailored Response within a shorter prefix length Tailored Response,
           then implementations can either:</t>
@@ -639,11 +638,11 @@
         <t>If the FAMILY, SOURCE PREFIX-LENGTH, and SOURCE PREFIX-LENGTH bits
         of ADDRESS in the response don't match the non-zero fields in the
         corresponding query, the full response MUST be dropped, as described
-        in <xref target="security"/>. In a response to a query which
-        specified only the SOURCE PREFIX-LENGTH for privacy masking, the
-        FAMILY and ADDRESS fields MUST contain the appropriate non-zero
-        information that the Authoritative Nameserver used to generate the
-        answer, so that it can be cached accordingly.</t>
+        in <xref target="security"/>. In a response to a query which specified
+        only the SOURCE PREFIX-LENGTH for privacy masking, the FAMILY and
+        ADDRESS fields MUST contain the appropriate non-zero information that
+        the Authoritative Nameserver used to generate the answer, so that it
+        can be cached accordingly.</t>
 
         <t>If no ECS option is contained in the response, the Intermediate
         Nameserver SHOULD treat this as being equivalent to having received a
@@ -665,7 +664,7 @@
           length depends on the relationship between SOURCE PREFIX-LENGTH,
           SCOPE PREFIX-LENGTH, and the maximum cacheable prefix length
           configured for the cache.</t>
-          
+
           <t>If SCOPE PREFIX-LENGTH is not longer than SOURCE PREFIX-LENGTH
           store SCOPE PREFIX-LENGTH bits of ADDRESS and mark the response as
           valid for all addresses that fall within that range.</t>
@@ -682,12 +681,12 @@
 
           <t>DNSKEY and DS records are the one exception to the above rules
           for records in the answer section. These records SHOULD always be
-          cached at /0.  See <xref target="dnssec"/> for more.</t>
+          cached at /0. See <xref target="dnssec"/> for more.</t>
 
           <t>Note that the additional and authority sections from a DNS
           response message are specifically excluded here. Any records from
-          these sections MUST NOT be tied to a network. See more at
-          <xref target="otheranswers"/>.</t>
+          these sections MUST NOT be tied to a network. See more at <xref
+          target="otheranswers"/>.</t>
 
           <t>Records that are cached as /0 because of a query's SOURCE
           PREFIX-LENGTH of 0 MUST be distinguished from those that are cached
@@ -706,10 +705,9 @@
           significantly increase the size of the cache, reduce the number of
           results that can be served from cache, and increase the load on the
           server. Implementing the mitigation techniques described in <xref
-          target="security"/> is strongly recommended.  For cache size
-          issues, implementers should consider data storage formats that allow
-          the same answer data to be shared among multiple prefixes.
-          </t>
+          target="security"/> is strongly recommended. For cache size issues,
+          implementers should consider data storage formats that allow the
+          same answer data to be shared among multiple prefixes.</t>
         </section>
 
         <section title="Answering from Cache">
@@ -728,16 +726,16 @@
               PREFIX-LENGTH is initially ignored. If no covering entry is
               found and SOURCE PREFIX-LENGTH is shorter than the configured
               maximum length allowed for the cache, repeat the cache lookup
-              for an entry that exactly matches SOURCE PREFIX-LENGTH.  These
+              for an entry that exactly matches SOURCE PREFIX-LENGTH. These
               special entries, which do not cover longer prefix lengths, occur
               as described in the previous section.</t>
 
               <t>If there was an ECS option with an ADDRESS, the ADDRESS from
               it MAY be used if local policy allows. Policy can vary depending
               on the agreements the operator of the Intermediate Nameserver
-              has with Authoritative Nameserver operators; see
-              <xref target="whitelist"/>. If policy does not allow, a REFUSED
-              response SHOULD be sent.  See <xref target="transitivity"/> for
+              has with Authoritative Nameserver operators; see <xref
+              target="whitelist"/>. If policy does not allow, a REFUSED
+              response SHOULD be sent. See <xref target="transitivity"/> for
               more.</t>
             </list></t>
 
@@ -807,7 +805,7 @@
         Nameserver would normally include in a locally originated ECS option.
         If an Intermediate Nameserver receives a query with SOURCE
         PREFIX-LENGTH set to 0 it MUST forward the query as-is and MUST NOT
-        replace it with more accurate address information. </t>
+        replace it with more accurate address information.</t>
 
         <t>If for any reason the Intermediate Nameserver does not want to use
         the information in an ECS option it receives (too little address
@@ -850,7 +848,7 @@
 
       <t>It is expected that in a signed zone using ECS all signatures will
       use the same DNSKEY record independent of the Tailored Response that
-      should be cached per network.  Trying to establish a network-specific
+      should be cached per network. Trying to establish a network-specific
       chain of trust from a non-ECS-enabled zone into an ECS-enabled zone,
       which tecnically feasbile, has no apparent benefits. Therefore, while
       RRSIGs are obviously tied to the same network as the Tailored Response
@@ -858,8 +856,8 @@
       clients.</t>
 
       <t>NSEC and NSEC3 are explicitly not addressed in this specification per
-      the discussion about negative answers in
-      <xref target="otheranswers"/>.</t>
+      the discussion about negative answers in <xref
+      target="otheranswers"/>.</t>
     </section>
 
     <section title="NAT Considerations">
@@ -885,16 +883,16 @@
 
       <t>Full treatment of special network addresses is beyond the scope of
       this document; handling them will likely differ according to the
-      operational environments of each service provider.  As a general
-      guideline, if an Authoritative Nameserver on the publicly routed Internet
-      receives a query that specifies an ADDRESS in <xref target="RFC1918"/>
-      or <xref target="RFC4193"/> private address space, it SHOULD ignore
-      ADDRESS and look up its answer based on the address of the Recursive
-      Resolver. In the response it SHOULD set SCOPE PREFIX-LENGTH to cover all
-      of the relevant private space. For example, a query for ADDRESS 10.1.2.0
-      with a SOURCE PREFIX-LENGTH of 24 would get a returned SCOPE
-      PREFIX-LENGTH of 8. The Intermediate Nameserver MAY elect to cache the
-      answer under one entry for <xref target="RFC6890">special-purpose
+      operational environments of each service provider. As a general
+      guideline, if an Authoritative Nameserver on the publicly routed
+      Internet receives a query that specifies an ADDRESS in <xref
+      target="RFC1918"/> or <xref target="RFC4193"/> private address space, it
+      SHOULD ignore ADDRESS and look up its answer based on the address of the
+      Recursive Resolver. In the response it SHOULD set SCOPE PREFIX-LENGTH to
+      cover all of the relevant private space. For example, a query for
+      ADDRESS 10.1.2.0 with a SOURCE PREFIX-LENGTH of 24 would get a returned
+      SCOPE PREFIX-LENGTH of 8. The Intermediate Nameserver MAY elect to cache
+      the answer under one entry for <xref target="RFC6890">special-purpose
       addresses</xref>; see <xref target="pollution"/>.</t>
     </section>
 
@@ -1308,12 +1306,12 @@ USA
       <t>[RFC Editor: Please delete this section before publication.]</t>
 
       <t>-06 to -07:<list style="symbols">
-          <t>Minor comments from Suzanne, Mukund, Jinmei and from the IESG
-            on the dnsop list.</t>
+          <t>Minor comments from Suzanne, Mukund, Jinmei and from the IESG on
+          the dnsop list.</t>
 
           <t>Incorporated feedback from conference call with Mukund and Evan,
-            notably clarifying what prefix length to associate with answers in
-            the cache, how and why to deaggregate, and some DNSSEC stuff.</t>
+          notably clarifying what prefix length to associate with answers in
+          the cache, how and why to deaggregate, and some DNSSEC stuff.</t>
         </list></t>
 
       <t>-05 to -06:<list style="symbols">
