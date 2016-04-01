@@ -274,7 +274,7 @@
           quite close on the network.</t>
         </list></t>
 
-      <t>For a more comprehensive treatment of these DNS terms, please see
+      <t>For a more comprehensive treatment of DNS terms, please see
       <xref target="RFC7719"/>.</t>
     </section>
 
@@ -459,8 +459,11 @@
           FAMILY and ADDRESS data, but should be prepared to handle a REFUSED
           response if the Intermediate Nameserver that it queries has a policy
           that denies forwarding of the ADDRESS. If there is no ADDRESS set,
-          i.e. SOURCE PREFIX-LENGTH is set to 0, then FAMILY MUST be set to
-          0.</t>
+          i.e. SOURCE PREFIX-LENGTH is set to 0, then FAMILY SHOULD be set to
+          the transport over which the query is sent. This is for
+          interoperability; at least one major authoritative server will
+          ignore the option if FAMILY is not 1 or 2, even though it is
+          irrelevant if there are no ADDRESS bits.</t>
         </section>
 
         <section title="Forwarding Resolvers">
@@ -478,7 +481,7 @@
           policies regarding incoming ADDRESS information will apply in the
           same way. If the Forwarding Resolver receives a REFUSED response
           when it sends a query which includes a non-zero ADDRESS, it MUST
-          retry with FAMILY set to 0 and no ADDRESS.</t>
+          retry with no ADDRESS.</t>
         </section>
       </section>
 
@@ -517,10 +520,9 @@
           query.</t>
 
           <t>The FAMILY, SOURCE PREFIX-LENGTH and ADDRESS in the response MUST
-          match those in the query, unless the query specified only the SOURCE
-          PREFIX-LENGTH for privacy (and thus with FAMILY set to 0 and no
-          ADDRESS). Echoing back these values helps to mitigate certain attack
-          vectors, as described in <xref target="security"/>.</t>
+          match those in the query.  Echoing back these values helps to
+          mitigate certain attack vectors, as described in
+          <xref target="security"/>.</t>
 
           <t>The SCOPE PREFIX-LENGTH in the response indicates the network for
           which the answer is intended.</t>
@@ -660,7 +662,7 @@
 
         <section title="Caching the Response">
           <t>In the cache, all resource records in the answer section MUST be
-          to the network specified in the response. The appropriate prefix
+          tied to the network specified in the response. The appropriate prefix
           length depends on the relationship between SOURCE PREFIX-LENGTH,
           SCOPE PREFIX-LENGTH, and the maximum cacheable prefix length
           configured for the cache.</t>
@@ -679,9 +681,11 @@
           valid to answer client queries that specify exactly the same SOURCE
           PREFIX-LENGTH in their own ECS option.</t>
 
-          <t>DNSKEY and DS records are the one exception to the above rules
-          for records in the answer section. These records SHOULD always be
-          cached at /0. See <xref target="dnssec"/> for more.</t>
+          <t>The handling of DNSSEC-related records in the answer section was
+          unspecified in the original draft and inconsistently handled in
+          existing implementations.  An RRSIG must obviously be tied to the
+          RRset which it signs, but it is RECOMMENDED that all other DNSSEC
+          records be scoped at /0.  See <xref target="dnssec"/> for more.</t>
 
           <t>Note that the additional and authority sections from a DNS
           response message are specifically excluded here. Any records from
@@ -722,13 +726,13 @@
               used.</t>
 
               <t>If there was an ECS option specifying SOURCE PREFIX-LENGTH
-              but no ADDRESS, the client's address is used but SOURCE
-              PREFIX-LENGTH is initially ignored. If no covering entry is
-              found and SOURCE PREFIX-LENGTH is shorter than the configured
-              maximum length allowed for the cache, repeat the cache lookup
-              for an entry that exactly matches SOURCE PREFIX-LENGTH. These
-              special entries, which do not cover longer prefix lengths, occur
-              as described in the previous section.</t>
+              and ADDRESS covering the client's address, the client address is
+              used but SOURCE PREFIX-LENGTH is initially ignored. If no
+              covering entry is found and SOURCE PREFIX-LENGTH is shorter than
+              the configured maximum length allowed for the cache, repeat the
+              cache lookup for an entry that exactly matches SOURCE
+              PREFIX-LENGTH.  These special entries, which do not cover longer
+              prefix lengths, occur as described in the previous section.</t>
 
               <t>If there was an ECS option with an ADDRESS, the ADDRESS from
               it MAY be used if local policy allows. Policy can vary depending
@@ -770,8 +774,11 @@
 
         <t>Several other implementations, however, do not support being able
         to mix positive and negative answers, and thus interoperability is a
-        problem. It is recommended that no specific behavior regarding
-        negative answers be relied upon.</t>
+        problem. It is RECOMMENDED that no specific behavior regarding
+        negative answers be relied upon, but that Authoritative Nameservers
+        should conservatively expect that Intermediate Nameservers will treat
+        all negative answers as /0 and therefore SHOULD set SCOPE
+        PREFIX-LENGTH accordingly.</t>
 
         <t>This issue is expected to be revisited in a future revision of the
         protocol, possibly blessing the mixing of positive and negative
@@ -846,18 +853,27 @@
       any given Recursive Resolver and Authoritative Nameserver, which could
       be another barrier to further DNSSEC adoption in this area.</t>
 
-      <t>It is expected that in a signed zone using ECS all signatures will
-      use the same DNSKEY record independent of the Tailored Response that
-      should be cached per network. Trying to establish a network-specific
-      chain of trust from a non-ECS-enabled zone into an ECS-enabled zone,
-      which tecnically feasbile, has no apparent benefits. Therefore, while
-      RRSIGs are obviously tied to the same network as the Tailored Response
-      that they cover, DNSKEY and DS records SHOULD be invariant for all
-      clients.</t>
+      <t>The initial draft of this protocol, against which several
+      authoritative and recursive nameserver implementations were written, did
+      not discuss the handling of DNSSEC RRs and thus it is expected that
+      there are operational inconsistencies in handling them.</t>
 
-      <t>NSEC and NSEC3 are explicitly not addressed in this specification per
-      the discussion about negative answers in <xref
-      target="otheranswers"/>.</t>
+      <t>Given the intention of this document to describe how ECS is currently
+      deployed, specifying new requirements for DNSSEC handling is out of
+      scope.  However, some recommendations can be made as to what is most
+      likely to result in successful interopration for a DNSSEC-signed ECS
+      zone, mainly from the point of view of Authoritative Nameservers.</t>
+
+      <t>Most DNSSEC records SHOULD be scoped at /0, except for the RRSIG
+      records which MUST be tied to the RRset that they sign in a Tailored
+      Response. While it is possible to conceive of a way to get other DNSSEC
+      records working in a network-specific way, it has little apparent
+      benefit or likelihood of working with deployed validating resolvers.</t>
+
+      <t>One further implication here is that, despite the discussion about
+      negative answers in <xref target="otheranswers"/>, scoping NSEC or
+      NSEC3 records at /0 per the previous paragraph necessarily implies that
+      DNSSEC-signed negative answers must also be network-invariant.</t>
     </section>
 
     <section title="NAT Considerations">
