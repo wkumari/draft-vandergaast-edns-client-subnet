@@ -1,5 +1,3 @@
-**Important:** Read CONTRIBUTING.md before submitting feedback or contributing
-```
 
 
 
@@ -902,7 +900,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
    If an Intermediate Nameserver receives a query with SOURCE PREFIX-
    LENGTH set to 0 it MUST NOT include client address information in
-   queries made to resolve the that client's request.
+   queries made to resolve that client's request (see Section 7.1.2).
 
    If for any reason the Intermediate Nameserver does not want to use
    the information in an ECS option it receives (too little address
@@ -1792,4 +1790,3 @@ Authors' Addresses
 
 
 Contavalli, et al.       Expires October 7, 2016               [Page 32]
-```

@@ -437,7 +437,7 @@
           sufficient.</t>
         </section>
 
-        <section title="Stub Resolvers">
+        <section title="Stub Resolvers" anchor="stubs">
           <t>A Stub Resolver MAY generate DNS queries with an ECS option that
           sets SOURCE PREFIX-LENGTH to limit how network information should be
           revealed. An Intermediate Nameserver that receives such a query MUST
@@ -812,7 +812,8 @@
         Nameserver would normally include in a locally originated ECS option.
         If an Intermediate Nameserver receives a query with SOURCE
         PREFIX-LENGTH set to 0 it MUST NOT include client address information
-        in queries made to resolve the that client's request.</t>
+        in queries made to resolve that client's request
+        (see <xref target="stubs"/>).</t>
 
         <t>If for any reason the Intermediate Nameserver does not want to use
         the information in an ECS option it receives (too little address
