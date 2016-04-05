@@ -16,7 +16,7 @@
 <!ENTITY rfc6891 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6891.xml">
 <!ENTITY rfc7719 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7719.xml">
 ]>
-<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-07"
+<rfc category="info" docName="draft-ietf-dnsop-edns-client-subnet-08"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -110,7 +110,7 @@
       </address>
     </author>
 
-    <date day="21" month="March" year="2016"/>
+    <date year="2016"/>
 
     <area>ops</area>
 
@@ -811,8 +811,8 @@
         incoming query, and MAY have more or fewer address bits than the
         Nameserver would normally include in a locally originated ECS option.
         If an Intermediate Nameserver receives a query with SOURCE
-        PREFIX-LENGTH set to 0 it MUST forward the query as-is and MUST NOT
-        replace it with more accurate address information.</t>
+        PREFIX-LENGTH set to 0 it MUST NOT include client address information
+        in queries made to resolve the that client's request.</t>
 
         <t>If for any reason the Intermediate Nameserver does not want to use
         the information in an ECS option it receives (too little address
@@ -1320,6 +1320,20 @@ USA
 
     <section title="Document History">
       <t>[RFC Editor: Please delete this section before publication.]</t>
+
+      <t>-07 to -08:<list style="symbols">
+          <t>Jinmei observed that one section saying a /0 "MUST forward the
+          query as-is" was in conflict with the section that said the option
+          could be modified to contain the Recursive Resolver address.</t>
+
+          <t>Clarify that existing implementations don't interoperate w.r.t
+          DNSSEC.</t>
+
+          <t>Removed vestiges of able to set FAMILY to 0 when specifying just
+          a SOURCE PREFIX-LENGTH and no ADDRESS.  Doesn't interoperate.</t>
+
+          <t>Minor wording change in reference to DNS terminology draft.</t>
+      </list></t>
 
       <t>-06 to -07:<list style="symbols">
           <t>Minor comments from Suzanne, Mukund, Jinmei and from the IESG on
