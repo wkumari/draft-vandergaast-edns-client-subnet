@@ -1113,7 +1113,8 @@
 
     <section title="Example">
       <t><list style="numbers">
-          <t>A stub resolver, SR, with IP address 192.0.2.37, tries to resolve
+          <t>A stub resolver, SR, with IP address
+          2001:0db8:fd13:4231:2112:8a2e:c37b:7334 tries to resolve
           www.example.com by forwarding the query to the Recursive Resolver,
           RNS, asking for recursion.</t>
 
@@ -1133,21 +1134,21 @@
 
           <t>RNS prepares a new query for www.example.com, including an ECS
           option with: <list style="symbols">
-              <t>OPTION-CODE, set to 8.</t>
+              <t>OPTION-CODE set to 8.</t>
 
-              <t>OPTION-LENGTH, set to 0x00 0x07 for the following fixed 4
-              octets plus the 3 octets that will be used for ADDRESS.</t>
+              <t>OPTION-LENGTH set to 0x00 0x0b for the following fixed 4
+              octets plus the 7 octets that will be used for ADDRESS.</t>
 
-              <t>FAMILY, set to 0x00 0x01 as IP is an IPv4 address.</t>
+              <t>FAMILY set to 0x00 0x02 as IP is an IPv6 address.</t>
 
-              <t>SOURCE PREFIX-LENGTH, set to 0x18, as RNS is configured to
-              conceal the last 8 bits of every IPv4 address.</t>
+              <t>SOURCE PREFIX-LENGTH set to 0x38, as RNS is configured to
+              conceal the last 64 bits of every IPv4 address.</t>
 
-              <t>SCOPE PREFIX-LENGTH, set to 0x00, as specified by this
+              <t>SCOPE PREFIX-LENGTH set to 0x00, as specified by this
               document for all queries.</t>
 
-              <t>ADDRESS, set to 0xC0 0x00 0x02, providing only the first 24
-              bits of the IPv4 address.</t>
+              <t>ADDRESS set to 0x20 0x01 0x0d 0xb8 0xfd 0x13 0x42, providing
+              only the first 56 bits of the IPv6 address.</t>
             </list></t>
 
           <t>The query is sent. ANS understands and uses ECS. It parses the
@@ -1159,18 +1160,18 @@
 
           <t>ANS adds an ECS option in the response, containing: <list
               style="symbols">
-              <t>OPTION-CODE, set to 8.</t>
+              <t>OPTION-CODE set to 8.</t>
 
-              <t>OPTION-LENGTH, set to 0x00 0x07.</t>
+              <t>OPTION-LENGTH set to 0x00 0x07.</t>
 
-              <t>FAMILY, set to 0x00 0x01.</t>
+              <t>FAMILY set to 0x00 0x02.</t>
 
-              <t>SOURCE PREFIX-LENGTH, set to 0x18, copied from the query.</t>
+              <t>SOURCE PREFIX-LENGTH set to 0x38, copied from the query.</t>
 
-              <t>SCOPE PREFIX-LENGTH, set to 0x10, indicating a /16
-              network.</t>
+              <t>SCOPE PREFIX-LENGTH set to 0x30, indicating a /48 network.</t>
 
-              <t>ADDRESS, set to 0xC0 0x00 0x02, copied from the query.</t>
+              <t>ADDRESS set to 0x20 0x01 0x0d 0xb8 0xfd 0x13 0x42, copied
+              from the query.</t>
             </list></t>
 
           <t>RNS receives the response containing an ECS option. It verifies
@@ -1334,6 +1335,8 @@ USA
           a SOURCE PREFIX-LENGTH and no ADDRESS.  Doesn't interoperate.</t>
 
           <t>Minor wording change in reference to DNS terminology draft.</t>
+
+          <t>Change example to use IPv6 per Fred Baker's request.</t>
       </list></t>
 
       <t>-06 to -07:<list style="symbols">

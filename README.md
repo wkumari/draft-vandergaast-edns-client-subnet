@@ -1,3 +1,5 @@
+**Important:** Read CONTRIBUTING.md before submitting feedback or contributing
+```
 
 
 
@@ -5,11 +7,11 @@
 dnsop                                                      C. Contavalli
 Internet-Draft                                          W. van der Gaast
 Intended status: Informational                                    Google
-Expires: October 7, 2016                                     D. Lawrence
+Expires: October 15, 2016                                    D. Lawrence
                                                      Akamai Technologies
                                                                W. Kumari
                                                                   Google
-                                                           April 5, 2016
+                                                          April 13, 2016
 
 
                       Client Subnet in DNS Queries
@@ -38,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 7, 2016.
+   This Internet-Draft will expire on October 15, 2016.
 
 Copyright Notice
 
@@ -53,7 +55,7 @@ Copyright Notice
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 1]
+Contavalli, et al.      Expires October 15, 2016                [Page 1]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -109,7 +111,7 @@ Table of Contents
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 2]
+Contavalli, et al.      Expires October 15, 2016                [Page 2]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -165,7 +167,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 3]
+Contavalli, et al.      Expires October 15, 2016                [Page 3]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -221,7 +223,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 4]
+Contavalli, et al.      Expires October 15, 2016                [Page 4]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -277,7 +279,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 5]
+Contavalli, et al.      Expires October 15, 2016                [Page 5]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -333,7 +335,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 6]
+Contavalli, et al.      Expires October 15, 2016                [Page 6]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -389,7 +391,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 7]
+Contavalli, et al.      Expires October 15, 2016                [Page 7]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -445,7 +447,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 8]
+Contavalli, et al.      Expires October 15, 2016                [Page 8]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -501,7 +503,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016                [Page 9]
+Contavalli, et al.      Expires October 15, 2016                [Page 9]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -557,7 +559,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 10]
+Contavalli, et al.      Expires October 15, 2016               [Page 10]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -613,7 +615,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 11]
+Contavalli, et al.      Expires October 15, 2016               [Page 11]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -669,7 +671,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 12]
+Contavalli, et al.      Expires October 15, 2016               [Page 12]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -725,7 +727,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 13]
+Contavalli, et al.      Expires October 15, 2016               [Page 13]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -781,7 +783,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 14]
+Contavalli, et al.      Expires October 15, 2016               [Page 14]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -837,7 +839,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 15]
+Contavalli, et al.      Expires October 15, 2016               [Page 15]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -893,7 +895,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 16]
+Contavalli, et al.      Expires October 15, 2016               [Page 16]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -949,7 +951,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 17]
+Contavalli, et al.      Expires October 15, 2016               [Page 17]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -1005,7 +1007,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 18]
+Contavalli, et al.      Expires October 15, 2016               [Page 18]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -1061,7 +1063,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 19]
+Contavalli, et al.      Expires October 15, 2016               [Page 19]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -1117,7 +1119,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 20]
+Contavalli, et al.      Expires October 15, 2016               [Page 20]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -1173,7 +1175,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 21]
+Contavalli, et al.      Expires October 15, 2016               [Page 21]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -1229,7 +1231,7 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 22]
+Contavalli, et al.      Expires October 15, 2016               [Page 22]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
@@ -1239,8 +1241,9 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
 13.  Example
 
-   1.   A stub resolver, SR, with IP address 192.0.2.37, tries to
-        resolve www.example.com by forwarding the query to the Recursive
+   1.   A stub resolver, SR, with IP address
+        2001:0db8:fd13:4231:2112:8a2e:c37b:7334 tries to resolve
+        www.example.com by forwarding the query to the Recursive
         Resolver, RNS, asking for recursion.
 
    2.   RNS, supporting ECS, looks up www.example.com in its cache.  An
@@ -1260,49 +1263,53 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
    5.   RNS prepares a new query for www.example.com, including an ECS
         option with:
 
-        *  OPTION-CODE, set to 8.
+        *  OPTION-CODE set to 8.
 
-        *  OPTION-LENGTH, set to 0x00 0x07 for the following fixed 4
-           octets plus the 3 octets that will be used for ADDRESS.
+        *  OPTION-LENGTH set to 0x00 0x0b for the following fixed 4
+           octets plus the 7 octets that will be used for ADDRESS.
 
-        *  FAMILY, set to 0x00 0x01 as IP is an IPv4 address.
+        *  FAMILY set to 0x00 0x02 as IP is an IPv6 address.
 
-        *  SOURCE PREFIX-LENGTH, set to 0x18, as RNS is configured to
-           conceal the last 8 bits of every IPv4 address.
+        *  SOURCE PREFIX-LENGTH set to 0x38, as RNS is configured to
+           conceal the last 64 bits of every IPv4 address.
 
-        *  SCOPE PREFIX-LENGTH, set to 0x00, as specified by this
+        *  SCOPE PREFIX-LENGTH set to 0x00, as specified by this
            document for all queries.
 
-        *  ADDRESS, set to 0xC0 0x00 0x02, providing only the first 24
-           bits of the IPv4 address.
+        *  ADDRESS set to 0x20 0x01 0x0d 0xb8 0xfd 0x13 0x42, providing
+           only the first 56 bits of the IPv6 address.
 
    6.   The query is sent.  ANS understands and uses ECS.  It parses the
         ECS option, and generates a Tailored Response.
+
+
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 23]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
 
    7.   Due its internal implementation, ANS finds a response that is
         tailored for the whole /16 of the client that performed the
         query.
 
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 23]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
-
    8.   ANS adds an ECS option in the response, containing:
 
-        *  OPTION-CODE, set to 8.
+        *  OPTION-CODE set to 8.
 
-        *  OPTION-LENGTH, set to 0x00 0x07.
+        *  OPTION-LENGTH set to 0x00 0x07.
 
-        *  FAMILY, set to 0x00 0x01.
+        *  FAMILY set to 0x00 0x02.
 
-        *  SOURCE PREFIX-LENGTH, set to 0x18, copied from the query.
+        *  SOURCE PREFIX-LENGTH set to 0x38, copied from the query.
 
-        *  SCOPE PREFIX-LENGTH, set to 0x10, indicating a /16 network.
+        *  SCOPE PREFIX-LENGTH set to 0x30, indicating a /48 network.
 
-        *  ADDRESS, set to 0xC0 0x00 0x02, copied from the query.
+        *  ADDRESS set to 0x20 0x01 0x0d 0xb8 0xfd 0x13 0x42, copied
+           from the query.
 
    9.   RNS receives the response containing an ECS option.  It verifies
         that FAMILY, SOURCE PREFIX-LENGTH, and ADDRESS match the query.
@@ -1329,22 +1336,24 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
    RFC Editor prefers a maximum of 5 names on the front page, and so we
    have listed additional authors in this section
 
+
+
+
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 24]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    Edward Lewis
    ICANN
    12025 Waterfront Drive, Suite 300
    Los Angeles CA 90094-2536
    USA
    Email: edward.lewis@icann.org
-
-
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 24]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
    Sean Leach
    Fastly
@@ -1385,6 +1394,16 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
               STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
               <http://www.rfc-editor.org/info/rfc1034>.
 
+
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 25]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <http://www.rfc-editor.org/info/rfc1035>.
@@ -1392,15 +1411,6 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
    [RFC1700]  Reynolds, J. and J. Postel, "Assigned Numbers", RFC 1700,
               DOI 10.17487/RFC1700, October 1994,
               <http://www.rfc-editor.org/info/rfc1700>.
-
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 25]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
    [RFC1918]  Rekhter, Y., Moskowitz, B., Karrenberg, D., de Groot, G.,
               and E. Lear, "Address Allocation for Private Internets",
@@ -1441,22 +1451,19 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
               RFC 6890, DOI 10.17487/RFC6890, April 2013,
               <http://www.rfc-editor.org/info/rfc6890>.
 
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 26]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
               for DNS (EDNS(0))", STD 75, RFC 6891,
               DOI 10.17487/RFC6891, April 2013,
               <http://www.rfc-editor.org/info/rfc6891>.
-
-
-
-
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 26]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
 16.2.  Informative References
 
@@ -1501,18 +1508,17 @@ Appendix A.  Document History
 
    -07 to -08:
 
-   o  Jinmei observed that one section saying a /0 "MUST forward the
-      query as-is" was in conflict with the section that said the option
-      could be modified to contain the Recursive Resolver address.
 
 
 
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 27]
+Contavalli, et al.      Expires October 15, 2016               [Page 27]
 
 Internet-Draft        Client Subnet in DNS Queries            April 2016
 
+
+   o  Jinmei observed that one section saying a /0 "MUST forward the
+      query as-is" was in conflict with the section that said the option
+      could be modified to contain the Recursive Resolver address.
 
    o  Clarify that existing implementations don't interoperate w.r.t
       DNSSEC.
@@ -1521,6 +1527,8 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
       SOURCE PREFIX-LENGTH and no ADDRESS.  Doesn't interoperate.
 
    o  Minor wording change in reference to DNS terminology draft.
+
+   o  Change example to use IPv6 per Fred Baker's request.
 
    -06 to -07:
 
@@ -1556,19 +1564,19 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
 
    o  Jinmei's affiliation.
 
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 28]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    o  Minor wording clarifications.  (David Kahn Gillmor)
 
    o  Russ Housely's GenART review.
 
    -03 to -04:
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 28]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
    o  Privacy note per Ted Hardie's suggestion.
 
@@ -1611,20 +1619,21 @@ Internet-Draft        Client Subnet in DNS Queries            April 2016
       (Jinmei, others).  Stole most of the definition for prefix length
       from RFC4291.
 
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 29]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    o  Fixed the "SOURCE PREFIX-LENGTH set to 0" definition to include
       IPv6 (Tatuya Jinmei)
 
    o  Comment that ECS cannot be used to hand NXDOMAIN to some clients
       and not others, primarily because of interoperability issues.
       (Tatuya Jinmei)
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 29]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
    o  Added text explaining that implmentations need to document thier
       behavior with overlapping networks.
@@ -1668,19 +1677,18 @@ A.1.  -00
    o  Wire format changed to include the original address and prefix
       length in responses in defence against birthday attacks.
 
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 30]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    o  Security considerations now includes a section about birthday
       attacks.
 
    o  Renamed edns-client-ip in ECS, following suggestions on the
       mailing list.
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 30]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
    o  Clarified behavior of resolvers when presented with an invalid ECS
       option.
@@ -1724,19 +1732,18 @@ A.2.  -01
    o  Intermediate Nameservers can now remove an ECS option, or reduce
       the SOURCE PREFIX-LENGTH to increase privacy.
 
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 31]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    o  Added a reference to DoS attacks in the Security section.
 
    o  Don't use "network range", as it seems to have different meaning
       in other contexts, and turned out to be confusing.
-
-
-
-
-
-Contavalli, et al.       Expires October 7, 2016               [Page 31]
-
-Internet-Draft        Client Subnet in DNS Queries            April 2016
-
 
    o  Use shorter and longer prefix lengths, rather than higher or
       lower.  Add a better explanation in the format section.
@@ -1776,6 +1783,19 @@ Authors' Addresses
    Email: tale@akamai.com
 
 
+
+
+
+
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 32]
+
+Internet-Draft        Client Subnet in DNS Queries            April 2016
+
+
    Warren Kumari
    Google
    1600 Amphitheatre Parkway
@@ -1789,4 +1809,43 @@ Authors' Addresses
 
 
 
-Contavalli, et al.       Expires October 7, 2016               [Page 32]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Contavalli, et al.      Expires October 15, 2016               [Page 33]
+```
