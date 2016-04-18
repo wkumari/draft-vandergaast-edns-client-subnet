@@ -1142,7 +1142,7 @@
               <t>FAMILY set to 0x00 0x02 as IP is an IPv6 address.</t>
 
               <t>SOURCE PREFIX-LENGTH set to 0x38, as RNS is configured to
-              conceal the last 64 bits of every IPv4 address.</t>
+              conceal the last 72 bits of every IPv6 address.</t>
 
               <t>SCOPE PREFIX-LENGTH set to 0x00, as specified by this
               document for all queries.</t>
